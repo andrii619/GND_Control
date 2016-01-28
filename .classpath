@@ -7,5 +7,7 @@
 	<classpathentry kind="src" path="Comms"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="RXTXcomm-2.2pre2.jar"/>
+	<classpathentry kind="lib" path="comm.jar"/>
+	<classpathentry kind="lib" path="jssc-2.8.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
