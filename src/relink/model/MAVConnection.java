@@ -49,9 +49,33 @@ public class MAVConnection implements Connection, SerialPortEventListener {
 	public void sendMAVPacket(MAVLinkPacket p) {
 		// TODO Auto-generated method stub
 		byte[] b = p.encodePacket();
+		
+		try {
+			this.telemetryOutput.write(b);
+			this.telemetryOutput.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(this.whoiSerial != null)
+		{
+			b = generateWHOIPacket(p);
+			try {
+				this.whoiOutput.write(b);
+				this.whoiOutput.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		// send the byte buffer over serial connection 
 	}
-
+	public static byte[] generateWHOIPacket(MAVLinkPacket p)
+	{
+		byte[] b =null;
+		return b;
+		
+	}
 
 	@Override
 	public void connectTelemetry(String port, int baudRate) {
@@ -89,6 +113,13 @@ public class MAVConnection implements Connection, SerialPortEventListener {
 	@Override
 	public void disconnectTelemetry() {
 		// TODO Auto-generated method stub
+		try {
+			this.telemetryInput.close();
+			this.telemetryOutput.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.telemetrySerial.close();
 	}
 
@@ -128,6 +159,14 @@ public class MAVConnection implements Connection, SerialPortEventListener {
 	@Override
 	public void disconnectWHOI() {
 		// TODO Auto-generated method stub
+		try {
+			this.whoiInput.close();
+			this.whoiOutput.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		this.whoiSerial.close();
 	}
 
