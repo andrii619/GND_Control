@@ -111,7 +111,7 @@ public class Create_Connection extends JFrame implements ActionListener {
 		t.setPreferredSize(new Dimension(338,50));
 		buttonPanel.add(t);
 		buttonPanel.add(cancelButton);
-		//t.putConstraint(SpringLayout.WEST, addButton, 50, SpringLayout.WEST, buttonPanel);
+		////t.putConstraint(SpringLayout.WEST, addButton, 50, SpringLayout.WEST, buttonPanel);
 		//t.putConstraint(SpringLayout.NORTH, addButton, 20, SpringLayout.NORTH, buttonPanel);
 		
 		
