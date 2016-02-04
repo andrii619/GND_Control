@@ -8,6 +8,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -35,6 +37,7 @@ public class Create_Connection extends JFrame implements ActionListener {
 	//////////////
 	//////////////////////////////////
 	private JPanel cardPanel;
+	private CardLayout cardlayout;
 	/////////////////////////////////////////////////////////////////
 	private JPanel serialPanel;
 	private SpringLayout serialSpring;
@@ -50,12 +53,21 @@ public class Create_Connection extends JFrame implements ActionListener {
 	private JComboBox<Integer> stopBitsBox;
 	////////////////////////////////////////////////////////////////
 	private JPanel tcpPanel;
-	
+	private JTextField hostAddressField;
+	private JTextField listeningPortField;
 	
 	////////////////////////////////////
-	///////
-	private final static String SERIAL_PANEL = "serial";
-	private final static String WHOI_PANEL = "whoi";
+	private JPanel udpPanel;
+	/////////////////////////////////////////
+	private JPanel logPanel;
+	///////////////////////////////////
+	private JPanel whoiPanel;
+	//////////////////////
+	private final static String SERIAL_PANEL = "Serial";
+	private final static String WHOI_PANEL = "WHOI";
+	private final static String TCP_PANEL = "TCP";
+	private final static String UDP_PANEL = "UDP";
+	private final static String LOG_PANEL = "Log";
 	private final static String[] choises = {"Serial","WHOI","TCP","UDP","Log"};
 	private final static String[] parityChoise = {};
 	private final static Integer[] rateList = {2400,4800,9600,19200,38400,57600,115200,230400,460800,500000};
@@ -86,6 +98,15 @@ public class Create_Connection extends JFrame implements ActionListener {
 		connectionBox = new JComboBox<String>(choises);
 		connectionBox.setSelectedIndex(0);
 		connectionBox.addActionListener(this);
+		connectionBox.addItemListener(new ItemListener(){
+
+			@Override
+			public void itemStateChanged(ItemEvent arg0) {
+				// TODO Auto-generated method stub
+				cardlayout.show(cardPanel, (String)arg0.getItem());
+			}
+			
+		});
 		this.connectionTypePanel.add(nameLabel);
 		nameField.setPreferredSize(new Dimension(100,20));
 		this.connectionTypePanel.add(nameField);
@@ -96,6 +117,10 @@ public class Create_Connection extends JFrame implements ActionListener {
 		this.connectionTypePanel.add(connectionBox);
 		/////////////////////////////////////////////////////////////////////////////
 		this.makeSerialPanel();
+		this.makeTCPPanel();
+		this.makeUDPPanel();
+		this.makeLogPanel();
+		this.makeWHOIPanel();
 		//////////////////////////////////////////////////////////////////////////////
 		
 		
@@ -114,9 +139,18 @@ public class Create_Connection extends JFrame implements ActionListener {
 		////t.putConstraint(SpringLayout.WEST, addButton, 50, SpringLayout.WEST, buttonPanel);
 		//t.putConstraint(SpringLayout.NORTH, addButton, 20, SpringLayout.NORTH, buttonPanel);
 		
-		
+		cardlayout = new CardLayout();
+		this.cardPanel = new JPanel(cardlayout);
+		cardPanel.add(serialPanel,SERIAL_PANEL);
+		cardPanel.add(tcpPanel, TCP_PANEL);
+		cardPanel.add(udpPanel,UDP_PANEL);
+		cardPanel.add(logPanel, LOG_PANEL);
+		cardPanel.add(whoiPanel, WHOI_PANEL);
 		this.contentPane.add(connectionTypePanel, BorderLayout.NORTH);
-		this.contentPane.add(serialPanel, BorderLayout.CENTER);
+		this.contentPane.add(cardPanel,BorderLayout.CENTER);
+		//cardlayout.show(cardPanel, (String)TCP_PANEL);
+		//this.contentPane.add(serialPanel, BorderLayout.CENTER);
+		//this.contentPane.add(tcpPanel,BorderLayout.CENTE
 		this.contentPane.add(buttonPanel, BorderLayout.SOUTH);
 		
 		
@@ -127,6 +161,64 @@ public class Create_Connection extends JFrame implements ActionListener {
 
 	
 	
+	private void makeWHOIPanel() {
+		// TODO Auto-generated method stub
+		this.whoiPanel = new JPanel();
+	}
+
+
+
+	private void makeLogPanel() {
+		// TODO Auto-generated method stub
+		this.logPanel = new JPanel();
+	}
+
+
+
+	private void makeUDPPanel() {
+		// TODO Auto-generated method stub
+		this.udpPanel = new JPanel();
+	}
+
+
+
+	private void makeTCPPanel() {
+		// TODO Auto-generated method stub
+		this.tcpPanel = new JPanel();
+		SpringLayout tcpLayout = new SpringLayout();
+		tcpPanel.setLayout(tcpLayout);
+		
+		this.hostAddressField = new JTextField();
+		hostAddressField.setPreferredSize(new Dimension(100,25));
+		this.listeningPortField= new JTextField();
+		listeningPortField.setPreferredSize(new Dimension(100,25));
+		
+		JLabel hostAddressLabel = new JLabel("Host Address:");
+		JLabel listeningPortLabel = new JLabel("Listening Port:");
+		
+		tcpPanel.add(listeningPortLabel);
+		tcpPanel.add(hostAddressLabel);
+		tcpPanel.add(hostAddressField);
+		tcpPanel.add(listeningPortField);
+		
+		tcpLayout.putConstraint(SpringLayout.WEST, hostAddressLabel, 50, SpringLayout.WEST, tcpPanel);
+		tcpLayout.putConstraint(SpringLayout.NORTH, hostAddressLabel, 50, SpringLayout.NORTH, tcpPanel);
+		
+		tcpLayout.putConstraint(SpringLayout.WEST, listeningPortLabel, 50, SpringLayout.WEST, tcpPanel);
+		tcpLayout.putConstraint(SpringLayout.NORTH, listeningPortLabel, 50, SpringLayout.SOUTH, hostAddressLabel);
+		
+		tcpLayout.putConstraint(SpringLayout.WEST, hostAddressField, 200, SpringLayout.WEST, tcpPanel);
+		tcpLayout.putConstraint(SpringLayout.NORTH, hostAddressField, 50, SpringLayout.NORTH, tcpPanel);
+		tcpLayout.putConstraint(SpringLayout.EAST, hostAddressField, -50, SpringLayout.EAST, tcpPanel);
+		
+		tcpLayout.putConstraint(SpringLayout.WEST, listeningPortField, 200, SpringLayout.WEST, tcpPanel);
+		tcpLayout.putConstraint(SpringLayout.NORTH, listeningPortField, 60, SpringLayout.NORTH, hostAddressLabel);
+		tcpLayout.putConstraint(SpringLayout.EAST, listeningPortField, -50, SpringLayout.EAST, tcpPanel);
+		
+	}
+
+
+
 	private void makeSerialPanel() {
 		// TODO Auto-generated method stub
 		serialSpring = new SpringLayout();

@@ -72,7 +72,7 @@ public class BoardConnect extends JFrame {
 		//setBounds(100, 100, 600, 600);
 		this.setPreferredSize(new Dimension(1100,650));
 		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBorder(new EmptyBorder(20, 20, 20, 20));
 		contentPane.setLayout(new BorderLayout());
 		contentPane.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		setContentPane(contentPane);
