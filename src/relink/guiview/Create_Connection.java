@@ -14,6 +14,7 @@ import java.awt.event.ItemListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -58,8 +59,11 @@ public class Create_Connection extends JFrame implements ActionListener {
 	
 	////////////////////////////////////
 	private JPanel udpPanel;
+	private JTextField udpHostField;
+	private JTextField udpPortField;
 	/////////////////////////////////////////
 	private JPanel logPanel;
+	private JFileChooser logChooser;
 	///////////////////////////////////
 	private JPanel whoiPanel;
 	//////////////////////
@@ -171,13 +175,42 @@ public class Create_Connection extends JFrame implements ActionListener {
 	private void makeLogPanel() {
 		// TODO Auto-generated method stub
 		this.logPanel = new JPanel();
+		logChooser= new JFileChooser();
+		logPanel.add(logChooser);
 	}
 
 
 
 	private void makeUDPPanel() {
 		// TODO Auto-generated method stub
-		this.udpPanel = new JPanel();
+		SpringLayout us=new SpringLayout();
+		this.udpPanel = new JPanel(us);
+		
+		JLabel udpHostLabel = new JLabel("Host:");
+		JLabel udpPortLabel = new JLabel("Port:");
+		
+		udpHostField = new JTextField();
+		udpPortField = new JTextField();
+		
+		udpPanel.add(udpHostLabel);
+		us.putConstraint(SpringLayout.WEST, udpHostLabel, 50, SpringLayout.WEST, udpPanel);
+		us.putConstraint(SpringLayout.NORTH, udpHostLabel, 50, SpringLayout.NORTH, udpPanel);
+		
+		udpPanel.add(udpPortLabel);
+		us.putConstraint(SpringLayout.WEST, udpPortLabel, 50, SpringLayout.WEST, udpPanel);
+		us.putConstraint(SpringLayout.NORTH, udpPortLabel, 50, SpringLayout.SOUTH, udpHostLabel);
+		
+		udpPanel.add(udpHostField);
+		us.putConstraint(SpringLayout.WEST, udpHostField, 140, SpringLayout.WEST, udpPanel);
+		us.putConstraint(SpringLayout.NORTH, udpHostField, 50, SpringLayout.NORTH, udpPanel);
+		us.putConstraint(SpringLayout.EAST, udpHostField, -50, SpringLayout.EAST, udpPanel);
+		
+		udpPanel.add(udpPortField);
+		us.putConstraint(SpringLayout.WEST, udpPortField, 140, SpringLayout.WEST, udpPanel);
+		us.putConstraint(SpringLayout.NORTH, udpPortField, 50, SpringLayout.SOUTH, udpHostLabel);
+		us.putConstraint(SpringLayout.EAST, udpPortField, -50, SpringLayout.EAST, udpPanel);
+		
+		
 	}
 
 

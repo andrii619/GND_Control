@@ -9,5 +9,7 @@
 	<classpathentry kind="lib" path="RXTXcomm-2.2pre2.jar"/>
 	<classpathentry kind="lib" path="comm.jar"/>
 	<classpathentry kind="lib" path="jssc-2.8.0.jar"/>
+	<classpathentry kind="lib" path="swingx-ws-1.0.jar"/>
+	<classpathentry kind="lib" path="swingx-all-1.6.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -29,9 +29,9 @@ public class LA_Productions extends JWindow {
 	
 	private JLabel splashLabel;
 	private List<BufferedImage> images = new ArrayList<BufferedImage>(3);
-	private static ImageIcon l=new ImageIcon("./lucal.png");
-	private static ImageIcon a = new ImageIcon("./andrii.png");
-	private static ImageIcon la = new ImageIcon("la1.png");
+	//private static ImageIcon l=new ImageIcon("./lucal.png");
+	//private static ImageIcon a = new ImageIcon("./andrii.png");
+	//private static ImageIcon la = new ImageIcon("la1.png");
 	
 	public LA_Productions()
 	{

@@ -36,9 +36,12 @@ public class UploadFirmware extends JFrame {
 		firmwarePanel = new JPanel();
 		firmwarePanel.setPreferredSize(new Dimension(300,300));
 		firmwarePanel.setBorder(BorderFactory.createLineBorder(Color.black));
-		//contentLayout.putConstraint(SpringLayout.WEST, c1, pad, e2, c2);
-		
 		contentPanel.add(firmwarePanel);
+		contentLayout.putConstraint(SpringLayout.WEST, firmwarePanel, 50, SpringLayout.WEST, contentPanel);
+		contentLayout.putConstraint(SpringLayout.NORTH, firmwarePanel, 50, SpringLayout.SOUTH, firmwareLabel);
+		contentLayout.putConstraint(SpringLayout.EAST, firmwarePanel, -50, SpringLayout.EAST, contentPanel);
+		
+		
 		
 		this.add(contentPanel);
 		
