@@ -1,4 +1,4 @@
-package relink.guiview;
+package gnd_control.guiview;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -18,7 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 
-import relink.control.RE_Control;
+
 
 public class BoardConnect extends JFrame {
 
@@ -45,7 +45,7 @@ public class BoardConnect extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					BoardConnect frame = new BoardConnect(new RE_Control(), new RE_LINK());
+					BoardConnect frame = new BoardConnect();
 					//frame.pack();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -58,7 +58,7 @@ public class BoardConnect extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public BoardConnect(RE_Control control, RE_LINK link) {
+	public BoardConnect() {
 		super("Board Connect");
 		addButton = new JButton("Add");
 		//this.addButton.setPreferredSize(new Dimension(100,100));

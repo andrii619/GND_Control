@@ -1,4 +1,4 @@
-package relink.guiview;
+package gnd_control.guiview;
 
 import java.awt.Dimension;
 import java.awt.Image;

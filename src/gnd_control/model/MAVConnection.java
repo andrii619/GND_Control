@@ -1,4 +1,4 @@
-package relink.model;
+package gnd_control.model;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package relink.model;
+package gnd_control.model;
 
 import com.MAVLink.MAVLinkPacket;
 
