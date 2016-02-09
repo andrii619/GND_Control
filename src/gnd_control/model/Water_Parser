@@ -1,0 +1,61 @@
+import java.util.ArrayList;
+
+
+public class Water_Parser {
+	public Water_Parser(String source){
+		String[] lines = source.split("\n");
+		String[] temp = null;
+		String[] values = null;
+		String[] items  = null;
+		Command token = null;
+		Statement statement = null;
+		ArrayList<Statement> statements = new ArrayList<Statement>();
+		for(int i=0;i<lines.length;i++){
+			if(lines[i].isEmpty() || lines[i].contains("#")){
+				continue;
+			}
+			else if(lines[i].contains("&")){//multi-command statement
+				temp = lines[i].split("@");
+				items  = temp[0].split("&");
+				values = temp[1].split(",");
+				statement = new Statement(token,Integer.parseInt(values[0]),true);
+			}
+			else if(lines[i].contains(":")){
+				
+			}
+		}
+	}
+	enum Command {pitch,roll,yaw,moveFoward,moveBackwards,label}
+	public class Statement{
+		boolean MultiCommand = false;
+		Command command;
+		ArrayList<Command> commands;
+		int value;
+		String Label;
+		ArrayList<Integer> values;
+		public Statement(Command item){
+			this.command = item;
+		}
+		public Statement(Command item, int value){
+			this.command = item;
+			this.value = value;
+		}
+		public Statement(Command item, String Label){
+			this.command = item;
+			this.Label = Label;
+		}
+		public Statement(Command item, int values, boolean MultiCommand){
+			if(MultiCommand){
+				this.MultiCommand = true;
+				this.commands = new ArrayList<Command>();
+				commands.add(item);
+				this.values = new ArrayList<Integer>();
+				
+			}
+		}
+		public void add(Command item, int value){
+			commands.add(item);
+			values.add(value);
+		}
+	}
+}
