@@ -12,6 +12,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.jdesktop.swingx.JXMapKit;
+import org.jdesktop.swingx.mapviewer.GeoPosition;
+import org.jdesktop.swingx.mapviewer.TileFactory;
 
 public class MapControl extends JFrame {
 	
@@ -30,7 +32,10 @@ public class MapControl extends JFrame {
 		map.setDefaultProvider(JXMapKit.DefaultProviders.OpenStreetMaps);
 		map.setPreferredSize(new Dimension(500,500));
 		contentPane.add(map);
-		
+		GeoPosition g =new GeoPosition(1.0,1.0,1.0,1.0,1.0,1.0);
+		map.setAddressLocation(new GeoPosition(40.521899, -74.459634));
+		map.setCenterPosition(new GeoPosition(40.521899, -74.459634));
+		map.setAddressLocationShown(true);
 		this.setContentPane(contentPane);
 		
 		this.pack();

@@ -26,8 +26,12 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SpringLayout;
 
+import gnd_control.control.Control;
+
 
 public class GND_Control_GUI_HUB extends JFrame{
+	private Control control;
+	
 	JPanel main = new JPanel(new BorderLayout());
 	JLayeredPane p0 = new JLayeredPane();
 	JTabbedPane p1 = new JTabbedPane();

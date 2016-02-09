@@ -2,16 +2,16 @@ package gnd_control.model;
 
 import com.MAVLink.MAVLinkPacket;
 
-public interface Connection {
+public interface Connection  {
 
-	public void connectTelemetry(String port, int baudRate);
+	public void connect();
 	
-	public void disconnectTelemetry();
+	public void disconnect();
 	
-	public void connectWHOI(String port, int baudRate);
+	public void sendMAV(MAVLinkPacket packet);
 	
-	public void disconnectWHOI();
+	public void sendWHOI(MAVLinkPacket packet);
 	
-	public void sendMAVPacket(MAVLinkPacket p);
+	public void sendWHOI(WHOIPacket packet);
 	
 }

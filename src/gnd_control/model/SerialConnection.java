@@ -15,7 +15,7 @@ import javax.comm.UnsupportedCommOperationException;
 
 import com.MAVLink.MAVLinkPacket;
 
-public class MAVConnection implements Connection, SerialPortEventListener {
+public class SerialConnection implements Connection,  SerialPortEventListener {
 
 	private String telemetryPort;
 	private String WHOIPort;
@@ -35,7 +35,7 @@ public class MAVConnection implements Connection, SerialPortEventListener {
 	private OutputStream whoiOutput;
 	
 	
-	public MAVConnection()
+	public SerialConnection(String port, int rate )
 	{
 		this.telemetryPort = new String();
 		this.WHOIPort = new String();
@@ -46,7 +46,7 @@ public class MAVConnection implements Connection, SerialPortEventListener {
 	
 	
 	@Override
-	public void sendMAVPacket(MAVLinkPacket p) {
+	public void sendMAV(MAVLinkPacket p) {
 		// TODO Auto-generated method stub
 		byte[] b = p.encodePacket();
 		
@@ -77,7 +77,7 @@ public class MAVConnection implements Connection, SerialPortEventListener {
 		
 	}
 
-	@Override
+
 	public void connectTelemetry(String port, int baudRate) {
 		// TODO Auto-generated method stub
 		try {
@@ -110,7 +110,7 @@ public class MAVConnection implements Connection, SerialPortEventListener {
 	}
 
 
-	@Override
+	
 	public void disconnectTelemetry() {
 		// TODO Auto-generated method stub
 		try {
@@ -124,7 +124,7 @@ public class MAVConnection implements Connection, SerialPortEventListener {
 	}
 
 
-	@Override
+	
 	public void connectWHOI(String port, int baudRate) {
 		// TODO Auto-generated method stub
 		try {
@@ -156,7 +156,7 @@ public class MAVConnection implements Connection, SerialPortEventListener {
 	}
 
 
-	@Override
+	
 	public void disconnectWHOI() {
 		// TODO Auto-generated method stub
 		try {
@@ -173,6 +173,34 @@ public class MAVConnection implements Connection, SerialPortEventListener {
 
 	@Override
 	public void serialEvent(SerialPortEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void connect() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void disconnect() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void sendWHOI(MAVLinkPacket packet) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void sendWHOI(WHOIPacket packet) {
 		// TODO Auto-generated method stub
 		
 	}
