@@ -15,4 +15,6 @@ public interface Vehicle {
 	public double get_battery_level();
 	
 	public boolean is_armable();
+	
+	public void addVehicleStateListener();
 }

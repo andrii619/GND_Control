@@ -11,10 +11,12 @@ public class Copter implements Vehicle {
 	private GeoPosition current_location;
 	
 	private Battery battery;
+	private Attitude attitude;
 	
 	private boolean armed;
 	
 	private List<Connection> connections;
+	private List<VehicleStateListener> listeners;
 	
 	public Copter()
 	{
@@ -76,6 +78,11 @@ public class Copter implements Vehicle {
 	public boolean is_armable() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	@Override
+	public void addVehicleStateListener() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
