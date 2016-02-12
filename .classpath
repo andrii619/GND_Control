@@ -6,9 +6,10 @@
 	<classpathentry kind="src" path="enums"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="libs/comm.jar"/>
-	<classpathentry kind="lib" path="libs/jssc-2.8.0.jar"/>
 	<classpathentry kind="lib" path="libs/RXTXcomm-2.2pre2.jar"/>
 	<classpathentry kind="lib" path="libs/swingx-all-1.6.3.jar"/>
 	<classpathentry kind="lib" path="libs/swingx-ws-1.0.jar"/>
+	<classpathentry kind="lib" path="libs/jfxrt.jar"/>
+	<classpathentry kind="lib" path="libs/GMapsFX.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

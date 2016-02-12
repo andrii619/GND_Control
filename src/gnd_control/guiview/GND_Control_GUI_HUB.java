@@ -27,6 +27,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.SpringLayout;
 
 import gnd_control.control.Control;
+import gnd_control.control.GND_Control;
 
 
 public class GND_Control_GUI_HUB extends JFrame{
@@ -111,6 +112,9 @@ public class GND_Control_GUI_HUB extends JFrame{
 		this.setIconImage(g);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
+		
+		
+		this.control = new GND_Control();
 	}
 	public class ChangeSize implements ComponentListener{
 		@Override
