@@ -204,4 +204,11 @@ public class SerialConnection implements Connection,  SerialPortEventListener {
 		// TODO Auto-generated method stub
 		
 	}
+
+
+	@Override
+	public void addObserver(ConnectionObserver c) {
+		// TODO Auto-generated method stub
+		
+	}
 }

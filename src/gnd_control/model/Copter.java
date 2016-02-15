@@ -5,11 +5,12 @@ import java.util.List;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
+import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.enums.MAV_AUTOPILOT;
 import com.MAVLink.enums.MAV_TYPE;
 
-public class Copter implements Vehicle {
+public class Copter implements Vehicle, ConnectionObserver{
 	
 	private int vehicleId;
 	private boolean active;
@@ -40,6 +41,8 @@ public class Copter implements Vehicle {
 	{
 		this.home_location = new GPosition(40.521899, -74.459634);
 		connections  = new ArrayList<Connection>();
+		connections.add(c);
+		c.addObserver(this);
 	}
 	public Copter(GPosition home)
 	{
@@ -132,6 +135,11 @@ public class Copter implements Vehicle {
 	public void set_velocity(double x_velocity, double y_velocity, double z_velocity, int duration) {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public void handleMAVPacket(MAVLinkPacket p) {
+		// TODO Auto-generated method stub
+		System.out.println("Drone handles packets");
 	}
 
 }

@@ -14,4 +14,6 @@ public interface Connection  {
 	
 	public void sendWHOI(WHOIPacket packet);
 	
+	public void addObserver(ConnectionObserver c);
+	
 }

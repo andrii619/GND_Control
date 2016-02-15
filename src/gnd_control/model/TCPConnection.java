@@ -7,6 +7,8 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -21,6 +23,7 @@ public class TCPConnection implements Connection, Runnable {
 	Queue<MAVLinkPacket> queue;
 	Parser parser=null;
 	MAVLinkStats stats;
+	List<ConnectionObserver> listeners;
 	
 	public TCPConnection(String hostname, int port)
 	{
@@ -61,6 +64,7 @@ public class TCPConnection implements Connection, Runnable {
 		queue = new PriorityQueue<MAVLinkPacket>();
 		parser= new Parser();
 		stats = new MAVLinkStats();
+		listeners = new ArrayList<ConnectionObserver>();
 		
 		new Thread(this).start();
 	}
@@ -74,12 +78,33 @@ public class TCPConnection implements Connection, Runnable {
 	@Override
 	public void disconnect() {
 		// TODO Auto-generated method stub
-		
+		try {
+			outputStream.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			inputStream.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void sendMAV(MAVLinkPacket packet) {
 		// TODO Auto-generated method stub
+		if(packet!=null)
+		{
+			queue.add(packet);
+		}
 		
 	}
 
@@ -101,6 +126,17 @@ public class TCPConnection implements Connection, Runnable {
 		
 	    while (packet == null)
 	    {
+	    	if(!queue.isEmpty())
+	    	{
+	    		//queue.remove().encodePacket()
+	    		byte arr[] = queue.remove().encodePacket();
+	    		try {
+					outputStream.write(arr,0,arr.length);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	    	}
 	    	
 	    	try {
 	    		//System.out.println("Trying to read packet");
@@ -119,8 +155,22 @@ public class TCPConnection implements Connection, Runnable {
 	    	{
 	    		System.out.println(packet.unpack().toString());
 	    		packet = null;
+	    		notifyAllObservers(packet);
 	    	}
 	    }
+	}
+	public void addObserver(ConnectionObserver c)
+	{
+		if(c!=null)
+			listeners.add(c);
+	}
+
+	private void notifyAllObservers(MAVLinkPacket p) {
+		// TODO Auto-generated method stub
+		for(int i = 0; i < listeners.size(); i++)
+		{
+			listeners.get(i).handleMAVPacket(p);
+		}
 	}
 
 }

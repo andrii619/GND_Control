@@ -5,7 +5,7 @@ import org.jdesktop.swingx.mapviewer.GeoPosition;
 import com.MAVLink.Messages.MAVLinkMessage;
 
 public interface Vehicle {
-	
+	public static final int heartbeat_rate_msec = 1000;
 	
 	public void initialize();
 	

@@ -132,4 +132,10 @@ public class UDPConnection extends Thread implements Connection {
 		
 	}
 
+	@Override
+	public void addObserver(ConnectionObserver c) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
