@@ -24,6 +24,7 @@ public class TCPConnection implements Connection, Runnable {
 	Parser parser=null;
 	MAVLinkStats stats;
 	List<ConnectionObserver> listeners;
+	private boolean connected;
 	
 	public TCPConnection(String hostname, int port)
 	{
@@ -33,6 +34,7 @@ public class TCPConnection implements Connection, Runnable {
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -42,6 +44,7 @@ public class TCPConnection implements Connection, Runnable {
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return;
 		}
 		try {
 			socket.setSoTimeout(1000);
@@ -124,7 +127,7 @@ public class TCPConnection implements Connection, Runnable {
 	{
 		MAVLinkPacket packet = null;
 		
-	    while (packet == null)
+	    while (true)
 	    {
 	    	if(!queue.isEmpty())
 	    	{
@@ -153,8 +156,8 @@ public class TCPConnection implements Connection, Runnable {
 			}
 	    	if(packet != null)
 	    	{
-	    		System.out.println(packet.unpack().toString());
-	    		packet = null;
+	    		//System.out.println(packet.unpack().toString());
+	    		//packet = null;
 	    		notifyAllObservers(packet);
 	    	}
 	    }

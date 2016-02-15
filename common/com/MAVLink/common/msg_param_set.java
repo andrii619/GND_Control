@@ -152,7 +152,7 @@ public class msg_param_set extends MAVLinkMessage{
     * Returns a string with the MSG name and data
     */
     public String toString(){
-        return "MAVLINK_MSG_ID_PARAM_SET -"+" param_value:"+param_value+" target_system:"+target_system+" target_component:"+target_component+" param_id:"+param_id+" param_type:"+param_type+"";
+        return "MAVLINK_MSG_ID_PARAM_SET -"+" param_value:"+param_value+" target_system:"+target_system+" target_component:"+target_component+" param_id:"+param_id.toString()+" param_type:"+param_type+"";
     }
 }
         
