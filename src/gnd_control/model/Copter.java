@@ -127,8 +127,9 @@ public class Copter implements Vehicle {
 	{
 		
 	}
+
 	@Override
-	public void set_velocity(double x_velocity, double y_velocity, double z_velocity) {
+	public void set_velocity(double x_velocity, double y_velocity, double z_velocity, int duration) {
 		// TODO Auto-generated method stub
 		
 	}
