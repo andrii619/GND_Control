@@ -16,7 +16,7 @@ public interface Vehicle {
 	public void setLatitude(double latitude);
 	public void setLongtitude();
 	public void set_velocity(double x_velocity, double y_velocity, double z_velocity, int duration);
-	public void set_flight_mode();
+	public void set_mode();
 	public void set_armed(boolean armed);
 	public void takeoff(int height);
 	public double get_battery_level();
@@ -26,4 +26,6 @@ public interface Vehicle {
 	public void addVehicleStateListener();
 	public void setLongtitude(float longtitude);
 	public void handleMAVLink_Message(MAVLinkMessage m);
+	
+	public void get_position();
 }

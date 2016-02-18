@@ -9,6 +9,8 @@ import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.common.*;
 import com.MAVLink.enums.MAV_AUTOPILOT;
+import com.MAVLink.enums.MAV_CMD;
+import com.MAVLink.enums.MAV_MODE;
 import com.MAVLink.enums.MAV_TYPE;
 
 public class Copter implements Vehicle, ConnectionObserver{
@@ -83,8 +85,27 @@ public class Copter implements Vehicle, ConnectionObserver{
 	}
 
 	@Override
-	public void set_flight_mode() {
+	public void set_mode() {
 		// TODO Auto-generated method stub
+		msg_set_mode m =new msg_set_mode();
+		m.custom_mode = MAV_MODE.MAV_MODE_STABILIZE_DISARMED;
+		MAVLinkPacket p = m.pack();
+		for(int i = 0; i< connections.size(); i++)
+		{
+			connections.get(i).sendMAV(p);;
+		}
+	}
+	public void send_heartbeat()
+	{
+		msg_heartbeat m = new msg_heartbeat();
+		///m.sysid=255;
+		//m.compid=190; // mission planner
+		
+		
+		for(int i=0; i< connections.size();i++)
+		{
+			connections.get(i).sendMAV(m.pack());
+		}
 		
 	}
 
@@ -113,6 +134,25 @@ public class Copter implements Vehicle, ConnectionObserver{
 	@Override
 	public void set_armed(boolean armed) {
 		// TODO Auto-generated method stub
+		msg_command_long m=new msg_command_long();
+		m.command=MAV_CMD.MAV_CMD_COMPONENT_ARM_DISARM;
+		m.compid = 0;
+		m.confirmation=0;
+		if(armed)
+			m.param1=1;
+		else
+			m.param1=0;
+		m.param2=0;
+		m.param3=0;
+		m.param4=0;
+		m.param5=0;
+		m.param6=0;
+		m.param7=0;
+		
+		for(int i=0; i< connections.size();i++)
+		{
+			connections.get(i).sendMAV(m.pack());
+		}
 		
 	}
 	@Override
@@ -151,11 +191,13 @@ public class Copter implements Vehicle, ConnectionObserver{
 		// TODO Auto-generated method stub
 		MAVLinkMessage m = p.unpack();
 		int id = m.msgid;
+		System.out.println("Got: "+m.toString());
 		switch(id)
 		{
         case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:
             //return  new msg_heartbeat(this);
-        	System.out.println("Copter got heartbeat");break;
+        	msg_heartbeat msg = (msg_heartbeat)m;
+        	System.out.println("Copter got heartbeat.MAVVers: "+msg.mavlink_version+" SYSID: "+msg.sysid+" COMP ID "+msg.compid);break;
              
         case msg_sys_status.MAVLINK_MSG_ID_SYS_STATUS:
             //return  new msg_sys_status(this);
@@ -197,6 +239,7 @@ public class Copter implements Vehicle, ConnectionObserver{
         case msg_param_value.MAVLINK_MSG_ID_PARAM_VALUE:
         	msg_param_value val = (msg_param_value)m;
         	System.out.println("Copter got a param: param_value "+val.param_value+" param_id "+ val.getParam_Id());
+        	this.handle_param_msg(val);
             //return  new msg_param_value(this);
         	break;
              
@@ -659,6 +702,8 @@ public class Copter implements Vehicle, ConnectionObserver{
         case msg_statustext.MAVLINK_MSG_ID_STATUSTEXT:
             //return  new msg_statustext(this);
         	System.out.println("Copter got statustext");
+        	msg_statustext temp = (msg_statustext)m;
+        	System.out.println("Statustext: "+temp.toString()+" "+temp.getText());
         	break; 
         	
         case msg_debug.MAVLINK_MSG_ID_DEBUG:
@@ -666,6 +711,23 @@ public class Copter implements Vehicle, ConnectionObserver{
         	break;
 		}
 		//System.out.println("Drone handles packets");
+	}
+	private void handle_param_msg(msg_param_value val) {
+		// TODO Auto-generated method stub
+		String param_id = val.getParam_Id();
+		if(param_id.compareTo("")==0)
+		{
+			
+		}
+	}
+	public void get_position()
+	{
+		msg_param_request_list m =new msg_param_request_list();
+		MAVLinkPacket p = m.pack();
+		for(int i = 0; i< connections.size(); i++)
+		{
+			connections.get(i).sendMAV(p);;
+		}
 	}
 
 }

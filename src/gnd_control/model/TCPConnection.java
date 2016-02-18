@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.Parser;
@@ -64,7 +65,7 @@ public class TCPConnection implements Connection, Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		queue = new PriorityQueue<MAVLinkPacket>();
+		queue = new ArrayBlockingQueue<MAVLinkPacket>(20);
 		parser= new Parser();
 		stats = new MAVLinkStats();
 		listeners = new ArrayList<ConnectionObserver>();
