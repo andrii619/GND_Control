@@ -1,6 +1,7 @@
 package gnd_control.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
@@ -36,13 +37,16 @@ public class Copter implements Vehicle, ConnectionObserver{
 	private Attitude attitude;
 	
 	private boolean armed;
+	private boolean connected;
 	
 	private List<Connection> connections;
 	private List<VehicleStateListener> listeners;
+	private HashMap<String,Float> parameters;
 	
 	public Copter(Connection c)
 	{
 		this.home_location = new GPosition(40.521899, -74.459634);
+		this.connected = false;
 		connections  = new ArrayList<Connection>();
 		connections.add(c);
 		c.addObserver(this);
@@ -130,7 +134,24 @@ public class Copter implements Vehicle, ConnectionObserver{
 	public void addVehicleStateListener() {
 		// TODO Auto-generated method stub
 	}
-
+	public void transition() {
+		// TODO Auto-generated method stub
+		msg_command_long m = new msg_command_long();
+		m.command = 187; // transition command
+		m.confirmation=0;
+		m.compid=0;
+		m.param1=1;
+		m.param2=0;
+		m.param3=0;
+		m.param4=0;
+		m.param5=0;
+		m.param6=0;
+		m.param7=0;
+		for(int i=0; i< connections.size();i++)
+		{
+			connections.get(i).sendMAV(m.pack());
+		}
+	}
 	@Override
 	public void set_armed(boolean armed) {
 		// TODO Auto-generated method stub
@@ -238,7 +259,8 @@ public class Copter implements Vehicle, ConnectionObserver{
              
         case msg_param_value.MAVLINK_MSG_ID_PARAM_VALUE:
         	msg_param_value val = (msg_param_value)m;
-        	System.out.println("Copter got a param: param_value "+val.param_value+" param_id "+ val.getParam_Id());
+        	
+        	System.out.println("Copter got a param: param_value "+val.toString()+" val "+val.param_value+" param_id "+ val.getParam_Id());
         	this.handle_param_msg(val);
             //return  new msg_param_value(this);
         	break;
@@ -715,6 +737,7 @@ public class Copter implements Vehicle, ConnectionObserver{
 	private void handle_param_msg(msg_param_value val) {
 		// TODO Auto-generated method stub
 		String param_id = val.getParam_Id();
+		int hash_id = val.hashCode();
 		if(param_id.compareTo("")==0)
 		{
 			
@@ -729,5 +752,6 @@ public class Copter implements Vehicle, ConnectionObserver{
 			connections.get(i).sendMAV(p);;
 		}
 	}
+
 
 }

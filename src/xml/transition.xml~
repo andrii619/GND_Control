@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<mavlink>
+	<include>common.xml</include>
+	<enums></enums>
+	<messages>
+		<message id="180" name="TRANSITION">
+			<description>Send the transition when the drone transitions from air to water.</description>
+			<field type="uint8_t" name="air_to_water"></field>
+
+
+		</message>
+	</messages>
+</mavlink>
