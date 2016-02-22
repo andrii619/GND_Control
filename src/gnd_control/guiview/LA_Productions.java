@@ -23,8 +23,8 @@ public class LA_Productions extends JWindow {
 	
 	private static JProgressBar progressbar;
 	private static int counter=0;
-	private static final int TIMER_VAL = 100;
-	private static final int PROGRESS_MAX=100;
+	private static final int TIMER_VAL = 50;
+	private static final int PROGRESS_MAX=98;
 	private static Timer timer;
 	
 	private JLabel splashLabel;
@@ -36,9 +36,16 @@ public class LA_Productions extends JWindow {
 	public LA_Productions()
 	{
 		try {
-			images.add(ImageIO.read(new File("./lucas.png")));
-			images.add(ImageIO.read(new File("./andrii.png")));
-			images.add(ImageIO.read(new File("./la1.png")));
+			for(int i=0; i<99;i++)
+			{
+				images.add(ImageIO.read(new File("./src/gnd_control/guiview/splashscreen/backsplashl"+i+".png")));
+			}
+			//images.add(ImageIO.read(new File("./src/gnd_control/guiview/splashscreen/backsplashl0.png")));
+			//images.add(ImageIO.read(new File("./src/gnd_control/guiview/splashscreen/backsplashl1.png")));
+			//images.add(ImageIO.read(new File("./src/gnd_control/guiview/splashscreen/backsplashl2.png")));
+			//images.add(ImageIO.read(new File("./splashscreen/backsplashl0.png")));
+			//images.add(ImageIO.read(new File("./andrii.png")));
+			//images.add(ImageIO.read(new File("./la1.png")));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -49,12 +56,12 @@ public class LA_Productions extends JWindow {
 		//JLabel splashLabel = new JLabel(l);
 		contentPane.add(splashLabel);
 		
-		progressbar = new JProgressBar();
-		progressbar.setOrientation(JProgressBar.HORIZONTAL);
-		progressbar.setMaximum(PROGRESS_MAX);
-		progressbar.setBorder(BorderFactory.createLineBorder(Color.black));
-		progressbar.setForeground(Color.green);
-		contentPane.add(progressbar, BorderLayout.SOUTH);
+		//progressbar = new JProgressBar();
+		//progressbar.setOrientation(JProgressBar.HORIZONTAL);
+		//progressbar.setMaximum(PROGRESS_MAX);
+		//progressbar.setBorder(BorderFactory.createLineBorder(Color.black));
+		//progressbar.setForeground(Color.green);
+		//contentPane.add(progressbar, BorderLayout.SOUTH);
 		
 		this.setContentPane(contentPane);
 		this.pack();
@@ -74,21 +81,21 @@ public class LA_Productions extends JWindow {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				progressbar.setValue(counter);
+				//progressbar.setValue(counter);
 				if(counter == PROGRESS_MAX)
 				{
 					LA_Productions.this.dispose();
 					timer.stop();
 					System.exit(0);
 				}
-				if(counter >30 && counter <60)
-				{
-					splashLabel.setIcon(new ImageIcon(images.get(1)));
-				}
-				if(counter >=60)
-				{
-					splashLabel.setIcon(new ImageIcon(images.get(2)));
-				}
+				//if(counter >30 && counter <60)
+				//{
+				splashLabel.setIcon(new ImageIcon(images.get(counter)));
+				//}
+				//if(counter >=60)
+				//{
+				//	splashLabel.setIcon(new ImageIcon(images.get(2)));
+			//	}
 				counter++;
 			}
 			
