@@ -1,4 +1,4 @@
-package gnd_control.guiview;
+package gnd_control.guiview.profile;
 
 
 import java.awt.BorderLayout;
@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.io.IOException;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
