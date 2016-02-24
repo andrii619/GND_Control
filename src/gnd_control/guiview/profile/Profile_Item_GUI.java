@@ -1,5 +1,4 @@
-package gnd_control.guiview;
-
+package gnd_control.guiview.profile;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -7,7 +6,6 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.IOException;
 import java.net.URL;
-
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -16,7 +14,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
-
 
 public class Profile_Item_GUI extends JPanel{
 	Profile_Item profile;
