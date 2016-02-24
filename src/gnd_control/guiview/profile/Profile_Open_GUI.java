@@ -1,4 +1,4 @@
-package gnd_control.guiview;
+package gnd_control.guiview.profile;
 
 import javax.swing.JPanel;
 
