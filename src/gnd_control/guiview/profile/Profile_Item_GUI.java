@@ -27,7 +27,7 @@ public class Profile_Item_GUI extends JPanel{
 	JPanel p3 = new JPanel(spring);
 	
 	public Profile_Item_GUI(Profile_Item profile) throws IOException{
-		URL img1 = Profile_Item_GUI.this.getClass().getResource("quadicon.png");
+		URL img1 = Profile_Item_GUI.this.getClass().getResource("../quadicon.png");
 		Image g1 = ImageIO.read(img1);
 		g1 = g1.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
 		ImageIcon icon1 = new ImageIcon(g1);

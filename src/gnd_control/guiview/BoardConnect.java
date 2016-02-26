@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -31,10 +33,10 @@ public class BoardConnect extends JFrame {
 	private JList connectionList;
 	private DefaultListModel<String> listModel;
 	
-	private JButton addButton, editButton, deleteButton, connectButton, disconnectButton;
+	private JButton addButton, editButton, deleteButton, connectButton, disconnectButton, backButton;
 	
-	
-	
+	private ConnectListener connectListener;
+	private GND_Control_GUI_HUB hub;
 
 	/**
 	 * Launch the application.
@@ -45,7 +47,7 @@ public class BoardConnect extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					BoardConnect frame = new BoardConnect();
+					BoardConnect frame = new BoardConnect(null);
 					//frame.pack();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -58,8 +60,9 @@ public class BoardConnect extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public BoardConnect() {
+	public BoardConnect(GND_Control_GUI_HUB hub) {
 		super("Board Connect");
+		this.hub=hub;
 		addButton = new JButton("Add");
 		//this.addButton.setPreferredSize(new Dimension(100,100));
 		//this.addButton.setSize(100, 100);
@@ -67,6 +70,7 @@ public class BoardConnect extends JFrame {
 		deleteButton = new JButton("Delete");
 		connectButton = new JButton("Connect");
 		disconnectButton = new JButton("Disconnect");
+		backButton = new JButton("Back");
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//setBounds(100, 100, 600, 600);
@@ -91,8 +95,8 @@ public class BoardConnect extends JFrame {
 		this.buttonPanel = new JPanel();
 		//this.buttonPanel.setPreferredSize(new Dimension(500,500));
 		//this.buttonPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		this.buttonPanel.setLayout(new GridLayout(3, 9));
-		for(int i=0; i<9; i++)
+		this.buttonPanel.setLayout(new GridLayout(3, 11));
+		for(int i=0; i<11; i++)
 		{
 			JPanel p = new JPanel();
 			//p.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -108,6 +112,14 @@ public class BoardConnect extends JFrame {
 		this.buttonPanel.add(connectButton);
 		this.buttonPanel.add(new JPanel());
 		this.buttonPanel.add(disconnectButton);
+		this.buttonPanel.add(new JPanel());
+		this.buttonPanel.add(backButton);
+		connectListener = new ConnectListener();
+		this.backButton.addActionListener(connectListener);
+		this.addButton.addActionListener(connectListener);
+		this.deleteButton.addActionListener(connectListener);
+		this.editButton.addActionListener(connectListener);
+		this.connectButton.addActionListener(connectListener);
 		
 		for(int i=0; i<9; i++)
 		{
@@ -119,10 +131,24 @@ public class BoardConnect extends JFrame {
 		//this.contentPane.add(editButton, BorderLayout.CENTER);
 		//this.contentPane.add(deleteButton,BorderLayout.EAST);
 		//this.contentPane.add(connectButton);
-		
+		this.setLocationRelativeTo(null);
 		listModel.addElement("evsv");
 		this.connectionList.setSelectedIndex(0);
 		this.pack();
+	}
+	public class ConnectListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			if(e.getSource() == backButton)
+			{
+				BoardConnect.this.setVisible(false);
+				hub.setVisible(true);
+				
+			}
+		}
+		
 	}
 
 }

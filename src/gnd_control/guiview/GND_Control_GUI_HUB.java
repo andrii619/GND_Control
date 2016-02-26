@@ -28,8 +28,19 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SpringLayout;
 
+import gnd_control.control.Control;
+import gnd_control.control.GND_Control;
+import gnd_control.guiview.profile.Profile_HUB_GUI;
+import gnd_control.guiview.water.Water_GUI;
+
 
 public class GND_Control_GUI_HUB extends JFrame{
+	//private GND_Control_GUI_HUB hub;
+	private Control control = new GND_Control();
+	// all sub windows
+	private BoardConnect boardConnect = new BoardConnect(this);
+	
+	
 	JPanel main = new JPanel(new BorderLayout());
 	JLayeredPane p0 = new JLayeredPane();
 	JTabbedPane p1 = new JTabbedPane();
@@ -212,6 +223,8 @@ public class GND_Control_GUI_HUB extends JFrame{
 				GND_Control_GUI_HUB.this.b1.setIcon(icon6);
 				connection = true;
 			}
+			boardConnect.setVisible(true);
+			GND_Control_GUI_HUB.this.setVisible(false);
 		}
 	}
 	public static void main(String[] args) {

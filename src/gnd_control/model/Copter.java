@@ -92,7 +92,15 @@ public class Copter implements Vehicle, ConnectionObserver{
 	public void set_mode() {
 		// TODO Auto-generated method stub
 		msg_set_mode m =new msg_set_mode();
-		m.custom_mode = MAV_MODE.MAV_MODE_STABILIZE_DISARMED;
+		//m.sysid = 255; // id of sending system
+		/// custom mode 
+		// base mode 
+		m.sysid=1;
+		m.compid=1;
+		// target mode
+		m.base_mode=1;//MAV_MODE.MAV_MODE_GUIDED_DISARMED;
+		m.custom_mode=4;//MAV_MODE.MAV_MODE_GUIDED_DISARMED;
+		//m.custom_mode = MAV_MODE.MAV_MODE_STABILIZE_DISARMED;
 		MAVLinkPacket p = m.pack();
 		for(int i = 0; i< connections.size(); i++)
 		{
@@ -117,7 +125,25 @@ public class Copter implements Vehicle, ConnectionObserver{
 	@Override
 	public void takeoff(int height) {
 		// TODO Auto-generated method stub
-		
+		msg_command_long m = new msg_command_long();
+		m.compid = 0;
+		m.confirmation=0;
+		m.target_system = 1;
+		m.target_component = 1;
+		m.sysid = 255;
+		m.command = MAV_CMD.MAV_CMD_NAV_TAKEOFF;
+		m.param1=0;
+		m.param2=0;
+		m.param3=0;
+		m.param4=0;
+		m.param5=0;
+		m.param6=0;
+		m.param7 = height;
+		MAVLinkPacket p = m.pack();
+		for(int i = 0; i< connections.size(); i++)
+		{
+			connections.get(i).sendMAV(p);;
+		}
 	}
 
 	@Override
@@ -218,7 +244,7 @@ public class Copter implements Vehicle, ConnectionObserver{
         case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:
             //return  new msg_heartbeat(this);
         	msg_heartbeat msg = (msg_heartbeat)m;
-        	System.out.println("Copter got heartbeat.MAVVers: "+msg.mavlink_version+" SYSID: "+msg.sysid+" COMP ID "+msg.compid);break;
+        	System.out.println("Copter got heartbeat.MAVVers: "+msg.mavlink_version+" SYSID: "+msg.sysid+" COMP ID "+msg.compid+" mode "+msg.custom_mode);break;
              
         case msg_sys_status.MAVLINK_MSG_ID_SYS_STATUS:
             //return  new msg_sys_status(this);
