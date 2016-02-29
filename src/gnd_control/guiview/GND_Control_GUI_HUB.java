@@ -34,7 +34,7 @@ import gnd_control.guiview.profile.Profile_HUB_GUI;
 import gnd_control.guiview.water.Water_GUI;
 
 
-public class GND_Control_GUI_HUB extends JFrame{
+public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 	//private GND_Control_GUI_HUB hub;
 	private Control control = new GND_Control();
 	// all sub windows
@@ -134,7 +134,7 @@ public class GND_Control_GUI_HUB extends JFrame{
 		g = g.getScaledInstance(64, 64, Image.SCALE_SMOOTH);
 		this.setIconImage(g);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setVisible(true);
+		this.setVisible(false);
 	}
 	public class windowChange implements WindowListener, WindowStateListener{
 		@Override
@@ -227,12 +227,22 @@ public class GND_Control_GUI_HUB extends JFrame{
 			GND_Control_GUI_HUB.this.setVisible(false);
 		}
 	}
+	public void finish_splash()
+	{
+		this.setVisible(true);
+	}
+	
 	public static void main(String[] args) {
+		// do splash first
+		
+		GND_Control_GUI_HUB m=null;
+		
 		try {
-			new GND_Control_GUI_HUB();
+			m = new GND_Control_GUI_HUB();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		new LA_Productions(m);
 	}
 }

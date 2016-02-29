@@ -29,12 +29,14 @@ public class LA_Productions extends JWindow {
 	
 	private JLabel splashLabel;
 	private List<BufferedImage> images = new ArrayList<BufferedImage>(3);
+	private SplashListener splashlistener;
 	//private static ImageIcon l=new ImageIcon("./lucal.png");
 	//private static ImageIcon a = new ImageIcon("./andrii.png");
 	//private static ImageIcon la = new ImageIcon("la1.png");
 	
-	public LA_Productions()
+	public LA_Productions(SplashListener t)
 	{
+		splashlistener = t;
 		try {
 			for(int i=0; i<99;i++)
 			{
@@ -84,9 +86,10 @@ public class LA_Productions extends JWindow {
 				//progressbar.setValue(counter);
 				if(counter == PROGRESS_MAX)
 				{
+					splashlistener.finish_splash();
 					LA_Productions.this.dispose();
 					timer.stop();
-					System.exit(0);
+					//System.exit(0);
 				}
 				//if(counter >30 && counter <60)
 				//{
@@ -103,8 +106,8 @@ public class LA_Productions extends JWindow {
 		timer.start();
 	}
 	
-	public static void main(String[] args)
-	{
-		new LA_Productions();
-	}
+	//public static void main(String[] args)
+	//{
+	//	new LA_Productions();
+	//}
 }
