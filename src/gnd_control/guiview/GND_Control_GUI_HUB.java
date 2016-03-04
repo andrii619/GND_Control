@@ -30,6 +30,7 @@ import javax.swing.SpringLayout;
 
 import gnd_control.control.Control;
 import gnd_control.control.GND_Control;
+import gnd_control.guiview.interractive.Interractive_GUI;
 import gnd_control.guiview.profile.Profile_HUB_GUI;
 import gnd_control.guiview.water.Water_GUI;
 
@@ -47,7 +48,7 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 	JPanel p2 = new Profile_HUB_GUI();
 	JPanel p3 = new JPanel();
 	JPanel p4 = new Water_GUI();
-	JPanel p5 = new JPanel();
+	JPanel p5 = new Interractive_GUI();
 	JLabel l1 = new JLabel("(C) 2016 Software Engineering Team: Lucas Rivera, Andrii Hlyvko, Russell Epstein, Jonathan Zelaya, Prerak Mehta, Thomas Ippolito, and Kevin Wu");
 	JMenuBar bar = new JMenuBar();
 	JMenu m1 = new JMenu("FILE");

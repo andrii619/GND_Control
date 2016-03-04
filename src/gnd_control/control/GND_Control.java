@@ -1,12 +1,72 @@
 package gnd_control.control;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.MAVLink.Messages.MAVLinkMessage;
 
+import gnd_control.model.Backend;
+import gnd_control.model.Connection;
+import gnd_control.model.GND_Backend;
+import gnd_control.model.GND_Profile;
+import gnd_control.model.Profile;
+
 public class GND_Control implements Control, Vehicle_Observer {
+	Backend backend;
+	Profile currentProfile;
 	
 	public GND_Control()
 	{
+		backend = new GND_Backend();
+	}
+	
+	
+	public List<Connection> getConnections()
+	{
+		return null;
+	}
+	public List<String> listProfiles()
+	{
+		List<String> profiles = new ArrayList<String>();
+		for(Profile p : backend.getProfiles())
+		{
+			profiles.add(p.getName());
+		}
 		
+		return profiles;
+	}
+	
+	public boolean addProfile(String name, String description)
+	{
+		if(!profileExists(name))
+		{
+			GND_Profile profile = new GND_Profile(name, description);
+			backend.writeProfile(profile);
+			return true;
+		}
+		else
+		return false;
+	}
+	
+	public boolean deleteProfile(String name)
+	{
+		if(profileExists(name))
+		{
+			backend.deleteProfile(name);
+			return true;
+		}
+		else 
+			return false;
+	}
+	private boolean profileExists(String name)
+	{
+		return false;
+	}
+	public void selectProfile(String Name)
+	{
+		if(currentProfile != null)
+			backend.writeProfile(this.currentProfile);
+		this.currentProfile = backend.readProfile(Name);
 	}
 
 	@Override

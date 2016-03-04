@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
-public class Create_Connection extends JFrame implements ActionListener {
+public class Create_Connection extends JFrame {
 	
 	///////
 	private JPanel contentPane; // root pane
@@ -66,7 +66,21 @@ public class Create_Connection extends JFrame implements ActionListener {
 	private JFileChooser logChooser;
 	///////////////////////////////////
 	private JPanel whoiPanel;
+	private SpringLayout whoiSpring;
+	private JLabel whoiPortLabel;
+	private JLabel whoiRateLabel;
+	private JLabel whoiParityLabel;
+	private JLabel whoidataBitsLabel;
+	private JLabel whoiStopBitsLabel;
+	private JComboBox<String> whoiPortBox;
+	private JComboBox<Integer> whoiBaudRateBox;
+	private JComboBox<String> whoiParityBox;
+	private JComboBox<Integer> whoiDataBitsBox;
+	private JComboBox<Integer> whoiStopBitsBox;
 	//////////////////////
+	private BoardConnect boardConnect;
+	private ButtonListener buttonListener;
+	
 	private final static String SERIAL_PANEL = "Serial";
 	private final static String WHOI_PANEL = "WHOI";
 	private final static String TCP_PANEL = "TCP";
@@ -81,7 +95,7 @@ public class Create_Connection extends JFrame implements ActionListener {
 	
 	
 	
-	public Create_Connection()
+	public Create_Connection(BoardConnect b)
 	{
 		super("Create Connection");
 		this.setPreferredSize(new Dimension(600,500));
@@ -101,7 +115,7 @@ public class Create_Connection extends JFrame implements ActionListener {
 		nameField.setPreferredSize(new Dimension(100,20));
 		connectionBox = new JComboBox<String>(choises);
 		connectionBox.setSelectedIndex(0);
-		connectionBox.addActionListener(this);
+		//connectionBox.addActionListener(this);
 		connectionBox.addItemListener(new ItemListener(){
 
 			@Override
@@ -158,6 +172,10 @@ public class Create_Connection extends JFrame implements ActionListener {
 		this.contentPane.add(buttonPanel, BorderLayout.SOUTH);
 		
 		
+		boardConnect = b;
+		buttonListener = new ButtonListener();
+		this.addButton.addActionListener(buttonListener);
+		this.cancelButton.addActionListener(buttonListener);
 		
 		
 		this.pack();
@@ -167,7 +185,74 @@ public class Create_Connection extends JFrame implements ActionListener {
 	
 	private void makeWHOIPanel() {
 		// TODO Auto-generated method stub
-		this.whoiPanel = new JPanel();
+		whoiSpring = new SpringLayout();
+		this.whoiPanel = new JPanel(whoiSpring);
+		
+		whoiPanel.setPreferredSize(new Dimension(300,300));
+		whoiPanel.setBorder(BorderFactory.createBevelBorder(HEIGHT));
+		whoiPortLabel = new JLabel("Serial Port:");;
+		whoiRateLabel = new JLabel("Baud Rate:");
+		whoiParityLabel = new JLabel("Parity: ");
+		whoidataBitsLabel = new JLabel("Data Bits: ");
+		whoiStopBitsLabel = new JLabel("Stop Bits: ");
+		whoiPortBox = new JComboBox<String>();
+		whoiBaudRateBox = new JComboBox<Integer>(rateList);;
+		whoiParityBox= new JComboBox<String>(parityList);;
+		whoiDataBitsBox=new JComboBox<Integer>(dataList);;
+		whoiStopBitsBox=new JComboBox<Integer>(stopList);;
+		
+		whoiPortBox.setPreferredSize(new Dimension(80,25));
+		whoiParityBox.setPreferredSize(new Dimension(80,25));
+		whoiStopBitsBox.setPreferredSize(new Dimension(80,25));
+		whoiBaudRateBox.setPreferredSize(new Dimension(80,25));
+		whoiDataBitsBox.setPreferredSize(new Dimension(80,25));
+		
+		whoiPanel.add(whoiPortLabel);
+		whoiSpring.putConstraint(SpringLayout.WEST, whoiPortLabel, 50, SpringLayout.WEST, whoiPanel);
+		whoiSpring.putConstraint(SpringLayout.NORTH, whoiPortLabel, 50, SpringLayout.NORTH, whoiPanel);
+		
+		whoiPanel.add(whoiPortBox);
+		whoiSpring.putConstraint(SpringLayout.WEST, whoiPortBox, 20, SpringLayout.EAST, whoiPortLabel);
+		whoiSpring.putConstraint(SpringLayout.NORTH, whoiPortBox, 50, SpringLayout.NORTH, whoiPanel);
+		whoiSpring.putConstraint(SpringLayout.EAST, whoiPortBox, -50, SpringLayout.EAST, whoiPanel);
+		
+		whoiPanel.add(whoiRateLabel);
+		whoiSpring.putConstraint(SpringLayout.WEST, whoiRateLabel, 50, SpringLayout.WEST, whoiPanel);
+		whoiSpring.putConstraint(SpringLayout.NORTH, whoiRateLabel, 50, SpringLayout.SOUTH, whoiPortLabel);
+		
+		
+		whoiPanel.add(whoiBaudRateBox);
+		whoiSpring.putConstraint(SpringLayout.WEST, whoiBaudRateBox, 20, SpringLayout.EAST, whoiRateLabel);
+		whoiSpring.putConstraint(SpringLayout.NORTH, whoiBaudRateBox, 50, SpringLayout.SOUTH, whoiPortLabel);
+		whoiSpring.putConstraint(SpringLayout.EAST, whoiBaudRateBox, -50, SpringLayout.EAST, whoiPanel);
+		
+		whoiPanel.add(whoiParityLabel);
+		whoiSpring.putConstraint(SpringLayout.WEST, whoiParityLabel, 50, SpringLayout.WEST, whoiPanel);
+		whoiSpring.putConstraint(SpringLayout.NORTH, whoiParityLabel, 50, SpringLayout.SOUTH, whoiRateLabel);
+		
+		whoiPanel.add(whoiParityBox);
+		whoiSpring.putConstraint(SpringLayout.WEST, whoiParityBox, 147, SpringLayout.WEST, whoiPanel);
+		whoiSpring.putConstraint(SpringLayout.NORTH, whoiParityBox, 50, SpringLayout.SOUTH, whoiRateLabel);
+		whoiSpring.putConstraint(SpringLayout.EAST, whoiParityBox, -50, SpringLayout.EAST, whoiPanel);
+		//
+		whoiPanel.add(whoidataBitsLabel);
+		whoiSpring.putConstraint(SpringLayout.WEST, whoidataBitsLabel, 50, SpringLayout.WEST, whoiPanel);
+		whoiSpring.putConstraint(SpringLayout.NORTH, whoidataBitsLabel, 50, SpringLayout.SOUTH, whoiParityLabel);
+		
+		whoiPanel.add(whoiDataBitsBox);
+		whoiSpring.putConstraint(SpringLayout.WEST, whoiDataBitsBox, 147, SpringLayout.WEST, whoiPanel);
+		whoiSpring.putConstraint(SpringLayout.NORTH, whoiDataBitsBox, 50, SpringLayout.SOUTH, whoiParityLabel);
+		whoiSpring.putConstraint(SpringLayout.EAST, whoiDataBitsBox, -50, SpringLayout.EAST, whoiPanel);
+		
+		
+		whoiPanel.add(whoiStopBitsLabel);
+		whoiSpring.putConstraint(SpringLayout.WEST, whoiStopBitsLabel, 50, SpringLayout.WEST, whoiPanel);
+		whoiSpring.putConstraint(SpringLayout.NORTH, whoiStopBitsLabel, 50, SpringLayout.SOUTH, whoidataBitsLabel);
+		
+		whoiPanel.add(whoiStopBitsBox);
+		whoiSpring.putConstraint(SpringLayout.WEST, whoiStopBitsBox, 147, SpringLayout.WEST, whoiPanel);
+		whoiSpring.putConstraint(SpringLayout.NORTH, whoiStopBitsBox, 50, SpringLayout.SOUTH, whoidataBitsLabel);
+		whoiSpring.putConstraint(SpringLayout.EAST, whoiStopBitsBox, -50, SpringLayout.EAST, whoiPanel);
 	}
 
 
@@ -330,19 +415,29 @@ public class Create_Connection extends JFrame implements ActionListener {
 
 
 
-	public static void main(String[] args) {
+	//public static void main(String[] args) {
 		// TODO Auto-generated method stub
-			Create_Connection m= new Create_Connection();
+	//		Create_Connection m= new Create_Connection(null);
 			//m.pack();
-			m.setVisible(true);
-	}
+	//		m.setVisible(true);
+	//}
 
-
+	public class ButtonListener implements ActionListener{
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		if(e.getSource() == cancelButton)
+		{
+			Create_Connection.this.setVisible(false);
+			boardConnect.setVisible(true);
+		}
+		else if(e.getSource() == addButton)
+		{
+			
+		}
 		
+	}
 	}
 
 }

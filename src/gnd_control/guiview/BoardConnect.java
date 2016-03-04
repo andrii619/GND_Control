@@ -37,6 +37,7 @@ public class BoardConnect extends JFrame {
 	
 	private ConnectListener connectListener;
 	private GND_Control_GUI_HUB hub;
+	private Create_Connection createConnection;
 
 	/**
 	 * Launch the application.
@@ -135,6 +136,8 @@ public class BoardConnect extends JFrame {
 		listModel.addElement("evsv");
 		this.connectionList.setSelectedIndex(0);
 		this.pack();
+		
+		createConnection = new Create_Connection(this);
 	}
 	public class ConnectListener implements ActionListener{
 
@@ -145,6 +148,27 @@ public class BoardConnect extends JFrame {
 			{
 				BoardConnect.this.setVisible(false);
 				hub.setVisible(true);
+				
+			}
+			else if(e.getSource() == addButton)
+			{
+				BoardConnect.this.setVisible(false);
+				createConnection.setVisible(true);
+			}
+			else if(e.getSource() == editButton)
+			{
+				
+			}
+			else if(e.getSource() == deleteButton)
+			{
+				
+			}
+			else if(e.getSource() == connectButton)
+			{
+				
+			}
+			else if(e.getSource() == disconnectButton)
+			{
 				
 			}
 		}
