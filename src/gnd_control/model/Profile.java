@@ -4,4 +4,6 @@ public interface Profile {
 
 	String getName();
 
+	String getDescription();
+
 }

@@ -13,4 +13,17 @@ public class Attitude {
 	{
 		
 	}
+	
+	public void setPitch(double pitch)
+	{
+		
+	}
+	public void setYaw(double yaw)
+	{
+		
+	}
+	public void setRoll(double roll)
+	{
+		
+	}
 }

@@ -4,17 +4,17 @@ public class GPosition {
 private double latitude;
 private double longtitude;
 
-public	GPosition(double latitude, double longtitude)
+public	GPosition(float latitude, float longtitude)
 {
 	this.latitude=latitude;
 	this.longtitude=longtitude;
 }
-public void setLatitude(double latitude)
+public void setLatitude(float latitude)
 {
 	this.latitude=latitude;
 }
 
-public void setLongtitude(double longtitude)
+public void setLongtitude(float longtitude)
 {
 	this.longtitude = longtitude;
 }

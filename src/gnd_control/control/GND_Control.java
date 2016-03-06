@@ -75,4 +75,32 @@ public class GND_Control implements Control, Vehicle_Observer {
 		
 	}
 
+
+	@Override
+	public boolean isVehicleConnected() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean isVehicleArmed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public void disarmVehicle() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void armVehicle() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

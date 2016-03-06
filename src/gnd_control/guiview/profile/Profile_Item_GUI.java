@@ -34,10 +34,10 @@ public class Profile_Item_GUI extends JPanel{
 		l3 = new JLabel(icon1);
 		p2.setBorder(BorderFactory.createEtchedBorder());
 		p2.add(l3);
-		l1.setText(l1.getText()+" "+profile.Title);
+		l1.setText(l1.getText()+" "+profile.getTitle());
 		spring.putConstraint(SpringLayout.WEST,l1,4,SpringLayout.WEST,p3);
 		p3.add(l1);
-		l2.setText(l2.getText()+" "+profile.Description);
+		l2.setText(l2.getText()+" "+profile.getDescription());
 		spring.putConstraint(SpringLayout.NORTH,l2,16,SpringLayout.NORTH,p3);
 		spring.putConstraint(SpringLayout.WEST,l2,4,SpringLayout.WEST,p3);
 		spring.putConstraint(SpringLayout.EAST,l2,-4,SpringLayout.WEST,b);

@@ -11,6 +11,7 @@ public class GND_Profile implements Profile, Serializable {
 	public GND_Profile(String Name)
 	{
 		this.Name = Name;
+		vehicle = new Copter();
 	}
 	public GND_Profile(String Name, String description)
 	{
@@ -28,6 +29,11 @@ public class GND_Profile implements Profile, Serializable {
 	}
 	@Override
 	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public String getDescription() {
 		// TODO Auto-generated method stub
 		return null;
 	}

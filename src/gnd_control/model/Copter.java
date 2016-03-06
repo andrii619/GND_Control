@@ -45,7 +45,7 @@ public class Copter implements Vehicle, ConnectionObserver{
 	
 	public Copter(Connection c)
 	{
-		this.home_location = new GPosition(40.521899, -74.459634);
+		this.home_location = new GPosition(40.521899f, -74.459634f);
 		this.connected = false;
 		connections  = new ArrayList<Connection>();
 		connections.add(c);
@@ -53,7 +53,7 @@ public class Copter implements Vehicle, ConnectionObserver{
 	}
 	public Copter()
 	{
-		this.home_location = new GPosition(40.521899, -74.459634);
+		this.home_location = new GPosition(40.521899f, -74.459634f);
 		this.connected = false;
 		connections  = new ArrayList<Connection>();
 	}
