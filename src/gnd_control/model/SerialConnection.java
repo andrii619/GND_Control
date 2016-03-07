@@ -15,33 +15,26 @@ import javax.comm.UnsupportedCommOperationException;
 
 import com.MAVLink.MAVLinkPacket;
 
-public class SerialConnection implements Connection,  SerialPortEventListener {
+public class SerialConnection implements Connection,Runnable,  SerialPortEventListener {
 
+	private String name;
+	
 	private String telemetryPort;
-	private String WHOIPort;
 	private int telemetryRate;
-	private int whoiRate;
 	
 	private CommPortIdentifier telemetryID;
-	private CommPortIdentifier whoiID;
 	
 	private SerialPort telemetrySerial;
-	private SerialPort whoiSerial;
 	
 	private InputStream telemetryInput;
 	private OutputStream telemetryOutput;
 	
-	private InputStream whoiInput;
-	private OutputStream whoiOutput;
-	
-	
-	public SerialConnection(String port, int rate )
+	public SerialConnection(String name, String port, int rate )
 	{
+		this.name = name;
 		this.telemetryPort = new String();
-		this.WHOIPort = new String();
 		
 		this.telemetryRate = 0;
-		this.whoiRate = 0;
 	}
 	
 	
@@ -57,24 +50,7 @@ public class SerialConnection implements Connection,  SerialPortEventListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(this.whoiSerial != null)
-		{
-			b = generateWHOIPacket(p);
-			try {
-				this.whoiOutput.write(b);
-				this.whoiOutput.flush();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 		// send the byte buffer over serial connection 
-	}
-	public static byte[] generateWHOIPacket(MAVLinkPacket p)
-	{
-		byte[] b =null;
-		return b;
-		
 	}
 
 
@@ -208,6 +184,29 @@ public class SerialConnection implements Connection,  SerialPortEventListener {
 
 	@Override
 	public void addObserver(ConnectionObserver c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public String getConnectionName() {
+		// TODO Auto-generated method stub
+		return this.name;
+	}
+
+
+	@Override
+	public void setConnectionName(String name) {
+		// TODO Auto-generated method stub
+		if(name!= null)
+			if(!name.isEmpty())
+				this.name=name;
+	}
+
+
+	@Override
+	public void run() {
 		// TODO Auto-generated method stub
 		
 	}

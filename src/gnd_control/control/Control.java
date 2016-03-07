@@ -1,5 +1,7 @@
 package gnd_control.control;
 
+import gnd_control.model.Vehicle;
+
 public interface Control {
 
 	boolean isVehicleConnected();
@@ -9,5 +11,7 @@ public interface Control {
 	void disarmVehicle();
 
 	void armVehicle();
+
+	Vehicle getCurrentVehicle();
 
 }

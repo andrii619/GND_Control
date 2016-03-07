@@ -6,4 +6,6 @@ public interface Profile {
 
 	String getDescription();
 
+	Vehicle getVehicle();
+
 }

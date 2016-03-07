@@ -18,6 +18,7 @@ import com.MAVLink.Parser;
 import com.MAVLink.Messages.MAVLinkStats;
 
 public class TCPConnection implements Connection, Runnable {
+	String connectionName;
 	Socket socket = null;
 	InputStream inputStream = null;
 	OutputStream outputStream = null;
@@ -27,8 +28,9 @@ public class TCPConnection implements Connection, Runnable {
 	List<ConnectionObserver> listeners;
 	private boolean connected;
 	
-	public TCPConnection(String hostname, int port)
+	public TCPConnection(String name,String hostname, int port)
 	{
+		this.connectionName=name;
 		socket = null;
 		try {
 			socket = new Socket(hostname, port);
@@ -175,6 +177,20 @@ public class TCPConnection implements Connection, Runnable {
 		{
 			listeners.get(i).handleMAVPacket(p);
 		}
+	}
+
+	@Override
+	public String getConnectionName() {
+		// TODO Auto-generated method stub
+		return this.connectionName;
+	}
+
+	@Override
+	public void setConnectionName(String name) {
+		// TODO Auto-generated method stub
+		if(name!=null)
+			if(!name.isEmpty())
+				this.connectionName=name;
 	}
 
 }

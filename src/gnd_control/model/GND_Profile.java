@@ -37,4 +37,9 @@ public class GND_Profile implements Profile, Serializable {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public Vehicle getVehicle() {
+		// TODO Auto-generated method stub
+		return vehicle;
+	}
 }

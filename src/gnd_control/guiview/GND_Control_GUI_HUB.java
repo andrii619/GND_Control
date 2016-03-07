@@ -224,8 +224,11 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 				GND_Control_GUI_HUB.this.b1.setIcon(icon6);
 				connection = true;
 			}
-			boardConnect.setVisible(true);
-			GND_Control_GUI_HUB.this.setVisible(false);
+			if(control.getCurrentVehicle() != null)
+			{
+				boardConnect.setVisible(true);
+				GND_Control_GUI_HUB.this.setVisible(false);
+			}
 		}
 	}
 	public void finish_splash()

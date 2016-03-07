@@ -11,7 +11,8 @@ import java.net.UnknownHostException;
 import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.Parser;
 
-public class UDPConnection extends Thread implements Connection {
+public class UDPConnection implements Connection, Runnable {
+	private String connectionName;
 	private int port;
 	private String address;
 	
@@ -24,8 +25,9 @@ public class UDPConnection extends Thread implements Connection {
 	
 	private Parser parser;
 	
-	public UDPConnection(String address, int port)
+	public UDPConnection(String name, String address, int port)
 	{
+		this.connectionName=name;
 		this.port = port;
 		this.address = address;
 		
@@ -59,7 +61,8 @@ public class UDPConnection extends Thread implements Connection {
 		
 		parser=new Parser();
 		
-		this.start();
+		new Thread(this).start();
+		//this.start();
 	}
 
 	@Override
@@ -134,6 +137,23 @@ public class UDPConnection extends Thread implements Connection {
 
 	@Override
 	public void addObserver(ConnectionObserver c) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void setConnectionName(String name)
+	{
+		if(name!=null)
+			if(!name.isEmpty())
+				this.connectionName=name;
+	}
+	public String getConnectionName()
+	{
+		return this.connectionName;
+	}
+
+	@Override
+	public void run() {
 		// TODO Auto-generated method stub
 		
 	}

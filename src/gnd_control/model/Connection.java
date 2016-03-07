@@ -3,6 +3,10 @@ package gnd_control.model;
 import com.MAVLink.MAVLinkPacket;
 
 public interface Connection  {
+	
+	public String getConnectionName();
+	
+	public void setConnectionName(String name);
 
 	public void connect();
 	

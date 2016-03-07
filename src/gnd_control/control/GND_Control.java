@@ -10,14 +10,17 @@ import gnd_control.model.Connection;
 import gnd_control.model.GND_Backend;
 import gnd_control.model.GND_Profile;
 import gnd_control.model.Profile;
+import gnd_control.model.Vehicle;
 
 public class GND_Control implements Control, Vehicle_Observer {
 	Backend backend;
-	Profile currentProfile;
+	Profile currentProfile = new GND_Profile("Sample");
+	Vehicle currentVehicle;
 	
 	public GND_Control()
 	{
 		backend = new GND_Backend();
+		currentVehicle=currentProfile.getVehicle();
 	}
 	
 	
@@ -101,6 +104,13 @@ public class GND_Control implements Control, Vehicle_Observer {
 	public void armVehicle() {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	@Override
+	public Vehicle getCurrentVehicle() {
+		// TODO Auto-generated method stub
+		return this.currentVehicle;
 	}
 
 }
