@@ -1,5 +1,7 @@
 package gnd_control.model;
 
+import java.util.List;
+
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
 import com.MAVLink.Messages.MAVLinkMessage;
@@ -28,4 +30,6 @@ public interface Vehicle {
 	public void handleMAVLink_Message(MAVLinkMessage m);
 	
 	public void get_position();
+	
+	public List<Connection> listConnections();
 }

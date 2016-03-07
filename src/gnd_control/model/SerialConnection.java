@@ -17,10 +17,10 @@ import com.MAVLink.MAVLinkPacket;
 
 public class SerialConnection implements Connection,Runnable,  SerialPortEventListener {
 
-	private String name;
+	private String connectionName;
 	
-	private String telemetryPort;
-	private int telemetryRate;
+	private String port;
+	private int rate;
 	
 	private CommPortIdentifier telemetryID;
 	
@@ -31,10 +31,10 @@ public class SerialConnection implements Connection,Runnable,  SerialPortEventLi
 	
 	public SerialConnection(String name, String port, int rate )
 	{
-		this.name = name;
-		this.telemetryPort = new String();
+		this.connectionName = name;
+		this.port = port;
 		
-		this.telemetryRate = 0;
+		this.rate = rate;
 	}
 	
 	
@@ -54,12 +54,12 @@ public class SerialConnection implements Connection,Runnable,  SerialPortEventLi
 	}
 
 
-	public void connectTelemetry(String port, int baudRate) {
+	public void connect() {
 		// TODO Auto-generated method stub
 		try {
 			this.telemetryID = CommPortIdentifier.getPortIdentifier(port);
 			this.telemetrySerial = (SerialPort) this.telemetryID.open("RE_LINK", 2000);
-			this.telemetrySerial.setSerialPortParams(baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+			this.telemetrySerial.setSerialPortParams(rate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 			this.telemetrySerial.addEventListener(this);
 			this.telemetrySerial.setDTR(false);
 			this.telemetrySerial.setRTS(false);
@@ -100,7 +100,7 @@ public class SerialConnection implements Connection,Runnable,  SerialPortEventLi
 	}
 
 
-	
+/**	
 	public void connectWHOI(String port, int baudRate) {
 		// TODO Auto-generated method stub
 		try {
@@ -131,7 +131,8 @@ public class SerialConnection implements Connection,Runnable,  SerialPortEventLi
 		}
 	}
 
-
+*/
+	/**
 	
 	public void disconnectWHOI() {
 		// TODO Auto-generated method stub
@@ -145,7 +146,7 @@ public class SerialConnection implements Connection,Runnable,  SerialPortEventLi
 		
 		this.whoiSerial.close();
 	}
-
+*/
 
 	@Override
 	public void serialEvent(SerialPortEvent arg0) {
@@ -155,28 +156,7 @@ public class SerialConnection implements Connection,Runnable,  SerialPortEventLi
 
 
 	@Override
-	public void connect() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
 	public void disconnect() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void sendWHOI(MAVLinkPacket packet) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void sendWHOI(WHOIPacket packet) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -192,7 +172,7 @@ public class SerialConnection implements Connection,Runnable,  SerialPortEventLi
 	@Override
 	public String getConnectionName() {
 		// TODO Auto-generated method stub
-		return this.name;
+		return this.connectionName;
 	}
 
 
@@ -201,7 +181,7 @@ public class SerialConnection implements Connection,Runnable,  SerialPortEventLi
 		// TODO Auto-generated method stub
 		if(name!= null)
 			if(!name.isEmpty())
-				this.name=name;
+				this.connectionName=name;
 	}
 
 
@@ -209,5 +189,28 @@ public class SerialConnection implements Connection,Runnable,  SerialPortEventLi
 	public void run() {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	@Override
+	public int compareTo(Connection b) {
+		// TODO Auto-generated method stub
+		return this.connectionName.compareTo(b.getConnectionName());
+	}
+	public boolean equals(Object o)
+	{
+		if(this == o)
+			return true;
+		if(!(o instanceof Connection))
+		{
+			return false;
+		}
+		Connection temp = (Connection)o;
+		if(temp.getConnectionName().compareTo(this.connectionName)==0)
+		{
+			return true;
+		}
+		else
+			return false;
 	}
 }

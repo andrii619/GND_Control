@@ -37,7 +37,7 @@ import gnd_control.guiview.water.Water_GUI;
 
 public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 	//private GND_Control_GUI_HUB hub;
-	private Control control = new GND_Control();
+	public Control control = new GND_Control();
 	// all sub windows
 	private BoardConnect boardConnect = new BoardConnect(this);
 	

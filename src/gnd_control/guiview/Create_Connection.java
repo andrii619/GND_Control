@@ -21,6 +21,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
+import gnd_control.model.Connection;
+import gnd_control.model.TCPConnection;
+
 public class Create_Connection extends JFrame {
 	
 	///////
@@ -35,6 +38,7 @@ public class Create_Connection extends JFrame {
 	private JLabel nameLabel;
 	private JLabel typeLabel;
 	private JTextField nameField;
+	private JLabel errorLabel;
 	//////////////
 	//////////////////////////////////
 	private JPanel cardPanel;
@@ -93,11 +97,12 @@ public class Create_Connection extends JFrame {
 	private final static Integer[] stopList = {1,2};
 	private final static Integer[] dataList= {5,6,7,8};
 	
+	private GND_Control_GUI_HUB hub;
 	
-	
-	public Create_Connection(BoardConnect b)
+	public Create_Connection(GND_Control_GUI_HUB hub,BoardConnect b)
 	{
 		super("Create Connection");
+		this.hub=hub;
 		this.setPreferredSize(new Dimension(600,500));
 		this.setMinimumSize(new Dimension(600,500));
 		this.contentPane = new JPanel();
@@ -105,6 +110,7 @@ public class Create_Connection extends JFrame {
 		this.contentPane.setLayout(new BorderLayout());
 		this.setContentPane(contentPane);
 		///////////////////////////////////////////////////
+		errorLabel=new JLabel();
 		connectionTypePanel = new JPanel();
 		connectionTypePanel.setPreferredSize(new Dimension(400,80));
 		this.connectionTypePanel.setLayout(new FlowLayout());
@@ -126,6 +132,7 @@ public class Create_Connection extends JFrame {
 			
 		});
 		this.connectionTypePanel.add(nameLabel);
+		connectionTypePanel.add(errorLabel);
 		nameField.setPreferredSize(new Dimension(100,20));
 		this.connectionTypePanel.add(nameField);
 		JPanel tmp = new JPanel();
@@ -434,7 +441,46 @@ public class Create_Connection extends JFrame {
 		}
 		else if(e.getSource() == addButton)
 		{
-			
+			String connectionName=nameField.getText();
+			if(connectionName.isEmpty())
+			{
+				errorLabel.setText("Enter Connection Name!");
+				return;
+			}
+			String hostAddress = hostAddressField.getText();
+			int listeningPort=0;
+			try{
+				listeningPort = Integer.parseInt(listeningPortField.getText());
+			} catch (Exception ex)
+			{
+				errorLabel.setText("not a number");
+				return;
+			}
+			if(hostAddress.isEmpty())
+			{
+				errorLabel.setText("Enter the hostname");
+				return;
+			}
+			if(listeningPort<0)
+			{
+				errorLabel.setText("Invelid port range");
+				return;
+			}
+			// create the connection
+			Connection c =new TCPConnection(connectionName, hostAddress,listeningPort);
+			if(hub.control.addConnection(c))
+			{
+				Create_Connection.this.setVisible(false);
+				boardConnect.addConnection(c);
+				boardConnect.setVisible(true);
+			}
+			else
+			{
+				errorLabel.setText("Could not add connection");
+			}
+			// hostAddressField;
+			//	private JTextField listeningPortField;
+			//	S
 		}
 		
 	}

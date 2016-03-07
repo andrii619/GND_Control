@@ -56,6 +56,10 @@ public class Copter implements Vehicle, ConnectionObserver{
 		this.home_location = new GPosition(40.521899f, -74.459634f);
 		this.connected = false;
 		connections  = new ArrayList<Connection>();
+		
+		//// delete later
+		connections.add(new TCPConnection("temp","127.0.0.1",10000));
+		////
 	}
 	public Copter(GPosition home)
 	{
@@ -783,6 +787,11 @@ public class Copter implements Vehicle, ConnectionObserver{
 		{
 			connections.get(i).sendMAV(p);;
 		}
+	}
+	@Override
+	public List<Connection> listConnections() {
+		// TODO Auto-generated method stub
+		return this.connections;
 	}
 
 

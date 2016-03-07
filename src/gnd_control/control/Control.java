@@ -1,5 +1,8 @@
 package gnd_control.control;
 
+import java.util.List;
+
+import gnd_control.model.Connection;
 import gnd_control.model.Vehicle;
 
 public interface Control {
@@ -13,5 +16,9 @@ public interface Control {
 	void armVehicle();
 
 	Vehicle getCurrentVehicle();
+	
+	List<String> getConnectionList();
+
+	boolean addConnection(Connection c);
 
 }

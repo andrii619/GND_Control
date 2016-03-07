@@ -28,25 +28,46 @@ public class TCPConnection implements Connection, Runnable {
 	List<ConnectionObserver> listeners;
 	private boolean connected;
 	
+	private String hostname;
+	private int port;
+	
 	public TCPConnection(String name,String hostname, int port)
 	{
 		this.connectionName=name;
 		socket = null;
+		this.hostname=hostname;
+		this.port=port;
+		
+		queue = new ArrayBlockingQueue<MAVLinkPacket>(20);
+		parser= new Parser();
+		stats = new MAVLinkStats();
+		listeners = new ArrayList<ConnectionObserver>();
+		
+		new Thread(this).start();
+	}
+	
+	@Override
+	public void connect() {
+		// TODO Auto-generated method stub
 		try {
 			socket = new Socket(hostname, port);
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			this.connected=false;
 			return;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			connected=false;
+			return;
 		}
 		try {
 			socket.setReuseAddress(true);
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			connected=false;
 			return;
 		}
 		try {
@@ -60,25 +81,16 @@ public class TCPConnection implements Connection, Runnable {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			connected=false;
 		}
 		try {
 			outputStream = socket.getOutputStream();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			connected=false;
 		}
-		queue = new ArrayBlockingQueue<MAVLinkPacket>(20);
-		parser= new Parser();
-		stats = new MAVLinkStats();
-		listeners = new ArrayList<ConnectionObserver>();
-		
-		new Thread(this).start();
-	}
-	
-	@Override
-	public void connect() {
-		// TODO Auto-generated method stub
-		
+		connected = true;
 	}
 
 	@Override
@@ -102,6 +114,7 @@ public class TCPConnection implements Connection, Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		connected=false;
 	}
 
 	@Override
@@ -113,24 +126,12 @@ public class TCPConnection implements Connection, Runnable {
 		}
 		
 	}
-
-	@Override
-	public void sendWHOI(MAVLinkPacket packet) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void sendWHOI(WHOIPacket packet) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	public void run()
 	{
 		MAVLinkPacket packet = null;
 		
-	    while (true)
+	    while (true && socket!=null)
 	    {
 	    	if(!queue.isEmpty())
 	    	{
@@ -191,6 +192,31 @@ public class TCPConnection implements Connection, Runnable {
 		if(name!=null)
 			if(!name.isEmpty())
 				this.connectionName=name;
+	}
+	
+	public int compareTo(Connection b)
+	{
+		return this.connectionName.compareTo(b.getConnectionName());
+	}
+	public boolean equals(Object o)
+	{
+		if(this == o)
+			return true;
+		if(!(o instanceof Connection))
+		{
+			return false;
+		}
+		Connection temp = (Connection)o;
+		if(temp.getConnectionName().compareTo(this.connectionName)==0)
+		{
+			return true;
+		}
+		else
+			return false;
+	}
+	public boolean isConnected()
+	{
+		return this.connected;
 	}
 
 }

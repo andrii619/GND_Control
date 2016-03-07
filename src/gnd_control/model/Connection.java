@@ -2,7 +2,7 @@ package gnd_control.model;
 
 import com.MAVLink.MAVLinkPacket;
 
-public interface Connection  {
+public interface Connection extends Comparable<Connection>  {
 	
 	public String getConnectionName();
 	
@@ -14,10 +14,10 @@ public interface Connection  {
 	
 	public void sendMAV(MAVLinkPacket packet);
 	
-	public void sendWHOI(MAVLinkPacket packet);
-	
-	public void sendWHOI(WHOIPacket packet);
-	
 	public void addObserver(ConnectionObserver c);
+	
+	public int compareTo(Connection b);
+	
+	public boolean equals(Object o);
 	
 }

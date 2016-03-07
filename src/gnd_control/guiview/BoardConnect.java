@@ -9,6 +9,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -19,6 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
+
+import gnd_control.model.Connection;
 
 
 
@@ -137,7 +140,19 @@ public class BoardConnect extends JFrame {
 		this.connectionList.setSelectedIndex(0);
 		this.pack();
 		
-		createConnection = new Create_Connection(this);
+		createConnection = new Create_Connection(hub,this);
+		
+		/// get a list of all connections
+		List<String> temp = this.hub.control.getConnectionList();
+		
+		if(temp != null)
+		{
+			for(int i=0; i<temp.size();i++)
+			{
+				listModel.addElement(temp.get(i));
+			}
+		}
+		
 	}
 	public class ConnectListener implements ActionListener{
 
@@ -173,6 +188,10 @@ public class BoardConnect extends JFrame {
 			}
 		}
 		
+	}
+	public void addConnection(Connection c) {
+		// TODO Auto-generated method stub
+		listModel.addElement(c.getConnectionName());
 	}
 
 }

@@ -1,5 +1,6 @@
 package gnd_control.control;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class GND_Control implements Control, Vehicle_Observer {
 	{
 		return null;
 	}
-	public List<String> listProfiles()
+	public List<String> listProfiles() throws ClassNotFoundException, IOException
 	{
 		List<String> profiles = new ArrayList<String>();
 		for(Profile p : backend.getProfiles())
@@ -112,5 +113,33 @@ public class GND_Control implements Control, Vehicle_Observer {
 		// TODO Auto-generated method stub
 		return this.currentVehicle;
 	}
-
+	
+	public List<String> getConnectionList()
+	{
+		if(this.currentVehicle==null)
+			return null;
+		List<String> connections = new ArrayList<String>();
+		for(Connection c: currentVehicle.listConnections())
+		{
+			connections.add(c.getConnectionName());
+		}
+		return connections;
+		
+	}
+	public boolean addConnection(Connection c)
+	{
+		if(c==null)
+			return false;
+		List<Connection> connections=currentVehicle.listConnections();
+		if(connections.contains(c))
+			return false;
+		else
+		{
+			currentVehicle.addConnection(c);
+			return true;
+		}
+	}
+	
+	
+	
 }
