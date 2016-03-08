@@ -1,6 +1,8 @@
 package gnd_control.model;
 
-public class Attitude {
+import java.io.Serializable;
+
+public class Attitude implements Serializable{
 	private double pitch;
 	private double roll;
 	private double yaw;

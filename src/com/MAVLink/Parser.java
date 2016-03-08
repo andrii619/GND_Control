@@ -6,11 +6,13 @@
 
 package com.MAVLink;
 
+import java.io.Serializable;
+
 import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.Messages.MAVLinkStats;
 
-public class Parser {
-
+public class Parser implements Serializable {
+	private static final long serialVersionUID = 1L;
     /**
      * States from the parsing state machine
      */

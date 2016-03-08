@@ -1,6 +1,9 @@
 package gnd_control.model;
 
-public class Battery {
+import java.io.Serializable;
+
+public class Battery implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private double current;
 	private double voltage;
 	private double level;

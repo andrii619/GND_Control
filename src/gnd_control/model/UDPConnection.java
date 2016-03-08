@@ -1,6 +1,7 @@
 package gnd_control.model;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -11,7 +12,8 @@ import java.net.UnknownHostException;
 import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.Parser;
 
-public class UDPConnection implements Connection, Runnable {
+public class UDPConnection implements Connection, Runnable, Serializable {
+	private static final long serialVersionUID = 1L;
 	private String connectionName;
 	private int port;
 	private String address;

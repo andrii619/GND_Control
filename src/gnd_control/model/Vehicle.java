@@ -32,4 +32,5 @@ public interface Vehicle {
 	public void get_position();
 	
 	public List<Connection> listConnections();
+	public void closeConnection(Connection c);
 }

@@ -6,13 +6,16 @@
 
 package com.MAVLink.Messages;
 
+import java.io.Serializable;
+
 import com.MAVLink.MAVLinkPacket;
 
 /**
  * Storage for MAVLink Packet and Error statistics
  * 
  */
-public class MAVLinkStats /* implements Serializable */{
+public class MAVLinkStats implements Serializable {
+	private static final long serialVersionUID = 1L;
 
     public int receivedPacketCount;
 

@@ -1,5 +1,6 @@
 package gnd_control.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +15,9 @@ import com.MAVLink.enums.MAV_CMD;
 import com.MAVLink.enums.MAV_MODE;
 import com.MAVLink.enums.MAV_TYPE;
 
-public class Copter implements Vehicle, ConnectionObserver{
+public class Copter implements Vehicle, ConnectionObserver, Serializable{
+	
+	private static final long serialVersionUID = 1L;
 	
 	private int vehicleId;
 	private boolean active;
@@ -792,6 +795,23 @@ public class Copter implements Vehicle, ConnectionObserver{
 	public List<Connection> listConnections() {
 		// TODO Auto-generated method stub
 		return this.connections;
+	}
+	@Override
+	public void closeConnection(Connection c) {
+		// TODO Auto-generated method stub
+		if(this.connections==null)
+			return;
+		if(connections.isEmpty())
+			return;
+		if(c==null)
+			return;
+		for(int i=0;i<connections.size();i++)
+		{
+			if(connections.get(i).equals(c))
+			{
+				connections.get(i).disconnect();
+			}
+		}
 	}
 
 

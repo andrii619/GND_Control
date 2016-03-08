@@ -3,6 +3,7 @@ package gnd_control.model;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
@@ -17,7 +18,8 @@ import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.Parser;
 import com.MAVLink.Messages.MAVLinkStats;
 
-public class TCPConnection implements Connection, Runnable {
+public class TCPConnection implements Connection, Runnable, Serializable {
+	private static final long serialVersionUID = 1L;
 	String connectionName;
 	Socket socket = null;
 	InputStream inputStream = null;

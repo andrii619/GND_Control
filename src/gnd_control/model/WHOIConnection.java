@@ -1,11 +1,13 @@
 package gnd_control.model;
 
+import java.io.Serializable;
+
 import javax.comm.SerialPortEvent;
 import javax.comm.SerialPortEventListener;
 
 import com.MAVLink.MAVLinkPacket;
 
-public class WHOIConnection implements Connection,Runnable,SerialPortEventListener {
+public class WHOIConnection implements Connection,Runnable,SerialPortEventListener, Serializable {
 	private String connectionName;
 	
 	@Override

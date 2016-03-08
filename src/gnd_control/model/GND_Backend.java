@@ -81,7 +81,10 @@ public class GND_Backend implements Backend, Serializable {
 			e.printStackTrace();
 		}
     	if(existingProfiles == null)
+    	{
     		return;
+    		//existingProfiles=new ArrayList<Profile>();
+    	}
     	for(int i=0; i<existingProfiles.size(); i++)
     	{
     		if(existingProfiles.get(i).getName().compareTo(profile.getName())==0)
@@ -167,6 +170,17 @@ public class GND_Backend implements Backend, Serializable {
 			}
 			for(int i=0;i<profiles.size();i++)
 			{
+				if(profiles.get(i)==null)
+				{
+					System.out.println("null profile");
+					continue;
+					
+				}
+				if(profiles.get(i).getName()==null)
+				{
+					System.out.println("null name");
+					continue;
+				}
 				if(profiles.get(i).getName().compareTo(name)==0)
 				{
 					n=profiles.get(i);

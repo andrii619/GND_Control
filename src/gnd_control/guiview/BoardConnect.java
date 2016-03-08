@@ -9,6 +9,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -35,6 +36,7 @@ public class BoardConnect extends JFrame {
 	
 	private JList connectionList;
 	private DefaultListModel<String> listModel;
+	private List<String> connections;
 	
 	private JButton addButton, editButton, deleteButton, connectButton, disconnectButton, backButton;
 	
@@ -143,15 +145,17 @@ public class BoardConnect extends JFrame {
 		createConnection = new Create_Connection(hub,this);
 		
 		/// get a list of all connections
-		List<String> temp = this.hub.control.getConnectionList();
-		
-		if(temp != null)
+		connections = this.hub.control.getConnectionList();
+		Collections.sort(connections);
+		if(connections != null)
 		{
-			for(int i=0; i<temp.size();i++)
+			for(int i=0; i<connections.size();i++)
 			{
-				listModel.addElement(temp.get(i));
+				listModel.addElement(connections.get(i));
 			}
 		}
+		connectionList.setSelectedIndex(0);
+		
 		
 	}
 	public class ConnectListener implements ActionListener{
@@ -176,7 +180,20 @@ public class BoardConnect extends JFrame {
 			}
 			else if(e.getSource() == deleteButton)
 			{
-				
+				int i = connectionList.getSelectedIndex();
+				if(i<0)
+					return;
+				String currentConnection=new String();
+				if(i>=0)
+				{
+					currentConnection= (String)connectionList.getSelectedValue();
+					listModel.remove(i);
+					connections.remove(currentConnection);
+					connectionList.setSelectedIndex(0);
+					connectionList.ensureIndexIsVisible(0);
+					hub.control.deleteConnection(currentConnection);
+					
+				}
 			}
 			else if(e.getSource() == connectButton)
 			{

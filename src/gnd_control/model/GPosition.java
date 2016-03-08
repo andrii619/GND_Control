@@ -1,8 +1,11 @@
 package gnd_control.model;
 
-public class GPosition {
+import java.io.Serializable;
+
+public class GPosition implements Serializable {
 private double latitude;
 private double longtitude;
+private static final long serialVersionUID = 1L;
 
 public	GPosition(float latitude, float longtitude)
 {

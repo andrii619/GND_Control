@@ -136,10 +136,33 @@ public class GND_Control implements Control, Vehicle_Observer {
 		else
 		{
 			currentVehicle.addConnection(c);
+			backend.writeProfile(currentProfile);
 			return true;
 		}
 	}
-	
+
+
+	@Override
+	public void deleteConnection(String currentConnection) {
+		// TODO Auto-generated method stub
+		if(this.currentVehicle==null)
+			return;
+		if(currentConnection == null)
+			return;
+		if(currentConnection.isEmpty())
+			return;
+		List<Connection> temp = this.currentVehicle.listConnections();
+		for(int i=0;i<temp.size();i++)
+		{
+			if(temp.get(i).getConnectionName().compareTo(currentConnection)==0)
+			{
+				this.currentVehicle.closeConnection(temp.get(i));
+				temp.remove(i);
+				return;
+			}
+		}
+		backend.writeProfile(currentProfile);
+	}
 	
 	
 }

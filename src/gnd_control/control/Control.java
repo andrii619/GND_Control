@@ -21,4 +21,6 @@ public interface Control {
 
 	boolean addConnection(Connection c);
 
+	void deleteConnection(String currentConnection);
+
 }
