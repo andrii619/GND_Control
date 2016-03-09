@@ -44,20 +44,27 @@ public class TCPConnection implements Connection, Runnable, Serializable {
 		parser= new Parser();
 		stats = new MAVLinkStats();
 		listeners = new ArrayList<ConnectionObserver>();
+		//try {
+		//	connect();
+		//} catch (MyConnectException e) {
+			// TODO Auto-generated catch block
+		//	e.printStackTrace();
+		//}
 		
-		new Thread(this).start();
+		//new Thread(this).start();
 	}
 	
 	@Override
-	public void connect() {
+	public void connect() throws MyConnectException {
 		// TODO Auto-generated method stub
 		try {
 			socket = new Socket(hostname, port);
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 			this.connected=false;
-			return;
+			throw new MyConnectException();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -93,25 +100,29 @@ public class TCPConnection implements Connection, Runnable, Serializable {
 			connected=false;
 		}
 		connected = true;
+		new Thread(this).start();
 	}
 
 	@Override
 	public void disconnect() {
 		// TODO Auto-generated method stub
 		try {
-			outputStream.close();
+			if(this.outputStream!=null)
+				outputStream.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
-			inputStream.close();
+			if(this.inputStream!=null)
+				inputStream.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
-			socket.close();
+			if(this.socket!=null)
+				socket.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -133,8 +144,21 @@ public class TCPConnection implements Connection, Runnable, Serializable {
 	{
 		MAVLinkPacket packet = null;
 		
-	    while (true && socket!=null)
+		
+	    while (true)
 	    {
+	    	//if(socket==null)
+			//{
+			//	try {
+			//		connect();
+			//	} catch (MyConnectException e) {
+					// TODO Auto-generated catch block
+			//		e.printStackTrace();
+			//		continue;
+			//	}
+			//}
+	    	if(socket==null)
+	    		continue;
 	    	if(!queue.isEmpty())
 	    	{
 	    		//queue.remove().encodePacket()

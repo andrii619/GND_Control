@@ -10,6 +10,7 @@ import gnd_control.model.Backend;
 import gnd_control.model.Connection;
 import gnd_control.model.GND_Backend;
 import gnd_control.model.GND_Profile;
+import gnd_control.model.MyConnectException;
 import gnd_control.model.Profile;
 import gnd_control.model.Vehicle;
 
@@ -21,6 +22,7 @@ public class GND_Control implements Control, Vehicle_Observer {
 	public GND_Control()
 	{
 		backend = new GND_Backend();
+		currentProfile=selectProfile("Sample");
 		currentVehicle=currentProfile.getVehicle();
 	}
 	
@@ -66,11 +68,13 @@ public class GND_Control implements Control, Vehicle_Observer {
 	{
 		return false;
 	}
-	public void selectProfile(String Name)
+	public Profile selectProfile(String Name)
 	{
 		if(currentProfile != null)
-			backend.writeProfile(this.currentProfile);
+			if(this.currentProfile.getName().compareTo(Name)!=0)
+				backend.writeProfile(this.currentProfile);
 		this.currentProfile = backend.readProfile(Name);
+		return currentProfile;
 	}
 
 	@Override
@@ -163,6 +167,74 @@ public class GND_Control implements Control, Vehicle_Observer {
 		}
 		backend.writeProfile(currentProfile);
 	}
+	public void saveCurrentProfile()
+	{
+		if(this.currentProfile!=null)
+		{
+			this.backend.writeProfile(currentProfile);
+		}
+	}
 	
+	public void closeCurrentConnections()
+	{
+		if(this.currentProfile==null)
+			return;
+		if(this.currentVehicle==null)
+			return;
+		List<Connection> temp = this.currentVehicle.listConnections();
+		if(temp == null)
+			return;
+		for(int i = 0; i < temp.size(); i++)
+		{
+			temp.get(i).disconnect();
+		}
+	}
+
+
+	@Override
+	public void closeConnection(String currentConnection) {
+		// TODO Auto-generated method stub
+		if(this.currentVehicle==null)
+			return;
+		List<Connection> c =this.currentVehicle.listConnections();
+		if(c==null)
+			return;
+		for(int i=0;i<c.size();i++)
+		{
+			if(c.get(i)==null)
+				continue;
+			if(c.get(i).getConnectionName().compareTo(currentConnection)==0)
+			{
+				c.get(i).disconnect();
+				break;
+			}
+		}
+	}
+
+
+	@Override
+	public void connectConnetion(String currentConnection) {
+		// TODO Auto-generated method stub
+		if(this.currentVehicle==null)
+			return;
+		List<Connection> c = this.currentVehicle.listConnections();
+		if(c==null)
+			return;
+		for(int i=0;i<c.size();i++)
+		{
+			if(c.get(i)==null)
+				continue;
+			if(c.get(i).getConnectionName().compareTo(currentConnection)==0)
+			{
+				try{
+				c.get(i).connect();
+				} catch(MyConnectException e)
+				{
+					
+				}
+				break;
+			}
+		}
+	}
 	
 }

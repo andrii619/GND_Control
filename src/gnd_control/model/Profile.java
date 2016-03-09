@@ -7,5 +7,7 @@ public interface Profile extends Comparable<Profile> {
 	String getDescription();
 
 	Vehicle getVehicle();
+	
+	void setFileName(String file);
 
 }

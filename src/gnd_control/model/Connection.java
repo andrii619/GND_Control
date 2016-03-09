@@ -8,7 +8,7 @@ public interface Connection extends Comparable<Connection>  {
 	
 	public void setConnectionName(String name);
 
-	public void connect();
+	public void connect() throws MyConnectException;
 	
 	public void disconnect();
 	

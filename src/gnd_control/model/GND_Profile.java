@@ -1,5 +1,6 @@
 package gnd_control.model;
 
+import java.io.File;
 import java.io.Serializable;
 
 
@@ -9,11 +10,14 @@ public class GND_Profile implements Profile, Serializable {
 	private String Name;
 	private String Description;
 	private Vehicle vehicle;
+	private String fileName;
+	private static final String defaultPic=new String("src"+File.pathSeparator+"gnd_control"+File.pathSeparator+"guiview"+File.pathSeparator+"copter.png");
 	
 	public GND_Profile(String Name)
 	{
 		this.Name = Name;
 		vehicle = new Copter();
+		fileName=new String(defaultPic);
 	}
 	public GND_Profile(String Name, String description)
 	{
@@ -53,5 +57,11 @@ public class GND_Profile implements Profile, Serializable {
         Profile temp = (Profile) o;
         if (!Name.equals(temp.getName())) return false;
         return true;
+	}
+	public void setFileName(String file)
+	{
+		if(file!=null)
+			if(!file.isEmpty())
+				this.fileName=file;
 	}
 }

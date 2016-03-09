@@ -72,6 +72,7 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
 	public void addConnection(Connection c)
 	{
 		this.connections.add(c);
+		c.addObserver(this);
 	}
 	
 	@Override

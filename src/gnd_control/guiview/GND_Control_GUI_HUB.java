@@ -142,6 +142,8 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 		public void windowActivated(WindowEvent arg0) {}
 		@Override
 		public void windowClosed(WindowEvent arg0) {
+			control.closeCurrentConnections();
+			control.saveCurrentProfile();
 			System.exit(0);//TODO save state to file
 		}
 		@Override

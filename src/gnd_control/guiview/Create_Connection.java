@@ -461,7 +461,7 @@ public class Create_Connection extends JFrame {
 				errorLabel.setText("Enter the hostname");
 				return;
 			}
-			if(listeningPort<0)
+			if(listeningPort<=1024 || listeningPort>65536)
 			{
 				errorLabel.setText("Invelid port range");
 				return;

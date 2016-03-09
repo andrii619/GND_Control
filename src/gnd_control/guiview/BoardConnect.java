@@ -197,11 +197,26 @@ public class BoardConnect extends JFrame {
 			}
 			else if(e.getSource() == connectButton)
 			{
-				
+				int i = connectionList.getSelectedIndex();
+				if(i<0)
+					return;
+				if(i>=0)
+				{
+					String currentConnection = (String)connectionList.getSelectedValue();
+					hub.control.connectConnetion(currentConnection);
+				}
 			}
 			else if(e.getSource() == disconnectButton)
 			{
+				int i = connectionList.getSelectedIndex();
+				if(i<0)
+					return;
 				
+				if(i>=0)
+				{
+					String currentConnection = (String)connectionList.getSelectedValue();
+					hub.control.closeConnection(currentConnection);
+				}
 			}
 		}
 		
