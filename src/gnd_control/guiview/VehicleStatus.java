@@ -2,6 +2,8 @@ package gnd_control.guiview;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -13,7 +15,9 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
-public class VehicleStatus extends JPanel {
+import gnd_control.model.VehicleStateListener;
+
+public class VehicleStatus extends JPanel implements VehicleStateListener {
 	private JButton armButton;
 	private JProgressBar batteryStatusBar;
 	private static final int PROGRESS_MAX=100;
@@ -26,14 +30,18 @@ public class VehicleStatus extends JPanel {
 	private JComboBox<String> modeBox;
 	private static final String[] MODES = {"Stabilize","Acro","Alt Hold","Auto","Guided","Loiter","RTL","Circle","Position",
 			"Land"};
+	private static final String ARMED="<html><font color=red>Armed</font></html>";
+	private static final String DISARMED = "<html><font color=green>Disarmed</font></html>";
+	private static final String DISCONNECTED="<html><font color=blue>Disconnected</font></html>";
 	
 	private GND_Control_GUI_HUB hub;
+	private StatusListener actionListener;
 	
 	public VehicleStatus(GND_Control_GUI_HUB hub)
 	{
 		this.hub=hub;
 		layout = new SpringLayout();
-		armButton = new JButton("<html><font color=blue>Disconnected</font></html>");
+		armButton = new JButton(DISCONNECTED);
 		armButton.setEnabled(false);
 		batteryStatusBar = new JProgressBar();
 		batteryStatusBar.setMaximum(PROGRESS_MAX);
@@ -45,10 +53,11 @@ public class VehicleStatus extends JPanel {
 		batteryStatusBar.setString("Battery Level: "+this.batteryStatusBar.getValue());
 		
 		
-		
+		actionListener=new StatusListener();
 		this.setLayout(layout);
 		
 		this.add(armButton);
+		armButton.addActionListener(actionListener);
 		layout.putConstraint(SpringLayout.WEST, armButton, 50, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.NORTH, armButton, 50, SpringLayout.NORTH, this);
 		layout.putConstraint(SpringLayout.EAST, armButton, -50, SpringLayout.EAST, this);
@@ -96,13 +105,13 @@ public class VehicleStatus extends JPanel {
 			if(hub.control.isVehicleArmed())
 			{
 				this.armButton.setEnabled(true);
-				this.armButton.setText("<html><font color=red>Armed</font></html>");
+				this.armButton.setText(ARMED);
 				
 			}
 			else
 			{
 				this.armButton.setEnabled(true);
-				this.armButton.setText("<html><font color=green>Disarmed</font></html>");
+				this.armButton.setText(DISARMED);
 			}
 			this.batteryStatusBar.setString("Battery Level "+hub.control.getVehicleBatteryLevel());
 			this.groundSpeedField.setText(""+hub.control.getVehicleGroundSpeed());
@@ -112,14 +121,14 @@ public class VehicleStatus extends JPanel {
 		else
 		{
 			this.armButton.setEnabled(false);
-			this.armButton.setText("<html><font color=blue>Disconnected</font></html>");
+			this.armButton.setText(DISCONNECTED);
 			this.batteryStatusBar.setValue(0);
 			this.groundSpeedField.setText("0.0");
 			this.altitudeField.setText("0.0");
 		}
 		
 		
-		
+		hub.control.addVehicleListener(this);
 		
 		this.setBorder(BorderFactory.createTitledBorder("Vehicle Status"));
 		this.setPreferredSize(new Dimension(400,400));
@@ -137,6 +146,73 @@ public class VehicleStatus extends JPanel {
 			f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			f.setVisible(true);
 			
+	}
+
+
+	@Override
+	public void armedChanged(boolean armed) {
+		// TODO Auto-generated method stub
+		if(this.hub==null)
+			return;
+		if(this.hub.control.isVehicleConnected())
+			if(armed)
+			{
+				this.armButton.setEnabled(true);
+				this.armButton.setText(ARMED);
+			}
+			else
+			{
+				this.armButton.setEnabled(true);
+				this.armButton.setText(DISARMED);
+			}
+	}
+
+
+	@Override
+	public void locationChange() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void batteryLevelChange() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void connected() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void flightModeChanged(String mode) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	protected class StatusListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			if(e.getSource()==armButton)
+			{
+				if(hub.control.isVehicleArmed())
+				{
+					hub.control.disarmVehicle();
+				}
+				else
+				{
+					hub.control.armVehicle();
+				}
+			}
+		}
+		
 	}
 
 }

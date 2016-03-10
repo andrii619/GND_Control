@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
@@ -13,6 +14,7 @@ import com.MAVLink.common.*;
 import com.MAVLink.enums.MAV_AUTOPILOT;
 import com.MAVLink.enums.MAV_CMD;
 import com.MAVLink.enums.MAV_MODE;
+import com.MAVLink.enums.MAV_MODE_FLAG_DECODE_POSITION;
 import com.MAVLink.enums.MAV_TYPE;
 
 public class Copter implements Vehicle, ConnectionObserver, Serializable{
@@ -29,6 +31,8 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
 	private float airSpeed;
 	private float climbRate;
 	private float altitude;
+	private float base_mode;
+	private float custom_mode;
 	
 	MAV_AUTOPILOT firmwareType;
 	MAV_TYPE vehicleType;
@@ -44,7 +48,9 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
 	
 	private List<Connection> connections;
 	private List<VehicleStateListener> listeners;
+	private VehicleStateListener controlListener;
 	private HashMap<String,Float> parameters;
+	private Timer timer;
 	
 	public Copter(Connection c)
 	{
@@ -56,6 +62,8 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
 		
 		listeners=new ArrayList<VehicleStateListener>();
 		
+		timer=new Timer();
+		
 	}
 	public Copter()
 	{
@@ -66,11 +74,10 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
 		
 		//// delete later
 		connections.add(new TCPConnection("temp","127.0.0.1",10000));
+		base_mode=0;
+		custom_mode=0;
 		////
-	}
-	public Copter(GPosition home)
-	{
-		this.home_location = home;
+		//timer=new Timer();
 	}
 
 	public void addConnection(Connection c)
@@ -181,6 +188,12 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
 			return;
 		listeners.add(l);
 	}
+	public void addControlListener(VehicleStateListener l)
+	{
+		if(l==null)
+			return;
+		this.controlListener=l;
+	}
 	public void transition() {
 		// TODO Auto-generated method stub
 		msg_command_long m = new msg_command_long();
@@ -254,6 +267,38 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
 		// TODO Auto-generated method stub
 		
 	}
+	public void handleHeartbeat(msg_heartbeat m)
+	{
+		this.connected=true;
+		
+		//check for arm/disarm change
+		boolean newArmed = (m.base_mode & MAV_MODE_FLAG_DECODE_POSITION.MAV_MODE_FLAG_DECODE_POSITION_SAFETY)!=0;
+		if(newArmed!=armed)
+		{
+			armed=newArmed;
+			//notify all observers
+			if(this.controlListener!=null)
+				controlListener.armedChanged(armed);
+			for(int i=0; i< this.listeners.size();i++)
+			{
+				this.listeners.get(i).armedChanged(armed);
+			}
+		}
+		
+		//check for flight mode change
+		if(m.base_mode != base_mode || m.custom_mode != custom_mode)
+		{
+			base_mode=m.base_mode;
+			custom_mode=m.custom_mode;
+			if(this.controlListener!=null)
+				controlListener.flightModeChanged(getFlightMode());
+		}
+		
+	}
+	private String getFlightMode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	@Override
 	public void handleMAVPacket(MAVLinkPacket p) {
 		// TODO Auto-generated method stub
@@ -265,8 +310,12 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
         case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:
             //return  new msg_heartbeat(this);
         	msg_heartbeat msg = (msg_heartbeat)m;
-        	System.out.println("Copter got heartbeat.MAVVers: "+msg.mavlink_version+" SYSID: "+msg.sysid+" COMP ID "+msg.compid+" mode "+msg.custom_mode);break;
+        	handleHeartbeat(msg);
+        	System.out.println("Copter got heartbeat.MAVVers: "+msg.mavlink_version+" SYSID: "+msg.sysid+
+        			" COMP ID "+msg.compid+" mode "+msg.custom_mode);
+        	break;
              
+        	
         case msg_sys_status.MAVLINK_MSG_ID_SYS_STATUS:
             //return  new msg_sys_status(this);
         	System.out.println("Copter got SYS_STATUS");
@@ -486,6 +535,7 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
         	
         case msg_command_ack.MAVLINK_MSG_ID_COMMAND_ACK:
             //return  new msg_command_ack(this);
+        	System.out.println("Got command ack");
         	break;
              
         case msg_manual_setpoint.MAVLINK_MSG_ID_MANUAL_SETPOINT:
@@ -820,6 +870,11 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
 				connections.get(i).disconnect();
 			}
 		}
+	}
+	@Override
+	public boolean isArmed() {
+		// TODO Auto-generated method stub
+		return this.armed;
 	}
 
 

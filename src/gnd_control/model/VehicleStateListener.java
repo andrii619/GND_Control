@@ -1,7 +1,9 @@
 package gnd_control.model;
 
 public interface VehicleStateListener {
-	public void arm_disarm();
+	public void armedChanged(boolean armed);
+	
+	public void flightModeChanged(String mode);
 	
 	public void locationChange();
 	

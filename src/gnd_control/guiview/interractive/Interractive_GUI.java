@@ -50,7 +50,7 @@ public class Interractive_GUI extends JPanel implements VehicleStateListener {
 	
 
 	@Override
-	public void arm_disarm() {
+	public void armedChanged(boolean armed) {
 		// TODO Auto-generated method stub
 		if(control.isVehicleArmed())
 		{
@@ -116,6 +116,11 @@ public class Interractive_GUI extends JPanel implements VehicleStateListener {
 				}
 			}
 		}
+		
+	}
+	@Override
+	public void flightModeChanged(String mode) {
+		// TODO Auto-generated method stub
 		
 	}
 }

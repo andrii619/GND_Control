@@ -96,21 +96,30 @@ public class GND_Control implements Control, Vehicle_Observer {
 	@Override
 	public boolean isVehicleArmed() {
 		// TODO Auto-generated method stub
-		return false;
+		if(this.currentVehicle==null)
+			return false;
+		else
+			return this.currentVehicle.isArmed();
 	}
 
 
 	@Override
 	public void disarmVehicle() {
 		// TODO Auto-generated method stub
-		
+		if(this.currentVehicle!=null)
+		{
+			this.currentVehicle.set_armed(false);
+		}
 	}
 
 
 	@Override
 	public void armVehicle() {
 		// TODO Auto-generated method stub
-		
+		if(this.currentVehicle!=null)
+		{
+			this.currentVehicle.set_armed(true);
+		}
 	}
 
 

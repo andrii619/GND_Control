@@ -5,6 +5,7 @@ import java.util.List;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
 import com.MAVLink.Messages.MAVLinkMessage;
+import com.MAVLink.common.msg_heartbeat;
 
 public interface Vehicle {
 	public static final int heartbeat_rate_msec = 1000;
@@ -26,6 +27,7 @@ public interface Vehicle {
 	public boolean is_armable();
 	
 	public void addVehicleStateListener(VehicleStateListener c);
+	public void addControlListener(VehicleStateListener control);
 	public void setLongtitude(float longtitude);
 	public void handleMAVLink_Message(MAVLinkMessage m);
 	
@@ -33,4 +35,8 @@ public interface Vehicle {
 	
 	public List<Connection> listConnections();
 	public void closeConnection(Connection c);
+	
+	public void handleHeartbeat(msg_heartbeat m);
+
+	public boolean isArmed();
 }
