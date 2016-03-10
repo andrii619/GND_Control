@@ -39,8 +39,8 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 	//private GND_Control_GUI_HUB hub;
 	public Control control = new GND_Control();
 	// all sub windows
-	private BoardConnect boardConnect = new BoardConnect(this);
-	
+	private BoardConnect boardConnect;
+	private VehicleStatus statusPanel;
 	
 	JPanel main = new JPanel(new BorderLayout());
 	JLayeredPane p0 = new JLayeredPane();
@@ -63,6 +63,9 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 	ImageIcon icon6;
 	ArrayList<ImageIcon> tablist = new ArrayList<ImageIcon>();
 	ArrayList<String> namelist = new ArrayList<String>();
+	
+	
+	
 	public GND_Control_GUI_HUB() throws IOException{
 		m1.add(i1);
 		m2.add(i2);
@@ -125,9 +128,17 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 		b1.setSize(72, 64);
 		p0.add(b1,0);
 		add(p0);
+		
+		////////////////////////////////////
+		statusPanel=new VehicleStatus(this);
+		//p0.add(statusPanel);
+		main.add(statusPanel,BorderLayout.EAST);
+		///////////////////////////////////
+		
+		
 		this.addWindowStateListener(new windowChange());
 		this.setLocation(100, 0);
-		this.setSize(900, 700);
+		this.setSize(1200, 700);
 		this.setMinimumSize(this.getSize());
 		this.setTitle("GND Control");
 		URL imgurl = this.getClass().getResource("gnd.png");
@@ -136,6 +147,12 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 		this.setIconImage(g);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(false);
+		
+		boardConnect = new BoardConnect(this);
+		
+		this.pack();
+		
+		
 	}
 	public class windowChange implements WindowListener, WindowStateListener{
 		@Override

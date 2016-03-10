@@ -25,7 +25,7 @@ public interface Vehicle {
 	
 	public boolean is_armable();
 	
-	public void addVehicleStateListener();
+	public void addVehicleStateListener(VehicleStateListener c);
 	public void setLongtitude(float longtitude);
 	public void handleMAVLink_Message(MAVLinkMessage m);
 	

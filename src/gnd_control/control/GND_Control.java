@@ -13,11 +13,13 @@ import gnd_control.model.GND_Profile;
 import gnd_control.model.MyConnectException;
 import gnd_control.model.Profile;
 import gnd_control.model.Vehicle;
+import gnd_control.model.VehicleStateListener;
 
 public class GND_Control implements Control, Vehicle_Observer {
 	Backend backend;
 	Profile currentProfile = new GND_Profile("Sample");
 	Vehicle currentVehicle;
+	List<VehicleStateListener> v;
 	
 	public GND_Control()
 	{
@@ -235,6 +237,34 @@ public class GND_Control implements Control, Vehicle_Observer {
 				break;
 			}
 		}
+	}
+
+
+	@Override
+	public void addVehicleListener(VehicleStateListener l) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public Float getVehicleBatteryLevel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Float getVehicleGroundSpeed() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Float getVehicleAltitude() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

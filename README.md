@@ -3,5 +3,6 @@
 GND_Control - a ground control station build using Java.
 This ground control software remotely controls drones using the [MAVLink protocol](http://qgroundcontrol.org/mavlink/start).
 The control can be done using mission planning or interactively using keyboard. The software can connect to 
-SITL using TCP or UDP. It adds a profile functionality to save different drone settings. It is still in the developing phase.
+SITL using TCP or UDP. It adds a profile functionality to save different drone settings. To communicate with Google 
+maps we r using the JxBrowser. GND_Control is still in the developing phase.
 This software differs from conventional drone control software(The cherry comes at the end :stuck_out_tongue: ).

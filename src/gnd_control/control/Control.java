@@ -5,6 +5,7 @@ import java.util.List;
 import gnd_control.model.Connection;
 import gnd_control.model.Profile;
 import gnd_control.model.Vehicle;
+import gnd_control.model.VehicleStateListener;
 
 public interface Control {
 
@@ -32,5 +33,13 @@ public interface Control {
 	void closeConnection(String currentConnection);
 
 	void connectConnetion(String currentConnection);
+
+	void addVehicleListener(VehicleStateListener l);
+
+	Float getVehicleBatteryLevel();
+
+	Float getVehicleGroundSpeed();
+
+	Float getVehicleAltitude();
 
 }

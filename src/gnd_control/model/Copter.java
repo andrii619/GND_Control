@@ -53,12 +53,16 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
 		connections  = new ArrayList<Connection>();
 		connections.add(c);
 		c.addObserver(this);
+		
+		listeners=new ArrayList<VehicleStateListener>();
+		
 	}
 	public Copter()
 	{
 		this.home_location = new GPosition(40.521899f, -74.459634f);
 		this.connected = false;
 		connections  = new ArrayList<Connection>();
+		listeners=new ArrayList<VehicleStateListener>();
 		
 		//// delete later
 		connections.add(new TCPConnection("temp","127.0.0.1",10000));
@@ -171,8 +175,11 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
 		return false;
 	}
 	@Override
-	public void addVehicleStateListener() {
+	public void addVehicleStateListener(VehicleStateListener l) {
 		// TODO Auto-generated method stub
+		if(l==null)
+			return;
+		listeners.add(l);
 	}
 	public void transition() {
 		// TODO Auto-generated method stub
