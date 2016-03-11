@@ -16,7 +16,7 @@ public class GND_Profile implements Profile, Serializable {
 	public GND_Profile(String Name)
 	{
 		this.Name = Name;
-		vehicle = new Copter();
+		vehicle = new GND_Vehicle();
 		fileName=new String(defaultPic);
 	}
 	public GND_Profile(String Name, String description)
@@ -25,7 +25,7 @@ public class GND_Profile implements Profile, Serializable {
 	}
 	public boolean createCopter()
 	{
-		vehicle = new Copter();
+		vehicle = new GND_Vehicle();
 		return true;
 	}
 	

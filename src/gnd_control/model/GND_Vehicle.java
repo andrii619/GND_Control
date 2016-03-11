@@ -17,7 +17,7 @@ import com.MAVLink.enums.MAV_MODE;
 import com.MAVLink.enums.MAV_MODE_FLAG_DECODE_POSITION;
 import com.MAVLink.enums.MAV_TYPE;
 
-public class Copter implements Vehicle, ConnectionObserver, Serializable{
+public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -51,7 +51,7 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
 	//private VehicleStateListener controlListener;
 	private HashMap<String,Float> parameters;
 	private Timer timer;
-	
+	/**
 	public Copter(Connection c)
 	{
 		this.home_location = new GPosition(40.521899f, -74.459634f);
@@ -64,8 +64,8 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
 		
 		timer=new Timer();
 		
-	}
-	public Copter()
+	}*/
+	public GND_Vehicle()
 	{
 		this.home_location = new GPosition(40.521899f, -74.459634f);
 		this.connected = false;
