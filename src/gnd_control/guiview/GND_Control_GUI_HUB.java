@@ -67,6 +67,7 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 	
 	
 	public GND_Control_GUI_HUB() throws IOException{
+		//control = new GND_Control();
 		m1.add(i1);
 		m2.add(i2);
 		i2.addActionListener(new HideTabs());
@@ -133,6 +134,8 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 		statusPanel=new VehicleStatus(this);
 		//p0.add(statusPanel);
 		main.add(statusPanel,BorderLayout.EAST);
+		this.control.addVehicleListener(statusPanel);
+		
 		///////////////////////////////////
 		
 		

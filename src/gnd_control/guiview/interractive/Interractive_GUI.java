@@ -44,7 +44,7 @@ public class Interractive_GUI extends JPanel implements VehicleStateListener {
 		
 		this.add(arm_button);
 		
-		control.addVehicleListener(this);
+		//control.addVehicleListener(this);
 		
 	}
 	

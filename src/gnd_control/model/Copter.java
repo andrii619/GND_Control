@@ -48,7 +48,7 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
 	
 	private List<Connection> connections;
 	private List<VehicleStateListener> listeners;
-	private VehicleStateListener controlListener;
+	//private VehicleStateListener controlListener;
 	private HashMap<String,Float> parameters;
 	private Timer timer;
 	
@@ -186,13 +186,12 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
 		// TODO Auto-generated method stub
 		if(l==null)
 			return;
+		if(listeners==null)
+		{
+			System.out.println("null listeners");
+			this.listeners=new ArrayList<VehicleStateListener>();
+		}
 		listeners.add(l);
-	}
-	public void addControlListener(VehicleStateListener l)
-	{
-		if(l==null)
-			return;
-		this.controlListener=l;
 	}
 	public void transition() {
 		// TODO Auto-generated method stub
@@ -277,11 +276,12 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
 		{
 			armed=newArmed;
 			//notify all observers
-			if(this.controlListener!=null)
-				controlListener.armedChanged(armed);
+			//if(this.controlListener!=null)
+			//	controlListener.armedChanged(armed);
 			for(int i=0; i< this.listeners.size();i++)
 			{
-				this.listeners.get(i).armedChanged(armed);
+				if(listeners.get(i)!=null)
+					this.listeners.get(i).armedChanged(armed);
 			}
 		}
 		
@@ -290,8 +290,13 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
 		{
 			base_mode=m.base_mode;
 			custom_mode=m.custom_mode;
-			if(this.controlListener!=null)
-				controlListener.flightModeChanged(getFlightMode());
+			//if(this.controlListener!=null)
+			//	controlListener.flightModeChanged(getFlightMode());
+			for(int i=0; i< this.listeners.size();i++)
+			{
+				if(listeners.get(i)!=null)
+					this.listeners.get(i).armedChanged(armed);
+			}
 		}
 		
 	}

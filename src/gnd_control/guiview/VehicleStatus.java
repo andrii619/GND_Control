@@ -128,7 +128,7 @@ public class VehicleStatus extends JPanel implements VehicleStateListener {
 		}
 		
 		
-		hub.control.addVehicleListener(this);
+		//hub.control.addVehicleListener(this);
 		
 		this.setBorder(BorderFactory.createTitledBorder("Vehicle Status"));
 		this.setPreferredSize(new Dimension(400,400));

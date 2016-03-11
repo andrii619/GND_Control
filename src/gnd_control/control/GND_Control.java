@@ -15,17 +15,19 @@ import gnd_control.model.Profile;
 import gnd_control.model.Vehicle;
 import gnd_control.model.VehicleStateListener;
 
-public class GND_Control implements Control, Vehicle_Observer {
+public class GND_Control implements Control  {
 	Backend backend;
-	Profile currentProfile = new GND_Profile("Sample");
+	Profile currentProfile;//= new GND_Profile("Sample");
 	Vehicle currentVehicle;
-	List<VehicleStateListener> v;
+	List<VehicleStateListener> stateListeners;
 	
 	public GND_Control()
 	{
+		currentProfile = new GND_Profile("Sample");
 		backend = new GND_Backend();
 		currentProfile=selectProfile("Sample");
 		currentVehicle=currentProfile.getVehicle();
+		stateListeners=new ArrayList<VehicleStateListener>();
 	}
 	
 	
@@ -77,12 +79,6 @@ public class GND_Control implements Control, Vehicle_Observer {
 				backend.writeProfile(this.currentProfile);
 		this.currentProfile = backend.readProfile(Name);
 		return currentProfile;
-	}
-
-	@Override
-	public void handle_status_msg(MAVLinkMessage m) {
-		// TODO Auto-generated method stub
-		
 	}
 
 
@@ -252,7 +248,11 @@ public class GND_Control implements Control, Vehicle_Observer {
 	@Override
 	public void addVehicleListener(VehicleStateListener l) {
 		// TODO Auto-generated method stub
-		
+		if(this.currentVehicle!=null)
+		{
+			if(l!=null)
+				this.currentVehicle.addVehicleStateListener(l);
+		}
 	}
 
 
