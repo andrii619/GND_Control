@@ -19,7 +19,7 @@ public class GND_Control implements Control  {
 	Backend backend;
 	Profile currentProfile;//= new GND_Profile("Sample");
 	Vehicle currentVehicle;
-	List<VehicleStateListener> stateListeners;
+	//List<VehicleStateListener> stateListeners;
 	
 	public GND_Control()
 	{
@@ -27,7 +27,7 @@ public class GND_Control implements Control  {
 		backend = new GND_Backend();
 		currentProfile=selectProfile("Sample");
 		currentVehicle=currentProfile.getVehicle();
-		stateListeners=new ArrayList<VehicleStateListener>();
+		//stateListeners=new ArrayList<VehicleStateListener>();
 	}
 	
 	
@@ -85,7 +85,10 @@ public class GND_Control implements Control  {
 	@Override
 	public boolean isVehicleConnected() {
 		// TODO Auto-generated method stub
-		return false;
+		if(this.currentVehicle==null)
+			return false;
+		else
+			return this.currentVehicle.isConnected();
 	}
 
 

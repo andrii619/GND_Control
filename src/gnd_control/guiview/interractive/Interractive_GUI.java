@@ -78,7 +78,7 @@ public class Interractive_GUI extends JPanel implements VehicleStateListener {
 
 
 	@Override
-	public void connected() {
+	public void connectedChanged(boolean connected) {
 		// TODO Auto-generated method stub
 		if(control.isVehicleConnected())
 		{

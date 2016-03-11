@@ -181,6 +181,10 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
 		// TODO Auto-generated method stub
 		return false;
 	}
+	public boolean isConnected()
+	{
+		return this.connected;
+	}
 	@Override
 	public void addVehicleStateListener(VehicleStateListener l) {
 		// TODO Auto-generated method stub
@@ -193,6 +197,11 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
 		}
 		listeners.add(l);
 	}
+	public List<VehicleStateListener> getVehicleStateListeners()
+	{
+		return this.listeners;
+	}
+	
 	public void transition() {
 		// TODO Auto-generated method stub
 		msg_command_long m = new msg_command_long();
@@ -269,11 +278,12 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
 	public void handleHeartbeat(msg_heartbeat m)
 	{
 		this.connected=true;
-		
+		System.out.println("Handling hertbeat");
 		//check for arm/disarm change
 		boolean newArmed = (m.base_mode & MAV_MODE_FLAG_DECODE_POSITION.MAV_MODE_FLAG_DECODE_POSITION_SAFETY)!=0;
 		if(newArmed!=armed)
 		{
+			System.out.println("armed state change");
 			armed=newArmed;
 			//notify all observers
 			//if(this.controlListener!=null)
@@ -281,7 +291,12 @@ public class Copter implements Vehicle, ConnectionObserver, Serializable{
 			for(int i=0; i< this.listeners.size();i++)
 			{
 				if(listeners.get(i)!=null)
+				{
+					this.listeners.get(i).connectedChanged(true);
 					this.listeners.get(i).armedChanged(armed);
+				}
+				else
+					System.out.println("listener is null");
 			}
 		}
 		

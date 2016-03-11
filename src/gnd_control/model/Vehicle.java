@@ -27,6 +27,7 @@ public interface Vehicle {
 	public boolean is_armable();
 	
 	public void addVehicleStateListener(VehicleStateListener c);
+	public List<VehicleStateListener> getVehicleStateListeners();
 	public void setLongtitude(float longtitude);
 	public void handleMAVLink_Message(MAVLinkMessage m);
 	
@@ -38,4 +39,5 @@ public interface Vehicle {
 	public void handleHeartbeat(msg_heartbeat m);
 
 	public boolean isArmed();
+	public boolean isConnected();
 }

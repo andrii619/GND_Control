@@ -183,9 +183,35 @@ public class VehicleStatus extends JPanel implements VehicleStateListener {
 
 
 	@Override
-	public void connected() {
+	public void connectedChanged(boolean connected) {
 		// TODO Auto-generated method stub
-		
+		if(!connected)
+		{
+			this.armButton.setEnabled(false);
+			this.armButton.setText(DISCONNECTED);
+			this.batteryStatusBar.setString("Battery Level: N/A");
+			this.batteryStatusBar.setValue(0);
+			this.altitudeField.setText("0.0");
+			this.groundSpeedField.setText("0.0");
+		}
+		else
+		{
+			this.armButton.setEnabled(true);
+			if(hub.control.isVehicleArmed())
+			{
+				this.armButton.setEnabled(true);
+				this.armButton.setText(ARMED);
+			}
+			else
+			{
+				this.armButton.setEnabled(true);
+				this.armButton.setText(DISARMED);
+			}
+			// get values
+			this.altitudeField.setText(""+hub.control.getVehicleAltitude());
+			this.groundSpeedField.setText(""+hub.control.getVehicleGroundSpeed());
+			this.batteryStatusBar.setString("Battery Level: "+hub.control.getVehicleBatteryLevel());
+		}
 	}
 
 

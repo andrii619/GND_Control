@@ -9,6 +9,6 @@ public interface VehicleStateListener {
 	
 	public void batteryLevelChange();
 	
-	public void connected();
+	public void connectedChanged(boolean connected);
 
 }
