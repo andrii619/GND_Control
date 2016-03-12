@@ -26,6 +26,12 @@ public class GND_Control implements Control  {
 		currentProfile = new GND_Profile("Sample");
 		backend = new GND_Backend();
 		currentProfile=selectProfile("Sample");
+		if(currentProfile==null)
+		{
+			currentProfile = new GND_Profile("Sample");
+			backend.writeProfile(currentProfile);
+		}
+			
 		currentVehicle=currentProfile.getVehicle();
 		//stateListeners=new ArrayList<VehicleStateListener>();
 	}

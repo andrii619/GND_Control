@@ -41,12 +41,13 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 	// all sub windows
 	private BoardConnect boardConnect;
 	private VehicleStatus statusPanel;
+	private MyGoogleMap googleMap;
 	
 	JPanel main = new JPanel(new BorderLayout());
 	JLayeredPane p0 = new JLayeredPane();
 	JTabbedPane p1 = new JTabbedPane();
 	JPanel p2 = new Profile_HUB_GUI();
-	JPanel p3 = new JPanel();
+	//JPanel p3;
 	JPanel p4 = new Water_GUI();
 	JPanel p5 = new Interractive_GUI(control);
 	JLabel l1 = new JLabel("(C) 2016 Software Engineering Team: Lucas Rivera(laneboy), Andrii Hlyvko(AndriiDSD), Russell Epstein, Jonathan Zelaya, Prerak Mehta, Thomas Ippolito, and Kevin Wu");
@@ -68,6 +69,10 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 	
 	public GND_Control_GUI_HUB() throws IOException{
 		//control = new GND_Control();
+		/////////////////////////////
+		googleMap = new MyGoogleMap(this);
+		///////////////////////////
+		
 		m1.add(i1);
 		m2.add(i2);
 		i2.addActionListener(new HideTabs());
@@ -108,7 +113,7 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 		icon5 = new ImageIcon(g5);
 		icon6 = new ImageIcon(g6);
 		p1.addTab("", icon1, p2,"Drone Profile");tablist.add(icon1);namelist.add("Drone Profiles");
-		p1.addTab("", icon2, p3,"Google Maps");tablist.add(icon2);namelist.add("Destination Routes");
+		p1.addTab("", icon2, googleMap,"Google Maps");tablist.add(icon2);namelist.add("Destination Routes");
 		p1.addTab("", icon3, p4,"Whoi Controls");tablist.add(icon3);namelist.add("Water Controls");
 		p1.addTab("", icon4, p5,"Drone Controls");tablist.add(icon4);namelist.add("Drone Control");
 		p1.addTab("", icon8, null, "Upload Firmware");tablist.add(icon8);namelist.add("Upload Firmware");
@@ -135,7 +140,8 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 		//p0.add(statusPanel);
 		main.add(statusPanel,BorderLayout.EAST);
 		this.control.addVehicleListener(statusPanel);
-		
+		this.control.addVehicleListener(googleMap);
+		//googleMap=new MyGoogleMap(this);
 		///////////////////////////////////
 		
 		

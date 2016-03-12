@@ -11,5 +11,11 @@
 	<classpathentry kind="lib" path="libs/swingx-ws-1.0.jar"/>
 	<classpathentry kind="lib" path="libs/jfxrt.jar"/>
 	<classpathentry kind="lib" path="libs/GMapsFX.jar"/>
+	<classpathentry kind="lib" path="libs/jxbrowser-6.2.jar"/>
+	<classpathentry kind="lib" path="libs/jxbrowser-linux32-6.2.jar"/>
+	<classpathentry kind="lib" path="libs/jxbrowser-linux64-6.2.jar"/>
+	<classpathentry kind="lib" path="libs/jxbrowser-mac-6.2.jar"/>
+	<classpathentry kind="lib" path="libs/jxbrowser-win-6.2.jar"/>
+	<classpathentry kind="lib" path="libs/license.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
