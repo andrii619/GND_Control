@@ -14,6 +14,7 @@ import com.MAVLink.common.*;
 import com.MAVLink.enums.MAV_AUTOPILOT;
 import com.MAVLink.enums.MAV_CMD;
 import com.MAVLink.enums.MAV_MODE;
+import com.MAVLink.enums.MAV_MODE_FLAG;
 import com.MAVLink.enums.MAV_MODE_FLAG_DECODE_POSITION;
 import com.MAVLink.enums.MAV_TYPE;
 
@@ -32,8 +33,8 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 	private float airSpeed;
 	private float climbRate;
 	private float altitude;
-	private float base_mode;
-	private float custom_mode;
+	private short base_mode;
+	private long custom_mode;
 	
 	private int firmwareType; // PX4 or APM..
 	private int vehicleType; // helicopter, fixed wing...
@@ -111,7 +112,7 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 		String mode=new String();
 		switch(this.vehicleType){
 		default:
-			mode=Vehicle.COPTER_MODES[(int)this.custom_mode];
+			mode=Vehicle.COPTER_MODES[(int) this.custom_mode];
 			break;
 		}
 		return mode;
@@ -132,6 +133,11 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 	@Override
 	public void set_mode(String mode) {
 		// TODO Auto-generated method stub
+		if(mode==null)
+			return;
+		if(mode.isEmpty())
+			return;
+		
 		msg_set_mode m =new msg_set_mode();
 		//m.sysid = 255; // id of sending system
 		/// custom mode 
@@ -139,8 +145,21 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 		m.sysid=1;
 		m.compid=1;
 		// target mode
-		m.base_mode=1;//MAV_MODE.MAV_MODE_GUIDED_DISARMED;
-		m.custom_mode=4;//MAV_MODE.MAV_MODE_GUIDED_DISARMED;
+		m.base_mode= (short) ((this.base_mode) | MAV_MODE_FLAG.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED);//MAV_MODE.MAV_MODE_GUIDED_DISARMED;
+		int j=-1;
+		for(int i=0;i<Vehicle.COPTER_MODES.length;i++)
+		{
+			if(Vehicle.COPTER_MODES[i].compareToIgnoreCase(mode)==0)
+			{
+				System.out.println("Trying to Set mode to "+i+" "+Vehicle.COPTER_MODES[i]);
+				j=i;
+				break;
+			}
+		}
+		if(j<0 || j>17)//mode not found
+			return;
+		
+		m.custom_mode=j;//MAV_MODE.MAV_MODE_GUIDED_DISARMED;
 		//m.custom_mode = MAV_MODE.MAV_MODE_STABILIZE_DISARMED;
 		MAVLinkPacket p = m.pack();
 		for(int i = 0; i< connections.size(); i++)
