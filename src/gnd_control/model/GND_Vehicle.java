@@ -21,6 +21,7 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
+	private boolean idSET=false;
 	private int vehicleId;
 	private boolean active;
 	private float roll;
@@ -34,8 +35,8 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 	private float base_mode;
 	private float custom_mode;
 	
-	MAV_AUTOPILOT firmwareType;
-	MAV_TYPE vehicleType;
+	private int firmwareType; // PX4 or APM..
+	private int vehicleType; // helicopter, fixed wing...
 	
 	private GPosition home_location;
 	private GPosition current_location;
@@ -85,6 +86,10 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 		this.connections.add(c);
 		c.addObserver(this);
 	}
+	public int getVehicleType()
+	{
+		return this.vehicleType;
+	}
 	
 	@Override
 	public void initialize() {
@@ -100,6 +105,17 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 			connections.get(i).sendMAV(p);;
 		}
 	}
+	
+	public String getVehicleMode()
+	{
+		String mode=new String();
+		switch(this.vehicleType){
+		default:
+			mode=Vehicle.COPTER_MODES[(int)this.custom_mode];
+			break;
+		}
+		return mode;
+	}
 
 	@Override
 	public GeoPosition getLocation() {
@@ -114,7 +130,7 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 	}
 
 	@Override
-	public void set_mode() {
+	public void set_mode(String mode) {
 		// TODO Auto-generated method stub
 		msg_set_mode m =new msg_set_mode();
 		//m.sysid = 255; // id of sending system
@@ -277,7 +293,24 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 	}
 	public void handleHeartbeat(msg_heartbeat m)
 	{
-		this.connected=true;
+		if(idSET==false)
+		{
+			this.connected=true;
+			this.vehicleId=m.sysid;
+			this.vehicleType=m.type;
+			this.firmwareType=m.autopilot;
+			idSET=true;
+			for(int i=0; i< this.listeners.size();i++)
+			{
+				if(listeners.get(i)!=null)
+				{
+					this.listeners.get(i).connectedChanged(true);
+				}
+				else
+					System.out.println("listener is null");
+			}
+		}
+		
 		System.out.println("Handling hertbeat");
 		//check for arm/disarm change
 		boolean newArmed = (m.base_mode & MAV_MODE_FLAG_DECODE_POSITION.MAV_MODE_FLAG_DECODE_POSITION_SAFETY)!=0;
@@ -292,7 +325,6 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 			{
 				if(listeners.get(i)!=null)
 				{
-					this.listeners.get(i).connectedChanged(true);
 					this.listeners.get(i).armedChanged(armed);
 				}
 				else
@@ -310,14 +342,32 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 			for(int i=0; i< this.listeners.size();i++)
 			{
 				if(listeners.get(i)!=null)
-					this.listeners.get(i).armedChanged(armed);
+					this.listeners.get(i).flightModeChanged(this.getFlightMode());
 			}
 		}
 		
 	}
 	private String getFlightMode() {
 		// TODO Auto-generated method stub
-		return null;
+		String mode = new String();
+		switch(this.firmwareType)
+		{
+			case MAV_AUTOPILOT.MAV_AUTOPILOT_GENERIC:
+				break;
+			
+			case MAV_AUTOPILOT.MAV_AUTOPILOT_ARDUPILOTMEGA:
+				switch(this.vehicleType)
+				{
+					default: mode=Vehicle.COPTER_MODES[(int)this.custom_mode];
+				}
+				
+				break;
+			
+			case MAV_AUTOPILOT.MAV_AUTOPILOT_PX4:break;
+			
+			default: mode= "N/A";
+		}
+		return mode;
 	}
 	@Override
 	public void handleMAVPacket(MAVLinkPacket p) {

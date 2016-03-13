@@ -42,4 +42,10 @@ public interface Control {
 
 	Float getVehicleAltitude();
 
+	int getVehicleType();
+
+	void changeMode(String selectedItem);
+
+	String getVehicleMode();
+
 }

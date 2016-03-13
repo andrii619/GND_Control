@@ -15,6 +15,9 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
+import com.MAVLink.enums.MAV_TYPE;
+
+import gnd_control.model.Vehicle;
 import gnd_control.model.VehicleStateListener;
 
 public class VehicleStatus extends JPanel implements VehicleStateListener {
@@ -62,9 +65,10 @@ public class VehicleStatus extends JPanel implements VehicleStateListener {
 		layout.putConstraint(SpringLayout.NORTH, armButton, 50, SpringLayout.NORTH, this);
 		layout.putConstraint(SpringLayout.EAST, armButton, -50, SpringLayout.EAST, this);
 		
-		modeBox = new JComboBox<String>(MODES);
+		modeBox = new JComboBox<String>();
 		modeBox.setEnabled(false);
 		this.add(modeBox);
+		modeBox.addActionListener(actionListener);
 		layout.putConstraint(SpringLayout.WEST, modeBox, 50, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.NORTH, modeBox, 50, SpringLayout.SOUTH, armButton);
 		layout.putConstraint(SpringLayout.EAST, modeBox, -50, SpringLayout.EAST, this);
@@ -211,6 +215,24 @@ public class VehicleStatus extends JPanel implements VehicleStateListener {
 			this.altitudeField.setText(""+hub.control.getVehicleAltitude());
 			this.groundSpeedField.setText(""+hub.control.getVehicleGroundSpeed());
 			this.batteryStatusBar.setString("Battery Level: "+hub.control.getVehicleBatteryLevel());
+			
+			modeBox.setEnabled(true);
+			modeBox.removeAllItems();
+			switch(hub.control.getVehicleType())
+			{
+				case MAV_TYPE.MAV_TYPE_FIXED_WING:break;
+				default: 
+					int j=-1;
+					for(int i=0;i<Vehicle.COPTER_MODES.length;i++)
+					{
+						modeBox.addItem(Vehicle.COPTER_MODES[i]);
+						if(Vehicle.COPTER_MODES[i].compareToIgnoreCase(hub.control.getVehicleMode())==0)
+							j=i;
+					}
+					if(j>=0)
+						modeBox.setSelectedIndex(j);
+					break;
+			}
 		}
 	}
 
@@ -218,6 +240,23 @@ public class VehicleStatus extends JPanel implements VehicleStateListener {
 	@Override
 	public void flightModeChanged(String mode) {
 		// TODO Auto-generated method stub
+		modeBox.setEnabled(true);
+		modeBox.removeAllItems();
+		switch(hub.control.getVehicleType())
+		{
+			case MAV_TYPE.MAV_TYPE_FIXED_WING:break;
+			default: 
+				int j=-1;
+				for(int i=0;i<Vehicle.COPTER_MODES.length;i++)
+				{
+					modeBox.addItem(Vehicle.COPTER_MODES[i]);
+					if(Vehicle.COPTER_MODES[i].compareToIgnoreCase(mode)==0)
+						j=i;
+				}
+				if(j>=0)
+					modeBox.setSelectedIndex(j);
+				break;
+		}
 		
 	}
 	
@@ -236,6 +275,10 @@ public class VehicleStatus extends JPanel implements VehicleStateListener {
 				{
 					hub.control.armVehicle();
 				}
+			}
+			else if(e.getSource()==modeBox)
+			{
+				hub.control.changeMode((String)modeBox.getSelectedItem());
 			}
 		}
 		

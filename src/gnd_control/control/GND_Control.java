@@ -284,5 +284,34 @@ public class GND_Control implements Control  {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+	@Override
+	public int getVehicleType() {
+		// TODO Auto-generated method stub
+		if(this.currentVehicle==null)
+			return -1;
+		return this.currentVehicle.getVehicleType();
+	}
+	public String getVehicleMode()
+	{
+		String mode=null;
+		if(this.currentVehicle==null)
+			return null;
+		
+		return this.currentVehicle.getVehicleMode();
+	}
+
+	@Override
+	public void changeMode(String selectedItem) {
+		// TODO Auto-generated method stub
+		if(selectedItem ==null)
+			return;
+		if(selectedItem.isEmpty())
+			return;
+		if(this.currentVehicle==null)
+			return;
+		this.currentVehicle.set_mode(selectedItem);
+	}
 	
 }
