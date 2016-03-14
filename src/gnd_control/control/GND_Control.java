@@ -25,7 +25,7 @@ public class GND_Control implements Control  {
 	{
 		currentProfile = new GND_Profile("Sample");
 		backend = new GND_Backend();
-		currentProfile=selectProfile("Sample");
+		currentProfile=backend.readProfile("Sample");//selectProfile("Sample");
 		if(currentProfile==null)
 		{
 			currentProfile = new GND_Profile("Sample");

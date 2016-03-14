@@ -23,6 +23,7 @@ import javax.swing.SpringLayout;
 
 import gnd_control.model.Connection;
 import gnd_control.model.TCPConnection;
+import gnd_control.model.UDPConnection;
 
 public class Create_Connection extends JFrame {
 	
@@ -91,7 +92,7 @@ public class Create_Connection extends JFrame {
 	private final static String UDP_PANEL = "UDP";
 	private final static String LOG_PANEL = "Log";
 	private final static String[] choises = {"Serial","WHOI","TCP","UDP","Log"};
-	private final static String[] parityChoise = {};
+	//private final static String[] parityChoise = {};
 	private final static Integer[] rateList = {2400,4800,9600,19200,38400,57600,115200,230400,460800,500000};
 	private final static String[] parityList = {"None", "Even", "Odd"};
 	private final static Integer[] stopList = {1,2};
@@ -447,27 +448,66 @@ public class Create_Connection extends JFrame {
 				errorLabel.setText("Enter Connection Name!");
 				return;
 			}
-			String hostAddress = hostAddressField.getText();
-			int listeningPort=0;
-			try{
-				listeningPort = Integer.parseInt(listeningPortField.getText());
-			} catch (Exception ex)
-			{
-				errorLabel.setText("not a number");
-				return;
-			}
-			if(hostAddress.isEmpty())
-			{
-				errorLabel.setText("Enter the hostname");
-				return;
-			}
-			if(listeningPort<=1024 || listeningPort>65536)
-			{
-				errorLabel.setText("Invelid port range");
-				return;
-			}
 			// create the connection
-			Connection c =new TCPConnection(connectionName, hostAddress,listeningPort);
+			Connection c = null;
+			if(((String)connectionBox.getSelectedItem()).compareTo("TCP")==0)
+			{
+				String hostAddress = hostAddressField.getText();
+				int listeningPort=0;
+				try{
+					listeningPort = Integer.parseInt(listeningPortField.getText());
+				} catch (Exception ex)
+				{
+					errorLabel.setText("not a number");
+					return;
+				}
+				if(hostAddress.isEmpty())
+				{
+					errorLabel.setText("Enter the hostname");
+					return;
+				}
+				if(listeningPort<=1024 || listeningPort>65536)
+				{
+					errorLabel.setText("Invelid port range");
+					return;
+				}
+				c =new TCPConnection(connectionName, hostAddress,listeningPort);
+			}
+			else if(((String)connectionBox.getSelectedItem()).compareTo("UDP")==0)
+			{
+				String hostAddress = udpHostField.getText();
+				int listeningPort=0;
+				try{
+					listeningPort = Integer.parseInt(udpPortField.getText());
+				} catch (Exception ex)
+				{
+					errorLabel.setText("not a number");
+					return;
+				}
+				if(hostAddress.isEmpty())
+				{
+					errorLabel.setText("Enter the hostname");
+					return;
+				}
+				if(listeningPort<=1024 || listeningPort>65536)
+				{
+					errorLabel.setText("Invelid port range");
+					return;
+				}
+				c = new UDPConnection(connectionName,listeningPort);
+			}
+			else if(((String)connectionBox.getSelectedItem()).compareTo("Serial")==0)
+			{
+				
+			}
+			else if(((String)connectionBox.getSelectedItem()).compareTo("WHOI")==0)
+			{
+				
+			}
+			else if(((String)connectionBox.getSelectedItem()).compareTo("Log")==0)
+			{
+				
+			}
 			if(hub.control.addConnection(c))
 			{
 				Create_Connection.this.setVisible(false);

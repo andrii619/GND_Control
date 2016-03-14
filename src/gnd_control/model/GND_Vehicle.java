@@ -328,6 +328,9 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 				else
 					System.out.println("listener is null");
 			}
+			
+			// request vehicle parameters and initialize
+			this.request_parameters();
 		}
 		
 		System.out.println("Handling hertbeat");

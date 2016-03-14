@@ -7,7 +7,12 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.Parser;
@@ -15,32 +20,38 @@ import com.MAVLink.Parser;
 public class UDPConnection implements Connection, Runnable, Serializable {
 	private static final long serialVersionUID = 1L;
 	private String connectionName;
-	private int port;
-	private String address;
 	
 	private int localPort;
+	private int targetPort;
+	//private String address;
+	
+	//private int localPort;
 	
 	private DatagramSocket udpSocket;
-	private InetAddress Inetaddress;
+	private InetAddress targetAddress;
 	private DatagramPacket packet;
 	private byte[] buf;
 	
 	private Parser parser;
+	private Queue<MAVLinkPacket> queue;
+	private List<ConnectionObserver> listeners;
+	private boolean connected;
 	
-	public UDPConnection(String name, String address, int port)
+	public UDPConnection(String name, int port)
 	{
 		this.connectionName=name;
-		this.port = port;
-		this.address = address;
-		
-
+		this.localPort = port;
+		//this.address = address;
+		connected=false;
 		
 		buf = new byte[263];
 		this.packet = new DatagramPacket(buf,buf.length);
 		
 		parser=new Parser();
+		queue=new ArrayBlockingQueue<MAVLinkPacket>(20);
+		listeners=new ArrayList<ConnectionObserver>();
 		
-		new Thread(this).start();
+		
 		//this.start();
 	}
 
@@ -48,17 +59,17 @@ public class UDPConnection implements Connection, Runnable, Serializable {
 	public void connect() {
 		// TODO Auto-generated method stub
 		try {
-			this.udpSocket = new DatagramSocket();
+			this.udpSocket = new DatagramSocket(this.localPort);
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		try {
-			this.Inetaddress = InetAddress.getByName(address);
-		} catch (UnknownHostException e) {
+		//try {
+		//	this.Inetaddress = InetAddress.getByName(address);
+		//} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		//	e.printStackTrace();
+		//}
 		try {
 			udpSocket.setSoTimeout(1000);
 		} catch (SocketException e) {
@@ -71,6 +82,8 @@ public class UDPConnection implements Connection, Runnable, Serializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		this.connected=true;
+		new Thread(this).start();
 	}
 
 	@Override
@@ -81,7 +94,11 @@ public class UDPConnection implements Connection, Runnable, Serializable {
 
 	@Override
 	public void sendMAV(MAVLinkPacket packet) {
-		// TODO Auto-generated method stub
+		
+		if(packet!=null)
+			this.queue.add(packet);
+	}
+		/**
 		packet.generateCRC();
 		this.buf=packet.encodePacket();
 		
@@ -95,6 +112,7 @@ public class UDPConnection implements Connection, Runnable, Serializable {
 		}
 		
 	}
+	
 	public void send(byte []b , int length)
 	{
 		try {
@@ -124,11 +142,17 @@ public class UDPConnection implements Connection, Runnable, Serializable {
 		
 		return p;
 	}
-
+	*/
 	@Override
 	public void addObserver(ConnectionObserver c) {
-		// TODO Auto-generated method stub
-		
+		if(c!=null)
+			listeners.add(c);
+	}
+	private void notifyAllObservers(MAVLinkPacket p) {
+		for(int i = 0; i < listeners.size(); i++)
+		{
+			listeners.get(i).handleMAVPacket(p);
+		}
 	}
 	
 	public void setConnectionName(String name)
@@ -145,7 +169,57 @@ public class UDPConnection implements Connection, Runnable, Serializable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		
+		MAVLinkPacket p=null;
+		while(true)
+		{
+			if(this.udpSocket==null)
+				continue;
+			if(!queue.isEmpty())
+			{
+				byte[] arr=queue.remove().encodePacket(); 
+				try {
+					//System.out.println("Sending packet");
+					if(this.targetAddress!=null && targetPort!=0)
+						udpSocket.send(new DatagramPacket(arr,arr.length,this.targetAddress,this.targetPort));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			try {
+				packet=new DatagramPacket(this.buf,buf.length);
+				udpSocket.receive(packet);
+				//System.out.println("Got pack");
+				//System.out.println("Got: "+new String(packet.getData()));
+				this.targetAddress=packet.getAddress();
+				this.targetPort=packet.getPort();
+				byte[] arr=packet.getData();
+				
+				////////////////////////
+				StringBuilder sb=new StringBuilder();
+				///////////////
+				
+				for(int i=packet.getOffset();i<packet.getLength();i++)
+				{
+					sb.append(String.format("| %02X |", arr[i]));
+					//System.out.println("Got byte: "+Character.toString((char)arr[i]));
+					p=parser.mavlink_parse_char(arr[i]);
+					if(p!=null)
+					{
+						System.out.println("not null");
+						this.notifyAllObservers(p);
+					}
+				}
+				System.out.println("Got bytes: "+sb.toString());
+			} catch(SocketTimeoutException m)
+			{
+				continue;
+			}catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
 	}
 
 	@Override

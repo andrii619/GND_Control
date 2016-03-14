@@ -143,25 +143,12 @@ public class TCPConnection implements Connection, Runnable, Serializable {
 	public void run()
 	{
 		MAVLinkPacket packet = null;
-		
-		
 	    while (true)
 	    {
-	    	//if(socket==null)
-			//{
-			//	try {
-			//		connect();
-			//	} catch (MyConnectException e) {
-					// TODO Auto-generated catch block
-			//		e.printStackTrace();
-			//		continue;
-			//	}
-			//}
 	    	if(socket==null)
 	    		continue;
 	    	if(!queue.isEmpty())
 	    	{
-	    		//queue.remove().encodePacket()
 	    		byte arr[] = queue.remove().encodePacket();
 	    		try {
 					outputStream.write(arr,0,arr.length);
@@ -170,11 +157,7 @@ public class TCPConnection implements Connection, Runnable, Serializable {
 					e.printStackTrace();
 				}
 	    	}
-	    	
 	    	try {
-	    		//System.out.println("Trying to read packet");
-	    	//	byte r[] = new byte[280];
-	    		
 				packet = parser.mavlink_parse_char(inputStream.read());
 			}  catch(SocketTimeoutException m)
 	    	{
@@ -186,8 +169,6 @@ public class TCPConnection implements Connection, Runnable, Serializable {
 			}
 	    	if(packet != null)
 	    	{
-	    		//System.out.println(packet.unpack().toString());
-	    		//packet = null;
 	    		notifyAllObservers(packet);
 	    	}
 	    }
