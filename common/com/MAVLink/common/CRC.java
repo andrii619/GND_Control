@@ -41,7 +41,8 @@ public class CRC {
     *            The message id number
     */
     public void finish_checksum(int msgid) {
-        update_checksum(MAVLINK_MESSAGE_CRCS[msgid]);
+    	if(msgid<=MAVLINK_MESSAGE_CRCS.length && msgid>=0)
+    		update_checksum(MAVLINK_MESSAGE_CRCS[msgid]);
     }
 
     /**

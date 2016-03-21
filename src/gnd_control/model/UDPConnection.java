@@ -52,7 +52,18 @@ public class UDPConnection implements Connection, Runnable, Serializable {
 		parser=new Parser();
 		queue=new ArrayBlockingQueue<MAVLinkPacket>(20);
 		listeners=new ArrayList<ConnectionObserver>();
-		
+		//try {
+		//	this.udpSocket.setReuseAddress(true);
+		//} catch (SocketException e) {
+			// TODO Auto-generated catch block
+		//	e.printStackTrace();
+		//}
+		//t/ry {
+		//	udpSocket.setSoTimeout(1000);
+		//} catch (SocketException e) {
+			// TODO Auto-generated catch block
+		//	e.printStackTrace();
+		//}
 		
 		//this.start();
 	}
@@ -98,7 +109,8 @@ public class UDPConnection implements Connection, Runnable, Serializable {
 	public void sendMAV(MAVLinkPacket packet) {
 		
 		if(packet!=null)
-			this.queue.add(packet);
+			queue.offer(packet);
+			//this.queue.add(packet);
 	}
 		/**
 		packet.generateCRC();

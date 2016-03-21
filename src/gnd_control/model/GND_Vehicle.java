@@ -13,6 +13,7 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.common.*;
 import com.MAVLink.enums.MAV_AUTOPILOT;
 import com.MAVLink.enums.MAV_CMD;
+import com.MAVLink.enums.MAV_DATA_STREAM;
 import com.MAVLink.enums.MAV_MODE;
 import com.MAVLink.enums.MAV_MODE_FLAG;
 import com.MAVLink.enums.MAV_MODE_FLAG_DECODE_POSITION;
@@ -100,6 +101,35 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 	public void request_parameters()
 	{
 		msg_param_request_list m =new msg_param_request_list();
+		MAVLinkPacket p = m.pack();
+		for(int i = 0; i< connections.size(); i++)
+		{
+			connections.get(i).sendMAV(p);;
+		}
+	}
+	public void request_datastream(int streamNum,int rate)
+	{
+		msg_request_data_stream m=new msg_request_data_stream();
+		//m.req_stream_id=MAV_DATA_STREAM.MAV_DATA_STREAM_ALL;
+		m.req_stream_id=(short) streamNum;
+		m.target_system=1;
+		m.target_component=0;
+		m.req_message_rate=rate;
+		m.start_stop=1;
+		MAVLinkPacket p = m.pack();
+		for(int i = 0; i< connections.size(); i++)
+		{
+			connections.get(i).sendMAV(p);;
+		}
+	}
+	public void stop_datastream(int streamID)
+	{
+		msg_request_data_stream m=new msg_request_data_stream();
+		m.req_stream_id=(short) streamID;
+		m.target_system=1;
+		m.target_component=0;
+		//m.req_message_rate=rate;
+		m.start_stop=0;
 		MAVLinkPacket p = m.pack();
 		for(int i = 0; i< connections.size(); i++)
 		{
@@ -329,8 +359,9 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 					System.out.println("listener is null");
 			}
 			
-			// request vehicle parameters and initialize
-			this.request_parameters();
+			// request vehicle parameters and initialize should be done in connectedChanged of the control
+			// request data stream
+			//this.request_parameters();
 		}
 		
 		System.out.println("Handling hertbeat");
@@ -967,6 +998,51 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 	public boolean isArmed() {
 		// TODO Auto-generated method stub
 		return this.armed;
+	}
+
+	@Override
+	public void disableRCOverride() {
+		// TODO Auto-generated method stub
+		msg_rc_channels_override m = new msg_rc_channels_override();
+		m.chan1_raw=0; // roll | yaw 
+		m.chan2_raw=0; // pitch | pitch
+		m.chan3_raw=0; // throttle|
+		m.chan4_raw=0; // yaw | roll
+		m.chan5_raw=0; //
+		m.chan6_raw=0; //
+		m.chan7_raw=0; //
+		m.chan8_raw=0; //
+		MAVLinkPacket p = m.pack();
+		for(int i = 0; i< connections.size(); i++)
+		{
+			connections.get(i).sendMAV(p);;
+		}
+	}
+
+	@Override
+	public void sendRCOverride(int pitch, int roll, int yaw, int throttle) {
+		// TODO Auto-generated method stub
+		if(!this.connected)
+			return;
+		
+		if(pitch<1000 || roll<1000 || yaw<1000 || throttle<1000)
+			return;
+		if(pitch>2000 || roll>2000 || yaw >2000 || throttle>2000)
+			return;
+		msg_rc_channels_override m = new msg_rc_channels_override();
+		m.chan1_raw=yaw;
+		m.chan2_raw=pitch;
+		m.chan3_raw=throttle;
+		m.chan4_raw=roll;
+		m.chan5_raw=0;
+		m.chan6_raw=0;
+		m.chan7_raw=0;
+		m.chan8_raw=0;
+		MAVLinkPacket p = m.pack();
+		for(int i = 0; i< connections.size(); i++)
+		{
+			connections.get(i).sendMAV(p);;
+		}
 	}
 
 

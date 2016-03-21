@@ -52,4 +52,22 @@ public interface Vehicle {
 	public int getVehicleType();
 
 	public String getVehicleMode();
+	public void request_parameters();
+	
+	public void request_datastream(int streamNumber, int rate_hz);
+	public void stop_datastream(int streamID);
+
+	public void disableRCOverride();
+
+	public void sendRCOverride(int pitch, int roll, int yaw, int throttle);
+	
+	//public void calibratePressure();
+	//public void calibrateLevel();
+	
+	//public void rebootAutopilot(boolean holdInBootloader);
+	
+	
+	
+	
+	
 }

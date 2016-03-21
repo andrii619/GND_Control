@@ -48,4 +48,8 @@ public interface Control {
 
 	String getVehicleMode();
 
+	void disableRCOverride();
+
+	void manualOverride(int pitch, int roll, int yaw, int throttle);
+
 }

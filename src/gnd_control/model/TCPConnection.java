@@ -135,7 +135,8 @@ public class TCPConnection implements Connection, Runnable, Serializable {
 		// TODO Auto-generated method stub
 		if(packet!=null)
 		{
-			queue.add(packet);
+			queue.offer(packet);
+			//queue.add(packet);
 		}
 		
 	}

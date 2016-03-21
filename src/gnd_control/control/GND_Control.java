@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.MAVLink.Messages.MAVLinkMessage;
+import com.MAVLink.common.msg_rc_channels_override;
+import com.MAVLink.enums.MAVLINK_DATA_STREAM_TYPE;
+import com.MAVLink.enums.MAV_DATA_STREAM;
 
 import gnd_control.model.Backend;
 import gnd_control.model.Connection;
@@ -15,7 +18,7 @@ import gnd_control.model.Profile;
 import gnd_control.model.Vehicle;
 import gnd_control.model.VehicleStateListener;
 
-public class GND_Control implements Control  {
+public class GND_Control implements Control, VehicleStateListener  {
 	Backend backend;
 	Profile currentProfile;//= new GND_Profile("Sample");
 	Vehicle currentVehicle;
@@ -312,6 +315,76 @@ public class GND_Control implements Control  {
 		if(this.currentVehicle==null)
 			return;
 		this.currentVehicle.set_mode(selectedItem);
+	}
+
+
+	@Override
+	public void armedChanged(boolean armed) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void flightModeChanged(String mode) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void locationChange() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void batteryLevelChange() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void connectedChanged(boolean connected) {
+		// TODO Auto-generated method stub
+		if(connected)
+		{
+			// start sending regular heartbeats
+			
+			// request parameters
+			this.currentVehicle.request_parameters();
+			
+			// request data stream
+			this.currentVehicle.request_datastream(MAV_DATA_STREAM.MAV_DATA_STREAM_ALL,1024);
+		}
+		else
+		{
+			
+		}
+	}
+
+
+	@Override
+	public void disableRCOverride() {
+		// TODO Auto-generated method stub
+		if(this.currentVehicle==null)
+			return;
+		this.currentVehicle.disableRCOverride();
+		
+		
+	}
+
+
+	@Override
+	public void manualOverride(int pitch, int roll, int yaw, int throttle) {
+		// TODO Auto-generated method stub
+		if(this.currentVehicle==null)
+			return;
+		if(!this.currentVehicle.isConnected())
+			return;
+		this.currentVehicle.sendRCOverride(pitch,roll,yaw,throttle);
 	}
 	
 }
