@@ -25,6 +25,10 @@ import gnd_control.model.Connection;
 import gnd_control.model.TCPConnection;
 import gnd_control.model.UDPConnection;
 
+/**
+ * The GUI that lets the user to create new connections.
+ *
+ */
 public class Create_Connection extends JFrame {
 	
 	///////

@@ -12,7 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
+/**
+ * <b>GND_Backend</b> class implements the Backend interface.
+ * @see Bachend
+ *
+ */
 public class GND_Backend implements Backend, Serializable {
 	private static final File dataDir=new File("data");
 	private static final File dataFile=new File(dataDir+File.separator+"users.ser");

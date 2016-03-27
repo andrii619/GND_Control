@@ -23,7 +23,10 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.SpringLayout;
 
-
+/**
+ * The Main GUI for the profiling system
+ *
+ */
 public class Profile_HUB_GUI extends JPanel{
 	SpringLayout spring = new SpringLayout();
 	CardLayout mcard = new CardLayout();

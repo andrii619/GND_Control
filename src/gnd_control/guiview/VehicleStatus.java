@@ -17,9 +17,14 @@ import javax.swing.SpringLayout;
 
 import com.MAVLink.enums.MAV_TYPE;
 
+import gnd_control.model.GPosition;
 import gnd_control.model.Vehicle;
 import gnd_control.model.VehicleStateListener;
 
+/**
+ * This panel shows the user the status of the current vehicle
+ *
+ */
 public class VehicleStatus extends JPanel implements VehicleStateListener {
 	private JButton armButton;
 	private JProgressBar batteryStatusBar;
@@ -173,14 +178,14 @@ public class VehicleStatus extends JPanel implements VehicleStateListener {
 
 
 	@Override
-	public void locationChange() {
+	public void locationChange(GPosition location) {
 		// TODO Auto-generated method stub
 		
 	}
 
 
 	@Override
-	public void batteryLevelChange() {
+	public void batteryLevelChange(double level) {
 		// TODO Auto-generated method stub
 		
 	}

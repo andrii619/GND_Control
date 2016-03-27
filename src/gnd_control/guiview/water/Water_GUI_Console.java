@@ -15,7 +15,9 @@ import javax.swing.JTextArea;
 import javax.swing.SpringLayout;
 import javax.swing.border.TitledBorder;
 
-
+/**
+ * <b>Water_GUI_Console</b> extands JPanel. A panel for underwater drone control.
+ */
 public class Water_GUI_Console extends JPanel{
 	CardLayout card = new CardLayout();
 	JPanel pc = new JPanel(card);

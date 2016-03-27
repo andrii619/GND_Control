@@ -13,7 +13,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.SpringLayout;
 
-
+/**
+ * The main GUI used for underwater control.
+ *
+ */
 public class Water_GUI extends JPanel{
 	SpringLayout spring = new SpringLayout();
 	

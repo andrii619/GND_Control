@@ -2,6 +2,7 @@ package gnd_control.guiview;
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
+import gnd_control.model.GPosition;
 import gnd_control.model.VehicleStateListener;
 
 import javax.swing.*;
@@ -131,13 +132,13 @@ public void flightModeChanged(String mode) {
 }
 
 @Override
-public void locationChange() {
+public void locationChange(GPosition p) {
 	// TODO Auto-generated method stub
 	
 }
 
 @Override
-public void batteryLevelChange() {
+public void batteryLevelChange(double value) {
 	// TODO Auto-generated method stub
 	
 }

@@ -19,6 +19,10 @@ import javax.swing.JProgressBar;
 import javax.swing.JWindow;
 import javax.swing.Timer;
 
+/**
+ * This class implements a splashscreen that is shown when the application starts.
+ *
+ */
 public class LA_Productions extends JWindow {
 	
 	private static JProgressBar progressbar;

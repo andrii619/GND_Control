@@ -25,7 +25,10 @@ import javax.swing.border.EmptyBorder;
 import gnd_control.model.Connection;
 
 
-
+/**
+ * The main GUI for managing vehicle connections
+ *
+ */
 public class BoardConnect extends JFrame {
 
 	private JPanel contentPane;

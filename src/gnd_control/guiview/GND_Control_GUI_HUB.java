@@ -34,7 +34,10 @@ import gnd_control.guiview.interractive.Interractive_GUI;
 import gnd_control.guiview.profile.Profile_HUB_GUI;
 import gnd_control.guiview.water.Water_GUI;
 
-
+/**
+ * The main Application class
+ *
+ */
 public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 	//private GND_Control_GUI_HUB hub;
 	public Control control = new GND_Control();

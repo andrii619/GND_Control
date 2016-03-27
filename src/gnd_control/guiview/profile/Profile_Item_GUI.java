@@ -15,6 +15,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
+/**
+ * This is a graphical representation of a user profile.
+ *
+ */
 public class Profile_Item_GUI extends JPanel{
 	Profile_Item profile;
 	SpringLayout spring = new SpringLayout();

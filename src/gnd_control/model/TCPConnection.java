@@ -17,7 +17,10 @@ import java.util.concurrent.ArrayBlockingQueue;
 import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.Parser;
 import com.MAVLink.Messages.MAVLinkStats;
-
+/**
+ * <b>TCPConnection</b> class implements the Connection interface. It is used for sending MAVLink data using
+ * a TCP network connection.
+ */
 public class TCPConnection implements Connection, Runnable, Serializable {
 	private static final long serialVersionUID = 1L;
 	String connectionName;

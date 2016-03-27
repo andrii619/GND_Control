@@ -15,6 +15,10 @@ import javax.comm.UnsupportedCommOperationException;
 
 import com.MAVLink.MAVLinkPacket;
 
+/**
+ * <b>SerialConnection</b> class implements the Connection interface. Is used to send MAVLink packets through a serial interface.
+ * @see Connection
+ */
 public class SerialConnection implements Connection,Runnable,  SerialPortEventListener {
 
 	private String connectionName;

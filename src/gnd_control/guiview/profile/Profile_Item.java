@@ -4,7 +4,10 @@ import javax.swing.ImageIcon;
 import gnd_control.model.GND_Profile;
 import gnd_control.model.Profile;
 
-
+/**
+ * <b>Profile_Item</b> class represents a user profile.
+ *
+ */
 public class Profile_Item {
 	//String Title;
 	//String Description;
@@ -25,11 +28,18 @@ public class Profile_Item {
 		profile = new GND_Profile(Title,Description);
 		this.icon = icon;
 	}
-	
+	/**
+	 * Get the name of the profile
+	 * @return
+	 */
 	public String getTitle()
 	{
 		return profile.getName();
 	}
+	/**
+	 * Get the description of the profile
+	 * @return
+	 */
 	public String getDescription()
 	{
 		return profile.getDescription();

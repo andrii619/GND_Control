@@ -19,6 +19,10 @@ import com.MAVLink.enums.MAV_MODE_FLAG;
 import com.MAVLink.enums.MAV_MODE_FLAG_DECODE_POSITION;
 import com.MAVLink.enums.MAV_TYPE;
 
+/**
+ * <b>GND_Vehicle</b> class implements the Vehicle interface
+ * @see Vehicle
+ */
 public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -149,7 +153,7 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 	}
 
 	@Override
-	public GeoPosition getLocation() {
+	public GPosition getLocation() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -310,7 +314,7 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 		
 	}
 	@Override
-	public void setLongtitude(float longtitude) {
+	public void setLongtitude(double longtitude) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -324,11 +328,7 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 		// TODO Auto-generated method stub
 		
 	}
-	@Override
-	public void setLongtitude() {
-		// TODO Auto-generated method stub
-		
-	}
+
 	
 	public void takeoff(float altitude)
 	{

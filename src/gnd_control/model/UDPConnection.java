@@ -19,6 +19,11 @@ import java.util.concurrent.ArrayBlockingQueue;
 import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.Parser;
 
+/**
+ * <b>UDPConnection</b> class implements the Connection interface. It is used to send MAVLink data
+ * using a UDP connection.
+ * @see Connection
+ */
 public class UDPConnection implements Connection, Runnable, Serializable {
 	private static final long serialVersionUID = 1L;
 	private String connectionName;

@@ -3,7 +3,11 @@ package gnd_control.model;
 import java.io.File;
 import java.io.Serializable;
 
-
+/**
+ * <b>GND_Profile</b> class impements the Profile interface.
+ * @see Profile
+ *
+ */
 public class GND_Profile implements Profile, Serializable {
 	private static final long serialVersionUID = 1L;
 	

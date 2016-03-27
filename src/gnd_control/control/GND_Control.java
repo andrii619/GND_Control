@@ -13,11 +13,17 @@ import gnd_control.model.Backend;
 import gnd_control.model.Connection;
 import gnd_control.model.GND_Backend;
 import gnd_control.model.GND_Profile;
+import gnd_control.model.GPosition;
 import gnd_control.model.MyConnectException;
 import gnd_control.model.Profile;
 import gnd_control.model.Vehicle;
 import gnd_control.model.VehicleStateListener;
 
+/**
+ * <b>GND_Control</b> class implements the Control interface.
+ * @see Control
+ *
+ */
 public class GND_Control implements Control, VehicleStateListener  {
 	Backend backend;
 	Profile currentProfile;//= new GND_Profile("Sample");
@@ -333,14 +339,14 @@ public class GND_Control implements Control, VehicleStateListener  {
 
 
 	@Override
-	public void locationChange() {
+	public void locationChange(GPosition p) {
 		// TODO Auto-generated method stub
 		
 	}
 
 
 	@Override
-	public void batteryLevelChange() {
+	public void batteryLevelChange(double level) {
 		// TODO Auto-generated method stub
 		
 	}

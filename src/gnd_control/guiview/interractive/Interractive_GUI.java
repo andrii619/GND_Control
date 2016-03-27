@@ -12,15 +12,21 @@ import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
 import gnd_control.control.Control;
+import gnd_control.model.GPosition;
 import gnd_control.model.VehicleStateListener;
 
+/**
+ * The main GUI for controlling the drone using the keyboard or a joystick.
+ * @author andrii
+ *
+ */
 public class Interractive_GUI extends JPanel implements VehicleStateListener {
 	//private static final String[] arr={"GUIDED","AUTO"};
 	private static int roll = 1500;
 	private static int yaw = 1500;
 	private static int pitch = 1500;
 	private static int throttle = 1500;
-	private static final int DELTA = 50;
+	private static final int DELTA = 10;
 	
 	//JComboBox modeBox;
 	
@@ -100,14 +106,14 @@ public class Interractive_GUI extends JPanel implements VehicleStateListener {
 
 
 	@Override
-	public void locationChange() {
+	public void locationChange(GPosition position) {
 		// TODO Auto-generated method stub
 		
 	}
 
 
 	@Override
-	public void batteryLevelChange() {
+	public void batteryLevelChange(double level) {
 		// TODO Auto-generated method stub
 		
 	}

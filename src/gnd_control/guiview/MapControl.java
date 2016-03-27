@@ -19,6 +19,10 @@ import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.jdesktop.swingx.mapviewer.TileFactory;
 
 ////// AIzaSyBdaICElKSehUsECqpLInkg9f_ufYH1Aco 
+/**
+ * This class is the GUI that is used for controlling the drone using maps.
+ *
+ */
 public class MapControl extends JFrame {
 	
 	JXMapKit map;

@@ -15,6 +15,10 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.Element;
  
  
+/**
+ * A scroll panel that has line numbering. Extends a JScrollPanel
+ *
+ */
 public class LineNumbering extends JScrollPane{
 	private JTextArea jta;
 	private JTextArea lines;

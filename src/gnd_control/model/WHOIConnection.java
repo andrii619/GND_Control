@@ -7,6 +7,11 @@ import javax.comm.SerialPortEventListener;
 
 import com.MAVLink.MAVLinkPacket;
 
+/**
+ * <b>WHOIConnection</b> class implements the Connection interface. Is used for sending data through 
+ * a WHOI acoustics modem.
+ * @see Connection
+ */
 public class WHOIConnection implements Connection,Runnable,SerialPortEventListener, Serializable {
 	private String connectionName;
 	

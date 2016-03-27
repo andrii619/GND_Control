@@ -10,6 +10,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
+/**
+ * The GUI for uploading new firmware to the MCU.
+ *
+ */
 public class UploadFirmware extends JFrame {
 	
 	private JPanel contentPanel;
