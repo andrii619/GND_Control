@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,6 +13,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.SpringLayout;
+
+//TODO make left side hideable
+
 
 /**
  * The main GUI used for underwater control.
@@ -25,7 +29,7 @@ public class Water_GUI extends JPanel{
 	JPanel p2 = new JPanel(new GridLayout(2,1));//Un Used[]
 	JScrollPane p3 = new LineNumbering();//Center [Text]
 	Water_GUI_RSideBar p4 = new Water_GUI_RSideBar();//East Command Past
-	JPanel p5 = new JPanel();//West
+	Water_Pseudo_Manual_Control_GUI p5 = new Water_Pseudo_Manual_Control_GUI();//West
 	JPanel p6 = new Water_GUI_Console();//South
 	JPanel p7 = new JPanel(spring);
 	JToolBar tool = new JToolBar();
