@@ -22,8 +22,10 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 import gnd_control.model.Connection;
+import gnd_control.model.SerialConnection;
 import gnd_control.model.TCPConnection;
 import gnd_control.model.UDPConnection;
+import jssc.SerialPort;
 import jssc.SerialPortList;
 
 /**
@@ -510,7 +512,70 @@ public class Create_Connection extends JFrame {
 			}
 			else if(((String)connectionBox.getSelectedItem()).compareTo("Serial")==0)
 			{
+				// get port name 
+				String portName = (String)portBox.getSelectedItem();
+				if(portName == null)
+				{
+					errorLabel.setText("Invalid port");
+					return;
+				}
+				if(portName.isEmpty())
+				{
+					errorLabel.setText("Invalid port");
+					return;
+				}
+				// get baud rate
+				int baudRate=-1;
+				baudRate= (Integer)baudRateBox.getSelectedItem();
+				if(baudRate<=0)
+				{
+					errorLabel.setText("Invelid baud rate");
+					return;
+				}
+				// get parity
+				String parity = (String)parityBox.getSelectedItem();
+				int parityBits=-1;
+				if(parity==null || parity.isEmpty())
+				{
+					errorLabel.setText("Invelid parity");
+					return;
+				}
+				if(parity.compareToIgnoreCase("Even")==0)
+				{
+					parityBits=SerialPort.PARITY_EVEN;
+				}
+				else if(parity.compareTo("Odd")==0)
+				{
+					parityBits=SerialPort.PARITY_ODD;
+				}
+				else if(parity.compareToIgnoreCase("None")==0)
+				{
+					parityBits=SerialPort.PARITY_NONE;
+				}
+				else
+				{
+					errorLabel.setText("Invalid parity");
+					return;
+				}
 				
+				// get data bits
+				int dataBits = -1;
+				dataBits=(Integer)dataBitsBox.getSelectedItem();
+				if(dataBits<=0 ||dataBits>8)
+				{
+					errorLabel.setText("Invelid data bits");
+					return;
+				}
+				int stopBits = -1;
+				stopBits = (Integer)stopBitsBox.getSelectedItem();
+				if(stopBits<=0 ||stopBits>3)
+				{
+					errorLabel.setText("Invelid stop bits");
+					return;
+				}
+				//get stop bits
+				
+				c= new SerialConnection(connectionName,portName,baudRate,parityBits,dataBits,stopBits);
 			}
 			else if(((String)connectionBox.getSelectedItem()).compareTo("WHOI")==0)
 			{

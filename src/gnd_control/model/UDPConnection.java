@@ -215,10 +215,10 @@ public class UDPConnection implements Connection, Runnable, Serializable {
 				byte[] arr=packet.getData();
 				
 				////////////////////////
-				StringBuilder sb=new StringBuilder();
-				StringBuilder sj=new StringBuilder();
+				//StringBuilder sb=new StringBuilder();
+				//StringBuilder sj=new StringBuilder();
 				///////////////
-				int nextValue=0;
+				//int nextValue=0;
 				for(int i=packet.getOffset();i<packet.getLength();i++)
 				{
 					//sb.append(String.format("| %02X |", arr[i]));
@@ -227,25 +227,25 @@ public class UDPConnection implements Connection, Runnable, Serializable {
 					p=parser.mavlink_parse_char(Integer.parseInt(String.format("%02X", arr[i]),16));
 					if(p!=null)
 					{
-						System.out.println("not null");
+						//System.out.println("not null");
 						this.notifyAllObservers(p);
 					}
 				}
 				//System.out.println("Got bytes: "+sb.toString());
 				//System.out.println("Got bytes: "+sj.toString());
-				ByteBuffer wrapper=ByteBuffer.wrap(arr);
+				//ByteBuffer wrapper=ByteBuffer.wrap(arr);
 				//CharBuffer c=wrapper.asCharBuffer();
 				///char[] chara=c.array();
-				for(int i=0;i<wrapper.remaining();i++)
-				{
+				//for(int i=0;i<wrapper.remaining();i++)
+				//{
 					//sj.append(String.format("| %03d |",wrapper.getInt()));
-					p=parser.mavlink_parse_char(wrapper.getInt());
-					if(p!=null)
-					{
-						System.out.println("not null");
-						this.notifyAllObservers(p);
-					}
-				}
+				//	p=parser.mavlink_parse_char(wrapper.getInt());
+				//	if(p!=null)
+				//	{
+				//		System.out.println("not null");
+				//		this.notifyAllObservers(p);
+				//	}
+				//}
 				//System.out.println("Got bytes: "+sj.toString());
 			} catch(SocketTimeoutException m)
 			{

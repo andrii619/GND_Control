@@ -53,7 +53,7 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 	//JPanel p3;
 	JPanel p4 = new Water_GUI();
 	JPanel p5 = new Interractive_GUI(control);
-	JLabel l1 = new JLabel("(C) 2016 Software Engineering Team: Lucas Rivera(laneboy), Andrii Hlyvko(AndriiDSD), Russell Epstein, Jonathan Zelaya, Prerak Mehta, Thomas Ippolito, and Kevin Wu");
+	JLabel l1 = new JLabel("");//(C) 2016 Software Engineering Team: Lucas Rivera(laneboy), Andrii Hlyvko(AndriiDSD), Russell Epstein, Jonathan Zelaya, Prerak Mehta, Thomas Ippolito, and Kevin Wu");
 	JMenuBar bar = new JMenuBar();
 	JMenu m1 = new JMenu("FILE");
 	JMenu m2 = new JMenu("SETTINGS");
