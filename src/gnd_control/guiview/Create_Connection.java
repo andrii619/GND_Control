@@ -24,6 +24,7 @@ import javax.swing.SpringLayout;
 import gnd_control.model.Connection;
 import gnd_control.model.TCPConnection;
 import gnd_control.model.UDPConnection;
+import jssc.SerialPortList;
 
 /**
  * The GUI that lets the user to create new connections.
@@ -361,6 +362,13 @@ public class Create_Connection extends JFrame {
 		dataBitsLabel=new JLabel("Data Bits:");
 		stopBitsLabel=new JLabel("Stop Bits:");
 		portBox=new JComboBox<String>();
+		String[] temp=SerialPortList.getPortNames();
+		if(temp!=null)
+		{
+			for(int i=0;i<temp.length;i++)
+			portBox.addItem(temp[i]);
+		}
+		
 		//portBox.setPreferredSize(new Dimension(50,50));
 		baudRateBox=new JComboBox<Integer>(rateList);
 		parityBox = new JComboBox<String>(parityList);

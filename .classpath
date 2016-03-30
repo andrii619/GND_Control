@@ -17,5 +17,8 @@
 	<classpathentry kind="lib" path="libs/jxbrowser-mac-6.2.jar"/>
 	<classpathentry kind="lib" path="libs/jxbrowser-win-6.2.jar"/>
 	<classpathentry kind="lib" path="libs/license.jar"/>
+	<classpathentry kind="lib" path="libs/jssc.jar"/>
+	<classpathentry kind="lib" path="libs/jssc-2.7.0-javadoc.jar"/>
+	<classpathentry kind="lib" path="libs/jssc-2.7.0-src.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
