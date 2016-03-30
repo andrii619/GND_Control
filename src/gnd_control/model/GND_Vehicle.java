@@ -1025,10 +1025,10 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 		if(!this.connected)
 			return;
 		
-		if(pitch<1000 || roll<1000 || yaw<1000 || throttle<1000)
-			return;
-		if(pitch>2000 || roll>2000 || yaw >2000 || throttle>2000)
-			return;
+		//if(pitch<1000 || roll<1000 || yaw<1000 || throttle<1000)
+		//	return;
+		//if(pitch>2000 || roll>2000 || yaw >2000 || throttle>2000)
+		//	return;
 		msg_rc_channels_override m = new msg_rc_channels_override();
 		m.chan1_raw=yaw;
 		m.chan2_raw=pitch;

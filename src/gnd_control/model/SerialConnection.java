@@ -2,6 +2,7 @@ package gnd_control.model;
 
 import jssc.*;
 
+import java.io.Serializable;
 //import java.io.IOException;
 //import java.io.InputStream;
 //import java.io.OutputStream;
@@ -27,7 +28,7 @@ import com.MAVLink.Messages.MAVLinkStats;
  * <b>SerialConnection</b> class implements the Connection interface. Is used to send MAVLink packets through a serial interface.
  * @see Connection
  */
-public class SerialConnection implements Connection,Runnable {
+public class SerialConnection implements Connection,Runnable, Serializable {
 
 	private String connectionName;
 	

@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
+import com.MAVLink.Messages.MAVLinkPayload;
+
 import gnd_control.control.Control;
 import gnd_control.model.GPosition;
 import gnd_control.model.VehicleStateListener;
@@ -171,7 +173,10 @@ public class Interractive_GUI extends JPanel implements VehicleStateListener {
 					pitch-=DELTA; // nose down
 				System.out.println("Current pitch "+pitch);
 				errorLabel.setText("pitch: "+pitch +", roll: "+roll+", yaw: "+yaw+", throttle: "+throttle);
-				control.manualOverride(pitch,roll,yaw,throttle);
+				control.manualOverride(pitch,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE);
 			}
 			else if(e.getKeyCode() == KeyEvent.VK_DOWN) // pitch, nose up
 			{
@@ -179,7 +184,10 @@ public class Interractive_GUI extends JPanel implements VehicleStateListener {
 					pitch += DELTA;
 				System.out.println("Current pitch "+pitch);
 				errorLabel.setText("pitch: "+pitch +", roll: "+roll+", yaw: "+yaw+", throttle: "+throttle);
-				control.manualOverride(pitch,roll,yaw,throttle);
+				control.manualOverride(pitch,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE);
 
 			}
 			else if(e.getKeyCode() == KeyEvent.VK_LEFT) // roll left
@@ -188,7 +196,10 @@ public class Interractive_GUI extends JPanel implements VehicleStateListener {
 					roll-=DELTA;
 				System.out.println("Current roll "+roll);
 				errorLabel.setText("pitch: "+pitch +", roll: "+roll+", yaw: "+yaw+", throttle: "+throttle);
-				control.manualOverride(pitch,roll,yaw,throttle);
+				control.manualOverride(MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						roll,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE);
 			}
 			else if(e.getKeyCode() == KeyEvent.VK_RIGHT) // roll right
 			{
@@ -196,14 +207,20 @@ public class Interractive_GUI extends JPanel implements VehicleStateListener {
 					roll+=DELTA;
 				System.out.println("Current roll "+roll);
 				errorLabel.setText("pitch: "+pitch +", roll: "+roll+", yaw: "+yaw+", throttle: "+throttle);
-				control.manualOverride(pitch,roll,yaw,throttle);
+				control.manualOverride(MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						roll,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE);
 			}
 			else if(e.getKeyCode() == KeyEvent.VK_A) // yaw left
 			{
 				if(yaw>=1100)
 					yaw-=DELTA;
 				errorLabel.setText("pitch: "+pitch +", roll: "+roll+", yaw: "+yaw+", throttle: "+throttle);
-				control.manualOverride(pitch,roll,yaw,throttle);
+				control.manualOverride(MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						yaw,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE);
 
 			}
 			else if(e.getKeyCode() == KeyEvent.VK_D) // yaw right
@@ -211,17 +228,23 @@ public class Interractive_GUI extends JPanel implements VehicleStateListener {
 				if(yaw<=1900)
 					yaw+=DELTA;
 				errorLabel.setText("pitch: "+pitch +", roll: "+roll+", yaw: "+yaw+", throttle: "+throttle);
-				control.manualOverride(pitch,roll,yaw,throttle);
-
+				//control.manualOverride(pitch,roll,yaw,throttle);
+				control.manualOverride(MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						yaw,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE);
 			}
-			else if(e.getKeyCode() == KeyEvent.VK_W) // increase throttle
+			else if(e.getKeyCode() == KeyEvent.VK_W) // increase throttle 65535
 			{
 				if(throttle<=1900)
 					throttle+=DELTA;
 				System.out.println("Current throttle "+throttle);
 				errorLabel.setText("pitch: "+pitch +", roll: "+roll+", yaw: "+yaw+", throttle: "+throttle);
-				control.manualOverride(pitch,roll,yaw,throttle);
-
+				//control.manualOverride(pitch,roll,yaw,throttle);
+				control.manualOverride(MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE, throttle);
+				//control.manualOverride(65535, , yaw, throttle);
 			}
 			else if(e.getKeyCode() == KeyEvent.VK_S) // decrease throttle
 			{
@@ -229,7 +252,11 @@ public class Interractive_GUI extends JPanel implements VehicleStateListener {
 					throttle-=DELTA;
 				System.out.println("Current throttle "+throttle);
 				errorLabel.setText("pitch: "+pitch +", roll: "+roll+", yaw: "+yaw+", throttle: "+throttle);
-				control.manualOverride(pitch,roll,yaw,throttle);
+				control.manualOverride(MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE, throttle);
+				//control.manualOverride(pitch,roll,yaw,throttle);
+				control.manualOverride(65535, 65535, 65535, throttle);
 			}
 		}
 

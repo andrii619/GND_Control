@@ -14,7 +14,7 @@ public class MAVLinkPayload {
     private static final short UNSIGNED_BYTE_MAX_VALUE = Byte.MAX_VALUE - Byte.MIN_VALUE;
 
     private static final short UNSIGNED_SHORT_MIN_VALUE = 0;
-    private static final int UNSIGNED_SHORT_MAX_VALUE = Short.MAX_VALUE - Short.MIN_VALUE;
+    public static final int UNSIGNED_SHORT_MAX_VALUE = Short.MAX_VALUE - Short.MIN_VALUE;
 
     private static final int UNSIGNED_INT_MIN_VALUE = 0;
     private static final long UNSIGNED_INT_MAX_VALUE = (long) Integer.MAX_VALUE - Integer.MIN_VALUE;
