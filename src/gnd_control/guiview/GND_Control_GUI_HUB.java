@@ -44,7 +44,8 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 	// all sub windows
 	private BoardConnect boardConnect;
 	private VehicleStatus statusPanel;
-	private MyGoogleMap googleMap;
+	private JPanel googleMap;
+	//private MyGoogleMap googleMap;
 	
 	JPanel main = new JPanel(new BorderLayout());
 	JLayeredPane p0 = new JLayeredPane();
@@ -53,7 +54,7 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 	//JPanel p3;
 	JPanel p4 = new Water_GUI();
 	JPanel p5 = new Interractive_GUI(control);
-	JLabel l1 = new JLabel("");//(C) 2016 Software Engineering Team: Lucas Rivera(laneboy), Andrii Hlyvko(AndriiDSD), Russell Epstein, Jonathan Zelaya, Prerak Mehta, Thomas Ippolito, and Kevin Wu");
+	JLabel l1 = new JLabel("(C) 2016 Software Engineering Team: Lucas Rivera(laneboy), Andrii Hlyvko(AndriiDSD), Russell Epstein, Jonathan Zelaya, Prerak Mehta, Thomas Ippolito, and Kevin Wu");
 	JMenuBar bar = new JMenuBar();
 	JMenu m1 = new JMenu("FILE");
 	JMenu m2 = new JMenu("SETTINGS");
@@ -73,7 +74,8 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 	public GND_Control_GUI_HUB() throws IOException{
 		//control = new GND_Control();
 		/////////////////////////////
-		googleMap = new MyGoogleMap(this);
+		googleMap=new JPanel();
+		//googleMap = new MyGoogleMap(this);
 		///////////////////////////
 		
 		m1.add(i1);
@@ -143,7 +145,7 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 		//p0.add(statusPanel);
 		main.add(statusPanel,BorderLayout.EAST);
 		this.control.addVehicleListener(statusPanel);
-		this.control.addVehicleListener(googleMap);
+		//this.control.addVehicleListener(googleMap);
 		//googleMap=new MyGoogleMap(this);
 		///////////////////////////////////
 		

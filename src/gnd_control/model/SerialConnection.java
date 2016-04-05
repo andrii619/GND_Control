@@ -45,13 +45,9 @@ public class SerialConnection implements Connection,Runnable, Serializable {
 	private MAVLinkStats stats;
 	private List<ConnectionObserver> listeners;
 	private boolean connected;
+	//private boolean test = true;
 	
-//	private CommPortIdentifier telemetryID;
-	
-	//private SerialPort telemetrySerial;
-	
-	//private InputStream telemetryInput;
-	//private OutputStream telemetryOutput;
+	private SerialPortListener serialListener;
 	
 	public SerialConnection(String name, String port, int rate )
 	{
@@ -86,121 +82,40 @@ public class SerialConnection implements Connection,Runnable, Serializable {
 			if(p!=null)
 				this.queue.offer(p);
 		}
-		//try {
-		//	this.telemetryOutput.write(b);
-		//	this.telemetryOutput.flush();
-	//	}// catch (IOException e) {
-			// TODO Auto-generated catch block
-	//		e.printStackTrace();
-	//	}
-		// send the byte buffer over serial connection 
 	}
 
-/**
-	public void connect() {
-		// TODO Auto-generated method stub
-		try {
-			this.telemetryID = CommPortIdentifier.getPortIdentifier(port);
-			this.telemetrySerial = (SerialPort) this.telemetryID.open("RE_LINK", 2000);
-			this.telemetrySerial.setSerialPortParams(rate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
-			this.telemetrySerial.addEventListener(this);
-			this.telemetrySerial.setDTR(false);
-			this.telemetrySerial.setRTS(false);
-			this.telemetrySerial.notifyOnDataAvailable(true);
-			this.telemetryInput=this.telemetrySerial.getInputStream();
-			this.telemetryOutput=this.telemetrySerial.getOutputStream();
-			
-		} catch (NoSuchPortException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnsupportedCommOperationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (PortInUseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TooManyListenersException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void sendBytes(byte [] arr)
+	{
+		System.out.println("send bytes");
+		System.out.println(Thread.currentThread().getName());
+		if(arr!=null)
+			if(arr.length!=0)
+				try {
+					this.serialPort.writeBytes(arr);
+				} catch (SerialPortException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 	}
 
-*/
-	/**
-	public void disconnectTelemetry() {
-		// TODO Auto-generated method stub
-		try {
-			this.telemetryInput.close();
-			this.telemetryOutput.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		this.telemetrySerial.close();
-	}
-*/
-
-/**	
-	public void connectWHOI(String port, int baudRate) {
-		// TODO Auto-generated method stub
-		try {
-			this.whoiID = CommPortIdentifier.getPortIdentifier(port);
-			this.whoiSerial = (SerialPort) whoiID.open("RE_LINK", 2000);
-			this.whoiSerial.setSerialPortParams(baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
-			this.whoiSerial.setDTR(false);
-			this.whoiSerial.setRTS(false);
-			this.whoiSerial.addEventListener(this);
-			this.whoiSerial.notifyOnDataAvailable(true);
-			this.whoiInput=this.whoiSerial.getInputStream();
-			this.whoiOutput=this.whoiSerial.getOutputStream();
-		} catch (NoSuchPortException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (PortInUseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnsupportedCommOperationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TooManyListenersException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-*/
-	/**
-	
-	public void disconnectWHOI() {
-		// TODO Auto-generated method stub
-		try {
-			this.whoiInput.close();
-			this.whoiOutput.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		this.whoiSerial.close();
-	}
-*/
 
 
 	@Override
 	public void disconnect() {
 		// TODO Auto-generated method stub
 		try {
+			serialPort.removeEventListener();
+		} catch (SerialPortException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
 			this.serialPort.closePort();
 		} catch (SerialPortException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 
 
@@ -232,6 +147,7 @@ public class SerialConnection implements Connection,Runnable, Serializable {
 	public void run() {
 		// TODO Auto-generated method stub
 		MAVLinkPacket packet = null;
+		System.out.println("Run: "+Thread.currentThread().getName());
 		while(true)
 		{
 			if(this.serialPort==null)
@@ -240,29 +156,36 @@ public class SerialConnection implements Connection,Runnable, Serializable {
 				continue;
 			if(!this.queue.isEmpty())
 			{
+				System.out.println("Queue is not empty");
 				byte arr[] = this.queue.remove().encodePacket();
 				try {
 					this.serialPort.writeBytes(arr);
+					System.out.println("Written");
 				} catch (SerialPortException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
+			/**
 			try {
+				//byte arr[] = serialPort.readBy
 				byte arr[] = serialPort.readBytes();
+				if(arr==null)
+					continue;
 				for(int i=0; i<arr.length;i++)
 				{
-					packet=parser.mavlink_parse_char(Integer.parseInt(String.format("%02X", arr[i]),16));
-					if(packet!=null)
-					{
+					System.out.println("Serial got: " +new String(arr));
+			//		packet=parser.mavlink_parse_char(Integer.parseInt(String.format("%02X", arr[i]),16));
+			//		if(packet!=null)
+			//		{
 						//System.out.println("not null");
-						this.notifyAllObservers(packet);
-					}
+			//			this.notifyAllObservers(packet);
+			//		}
 				}
 			} catch (SerialPortException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}*/
 		}
 	}
 
@@ -303,8 +226,15 @@ public class SerialConnection implements Connection,Runnable, Serializable {
 	public void connect() throws MyConnectException {
 		// TODO Auto-generated method stub
 		this.serialPort = new SerialPort(this.port);
-		
+		if(serialPort.isOpened())
+			try {
+				serialPort.closePort();
+			} catch (SerialPortException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		try {
+			
 			this.serialPort.openPort();
 			
 			this.serialPort.setParams(this.rate, this.data, this.stop, this.parity);
@@ -315,11 +245,57 @@ public class SerialConnection implements Connection,Runnable, Serializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		this.connected=true;
+		serialListener = new SerialPortListener();
+		try {
+			serialPort.addEventListener(serialListener);
+		} catch (SerialPortException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		new Thread(this).start();
 	}
 	public boolean isConnected()
 	{
 		return this.connected;
+	}
+	protected class SerialPortListener implements SerialPortEventListener{
+
+		@Override
+		public void serialEvent(SerialPortEvent event) {
+			// TODO Auto-generated method stub
+			if(event.isRXCHAR() && event.getEventValue() > 0) {
+				//test=false;
+				MAVLinkPacket packet=null;
+				//StringBuilder sj=new StringBuilder();
+	            try {
+	               // String receivedData = serialPort.readString(event.getEventValue());
+	                //System.out.println("Received response: " + receivedData);
+	            	byte[] arr=serialPort.readBytes();
+	            	if(arr==null)
+	            		return;
+	            	//System.out.println("Response: "+new String(arr));
+	                for(int i=0;i<arr.length;i++)
+		            {
+	                	//sj.append(String.format("| %03d |", Integer.parseInt(String.format("%02X", arr[i]), 16)));
+	               // 	sj.append(String.format("| %02X |", arr[i]));
+	                	packet=parser.mavlink_parse_char(Integer.parseInt(String.format("%02X", arr[i]),16));
+	                	if(packet!=null)
+	                	{
+	                	//	System.out.println(packet.toString());
+	                		notifyAllObservers(packet);
+	                	}
+		            }
+	                //System.out.println("Got bytes: "+sj.toString());
+	                
+	            }
+	            catch (SerialPortException ex) {
+	                System.out.println("Error in receiving string from COM-port: " + ex);
+	            }
+	            
+	        }
+		}
+		
 	}
 }

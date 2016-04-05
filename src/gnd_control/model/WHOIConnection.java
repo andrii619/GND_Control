@@ -232,6 +232,7 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 				continue;
 			if(!this.queue.isEmpty())
 			{
+				
 				byte arr[] = this.queue.remove().encodePacket();
 				try {
 					this.serialPort.writeBytes(arr);
@@ -306,10 +307,17 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 	public void connect() throws MyConnectException {
 		// TODO Auto-generated method stub
 		this.serialPort = new SerialPort(this.port);
-		
+		if(this.serialPort.isOpened())
+			try {
+				this.serialPort.closePort();
+			} catch (SerialPortException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		try {
 			this.serialPort.openPort();
-			
+			//this.serialPort.writeBytes("test".getBytes());
+			//System.out.println("Got: "+this.serialPort.readBytes(4).toString());
 			this.serialPort.setParams(this.rate, this.data, this.stop, this.parity);
 			  serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN | 
                       SerialPort.FLOWCONTROL_RTSCTS_OUT);
