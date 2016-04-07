@@ -6,15 +6,11 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import javax.comm.SerialPortEvent;
-import javax.comm.SerialPortEventListener;
-
 import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.Parser;
 import com.MAVLink.Messages.MAVLinkStats;
 
-import jssc.SerialPort;
-import jssc.SerialPortException;
+import jssc.*;
 
 /**
  * <b>WHOIConnection</b> class implements the Connection interface. Is used for sending data through 
@@ -38,17 +34,7 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 	private MAVLinkStats stats;
 	private List<ConnectionObserver> listeners;
 	private boolean connected;
-	
-//	private CommPortIdentifier telemetryID;
-	
-	//private SerialPort telemetrySerial;
-	
-	//private InputStream telemetryInput;
-	//private OutputStream telemetryOutput;
-	
 
-	
-	
 	public WHOIConnection(String connectionName, String portName, int baudRate, int parityBits, int dataBits, int stopBits) {
 		// TODO Auto-generated constructor stub
 		this.connectionName=connectionName;
@@ -66,122 +52,15 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 
 	@Override
 	public void sendMAV(MAVLinkPacket p) {
-		// TODO Auto-generated method stub
-		//byte[] b = p.encodePacket();
 		if(this.queue!=null)
 		{
 			WHOIPacket pack=new WHOIPacket(p);
 			if(p!=null)
 			{
-				// convert the mavlink packet into a whoi packet
-				
 				this.queue.offer(pack);
 			}
 		}
-		//try {
-		//	this.telemetryOutput.write(b);
-		//	this.telemetryOutput.flush();
-	//	}// catch (IOException e) {
-			// TODO Auto-generated catch block
-	//		e.printStackTrace();
-	//	}
-		// send the byte buffer over serial connection 
 	}
-
-/**
-	public void connect() {
-		// TODO Auto-generated method stub
-		try {
-			this.telemetryID = CommPortIdentifier.getPortIdentifier(port);
-			this.telemetrySerial = (SerialPort) this.telemetryID.open("RE_LINK", 2000);
-			this.telemetrySerial.setSerialPortParams(rate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
-			this.telemetrySerial.addEventListener(this);
-			this.telemetrySerial.setDTR(false);
-			this.telemetrySerial.setRTS(false);
-			this.telemetrySerial.notifyOnDataAvailable(true);
-			this.telemetryInput=this.telemetrySerial.getInputStream();
-			this.telemetryOutput=this.telemetrySerial.getOutputStream();
-			
-		} catch (NoSuchPortException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnsupportedCommOperationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (PortInUseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TooManyListenersException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-*/
-	/**
-	public void disconnectTelemetry() {
-		// TODO Auto-generated method stub
-		try {
-			this.telemetryInput.close();
-			this.telemetryOutput.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		this.telemetrySerial.close();
-	}
-*/
-
-/**	
-	public void connectWHOI(String port, int baudRate) {
-		// TODO Auto-generated method stub
-		try {
-			this.whoiID = CommPortIdentifier.getPortIdentifier(port);
-			this.whoiSerial = (SerialPort) whoiID.open("RE_LINK", 2000);
-			this.whoiSerial.setSerialPortParams(baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
-			this.whoiSerial.setDTR(false);
-			this.whoiSerial.setRTS(false);
-			this.whoiSerial.addEventListener(this);
-			this.whoiSerial.notifyOnDataAvailable(true);
-			this.whoiInput=this.whoiSerial.getInputStream();
-			this.whoiOutput=this.whoiSerial.getOutputStream();
-		} catch (NoSuchPortException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (PortInUseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnsupportedCommOperationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TooManyListenersException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-*/
-	/**
-	
-	public void disconnectWHOI() {
-		// TODO Auto-generated method stub
-		try {
-			this.whoiInput.close();
-			this.whoiOutput.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		this.whoiSerial.close();
-	}
-*/
 
 
 	@Override
@@ -235,6 +114,7 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 				
 				byte arr[] = this.queue.remove().encodePacket();
 				try {
+					if(arr!=null)
 					this.serialPort.writeBytes(arr);
 				} catch (SerialPortException e) {
 					// TODO Auto-generated catch block
@@ -327,10 +207,66 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 			e.printStackTrace();
 		}
 		this.connected=true;
+		
+		
+		// set up the whoi
+		try{
+		serialPort.writeString("$CCCFG,REV,0\r\n");                                                        
+		serialPort.writeString("$CCCFG,ASD,0\r\n");                                                        
+		serialPort.writeString("$CCCFG,SRC,0\r\n");                                                        
+		serialPort.writeString("$CCCFG,RXA,0\r\n");                                                        
+		serialPort.writeString("$CCCFG,RXD,1\r\n");                                                        
+		serialPort.writeString("$CCCFG,DTO,5\r\n");                                                        
+		serialPort.writeString("$CCCFG,AGN,0\r\n");                                                        
+		serialPort.writeString("$CCCFG,XST,0\r\n"); 
+		}catch(SerialPortException e)
+		{
+			e.printStackTrace();
+		}
+		
+		
 		new Thread(this).start();
 	}
 	public boolean isConnected()
 	{
 		return this.connected;
+	}
+	protected class SerialPortListener implements SerialPortEventListener{
+
+		@Override
+		public void serialEvent(SerialPortEvent event) {
+			// TODO Auto-generated method stub
+			if(event.isRXCHAR() && event.getEventValue() > 0) {
+				//test=false;
+				MAVLinkPacket packet=null;
+				//StringBuilder sj=new StringBuilder();
+	            try {
+	               // String receivedData = serialPort.readString(event.getEventValue());
+	                //System.out.println("Received response: " + receivedData);
+	            	byte[] arr=serialPort.readBytes();
+	            	if(arr==null)
+	            		return;
+	            	//System.out.println("Response: "+new String(arr));
+	                for(int i=0;i<arr.length;i++)
+		            {
+	                	//sj.append(String.format("| %03d |", Integer.parseInt(String.format("%02X", arr[i]), 16)));
+	               // 	sj.append(String.format("| %02X |", arr[i]));
+	                	packet=parser.mavlink_parse_char(Integer.parseInt(String.format("%02X", arr[i]),16));
+	                	if(packet!=null)
+	                	{
+	                	//	System.out.println(packet.toString());
+	                		notifyAllObservers(packet);
+	                	}
+		            }
+	                //System.out.println("Got bytes: "+sj.toString());
+	                
+	            }
+	            catch (SerialPortException ex) {
+	                System.out.println("Error in receiving string from COM-port: " + ex);
+	            }
+	            
+	        }
+		}
+		
 	}
 }
