@@ -83,6 +83,8 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 		connections.add(new TCPConnection("temp","127.0.0.1",10000));
 		base_mode=0;
 		custom_mode=0;
+		
+		this.battery=new Battery(0,0,0);
 		////
 		//timer=new Timer();
 	}
@@ -243,7 +245,7 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 	@Override
 	public double get_battery_level() {
 		// TODO Auto-generated method stub
-		return 0;
+		return this.battery.getLevel();
 	}
 	@Override
 	public boolean is_armable() {
@@ -361,7 +363,8 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 			
 			// request vehicle parameters and initialize should be done in connectedChanged of the control
 			// request data stream
-			//this.request_parameters();
+			this.request_parameters();
+			this.request_datastream(MAV_DATA_STREAM.MAV_DATA_STREAM_ALL, 1024);
 		}
 		
 		System.out.println("Handling hertbeat");
@@ -441,6 +444,9 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
         	
         case msg_sys_status.MAVLINK_MSG_ID_SYS_STATUS:
             //return  new msg_sys_status(this);
+        	msg_sys_status msg1 = (msg_sys_status)m;
+        	hanldeSystemStatus(msg1);
+        	
         	System.out.println("Copter got SYS_STATUS");
         	break;
              
@@ -954,6 +960,21 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 		}
 		//System.out.println("Drone handles packets");
 	}
+	private void hanldeSystemStatus(msg_sys_status msg1) {
+		// TODO Auto-generated method stub
+		if(this.listeners==null)
+			return;
+		this.battery.setLevel(msg1.battery_remaining);
+		for(int i=0;i<listeners.size(); i++)
+		{
+			if(listeners.get(i)!=null)
+			{
+				listeners.get(i).batteryLevelChange(msg1.battery_remaining);
+				//listeners.get(i).locationChange(position);
+			}
+		}
+	}
+
 	private void handle_param_msg(msg_param_value val) {
 		// TODO Auto-generated method stub
 		String param_id = val.getParam_Id();

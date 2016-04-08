@@ -25,4 +25,13 @@ public class Battery implements Serializable {
 		this.level = level;
 	}
 
+	public double getLevel() {
+		// TODO Auto-generated method stub
+		return this.level;
+	}
+	public void setLevel(double level)
+	{
+		this.level = level;
+	}
+
 }

@@ -187,7 +187,26 @@ public class VehicleStatus extends JPanel implements VehicleStateListener {
 	@Override
 	public void batteryLevelChange(double level) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Battery level change "+level);
+		int l = (int)level;
+		if(l>=75)
+		{
+			this.batteryStatusBar.setForeground(Color.GREEN);
+			this.batteryStatusBar.setValue((int)level);
+			this.batteryStatusBar.setString("Battery Level "+level);
+		}
+		else if(l<75 && l>=50)
+		{
+			this.batteryStatusBar.setForeground(Color.YELLOW);
+			this.batteryStatusBar.setValue((int)level);
+			this.batteryStatusBar.setString("Battery Level "+level);
+		}
+		else
+		{
+			this.batteryStatusBar.setForeground(Color.RED);
+			this.batteryStatusBar.setValue((int)level);
+			this.batteryStatusBar.setString("Battery Level "+level);
+		}
 	}
 
 

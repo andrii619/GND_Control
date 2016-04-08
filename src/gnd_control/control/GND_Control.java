@@ -277,7 +277,10 @@ public class GND_Control implements Control, VehicleStateListener  {
 	@Override
 	public Float getVehicleBatteryLevel() {
 		// TODO Auto-generated method stub
-		return null;
+		if(this.currentVehicle==null)
+			return 0f;
+		else
+			return (float) this.currentVehicle.get_battery_level();
 	}
 
 
