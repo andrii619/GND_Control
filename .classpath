@@ -11,14 +11,8 @@
 	<classpathentry kind="lib" path="libs/swingx-ws-1.0.jar"/>
 	<classpathentry kind="lib" path="libs/jfxrt.jar"/>
 	<classpathentry kind="lib" path="libs/GMapsFX.jar"/>
-	<classpathentry kind="lib" path="libs/jxbrowser-6.2.jar"/>
-	<classpathentry kind="lib" path="libs/jxbrowser-linux32-6.2.jar"/>
-	<classpathentry kind="lib" path="libs/jxbrowser-linux64-6.2.jar"/>
-	<classpathentry kind="lib" path="libs/jxbrowser-mac-6.2.jar"/>
-	<classpathentry kind="lib" path="libs/jxbrowser-win-6.2.jar"/>
 	<classpathentry kind="lib" path="libs/jssc.jar" sourcepath="libs/jssc-2.7.0-javadoc.jar"/>
 	<classpathentry kind="lib" path="libs/jssc-2.7.0-javadoc.jar"/>
 	<classpathentry kind="lib" path="libs/jssc-2.7.0-src.jar"/>
-	<classpathentry kind="lib" path="libs/licence.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

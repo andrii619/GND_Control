@@ -45,7 +45,7 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 	private BoardConnect boardConnect;
 	private VehicleStatus statusPanel;
 	//private JPanel googleMap;
-	private MyGoogleMap googleMap;
+	private MapPanel googleMap;
 	
 	JPanel main = new JPanel(new BorderLayout());
 	JLayeredPane p0 = new JLayeredPane();
@@ -75,7 +75,7 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 		//control = new GND_Control();
 		/////////////////////////////
 		//googleMap=new JPanel();
-		googleMap = new MyGoogleMap(this);
+		googleMap = new MapPanel();
 		///////////////////////////
 		
 		m1.add(i1);
