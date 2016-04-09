@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URL;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -215,8 +216,8 @@ public class MapPanel extends JPanel implements VehicleStateListener, MapCompone
 
 	    //Add a marker to the map
 	    MarkerOptions markerOptions = new MarkerOptions();
-
-	    markerOptions.position( new LatLong(47.6, -122.3) ).icon("copter3.png")
+	    URL t = this.getClass().getResource("copter3.png");
+	    markerOptions.position( new LatLong(47.6, -122.3) ).icon(t.getPath())//icon("../src/gnd_control/guiview/copter3.png")
 	                .visible(Boolean.TRUE)
 	                .title("My Marker");
 
