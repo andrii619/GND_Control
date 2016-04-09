@@ -134,7 +134,16 @@ public void flightModeChanged(String mode) {
 @Override
 public void locationChange(GPosition p) {
 	// TODO Auto-generated method stub
-	
+	if(p==null)
+		return;
+	// display the drone at current location
+	System.out.println("Setting location. Lat:"+p.getLatitude()+", long:"+p.getLongtitude());
+	browser.executeJavaScript("var myLatlng = new google.maps.LatLng(48.4431727,23.0488126);\n" +
+            "var marker = new google.maps.Marker({\n" +
+            "    position: myLatlng,\n" +
+            "    map: map,\n" +
+            "    title: 'Hello World!'\n" +
+            "});");
 }
 
 @Override

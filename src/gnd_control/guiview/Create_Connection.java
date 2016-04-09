@@ -217,6 +217,13 @@ public class Create_Connection extends JFrame {
 		whoiDataBitsBox=new JComboBox<Integer>(dataList);;
 		whoiStopBitsBox=new JComboBox<Integer>(stopList);;
 		
+		String[] temp=SerialPortList.getPortNames();
+		if(temp!=null)
+		{
+			for(int i=0;i<temp.length;i++)
+			whoiPortBox.addItem(temp[i]);
+		}
+		
 		whoiPortBox.setPreferredSize(new Dimension(80,25));
 		whoiParityBox.setPreferredSize(new Dimension(80,25));
 		whoiStopBitsBox.setPreferredSize(new Dimension(80,25));

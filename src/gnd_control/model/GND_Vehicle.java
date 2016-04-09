@@ -74,7 +74,7 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 	}*/
 	public GND_Vehicle()
 	{
-		this.home_location = new GPosition(40.521899f, -74.459634f);
+		this.home_location = new GPosition(40.521899f, -74.459634f,0f);
 		this.connected = false;
 		connections  = new ArrayList<Connection>();
 		listeners=new ArrayList<VehicleStateListener>();
@@ -85,6 +85,7 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 		custom_mode=0;
 		
 		this.battery=new Battery(0,0,0);
+		this.current_location=new GPosition(0,0,0);
 		////
 		//timer=new Timer();
 	}
@@ -532,6 +533,8 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
         	
         case msg_global_position_int.MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
             //return  new msg_global_position_int(this);
+        	msg_global_position_int msg2 = (msg_global_position_int)m;
+        	handleGlobalPositionInt(msg2);
         	break; 
         	
         case msg_rc_channels_scaled.MAVLINK_MSG_ID_RC_CHANNELS_SCALED:
@@ -960,6 +963,21 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 		}
 		//System.out.println("Drone handles packets");
 	}
+	private void handleGlobalPositionInt(msg_global_position_int msg2) {
+		// TODO Auto-generated method stub
+		this.current_location.setLatitude(msg2.lat);
+		this.current_location.setLongtitude(msg2.lon);
+		
+		if(this.listeners!=null)
+		{
+			for(int i=0;i<listeners.size();i++)
+			{
+				if(listeners.get(i)!=null)
+					listeners.get(i).locationChange(new GPosition(msg2.lat,msg2.lon,msg2.alt));
+			}
+		}
+	}
+
 	private void hanldeSystemStatus(msg_sys_status msg1) {
 		// TODO Auto-generated method stub
 		if(this.listeners==null)
@@ -1046,6 +1064,8 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 		if(!this.connected)
 			return;
 		
+		System.out.println("----------------------------------------------------------------");
+		System.out.println("Sending RC Override");
 		//if(pitch<1000 || roll<1000 || yaw<1000 || throttle<1000)
 		//	return;
 		//if(pitch>2000 || roll>2000 || yaw >2000 || throttle>2000)

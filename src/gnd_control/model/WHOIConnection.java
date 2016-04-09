@@ -55,6 +55,7 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 		if(this.queue!=null)
 		{
 			WHOIPacket pack=new WHOIPacket(p);
+			System.out.println("Sending WHOI "+pack.toString());
 			if(p!=null)
 			{
 				this.queue.offer(pack);

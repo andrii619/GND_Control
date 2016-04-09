@@ -106,4 +106,8 @@ public class WHOIPacket {
 		}
 		return null;
 	}
+	public String toString()
+	{
+		return this.command;
+	}
 }

@@ -9,6 +9,7 @@ import java.io.Serializable;
 public class GPosition implements Serializable {
 private double latitude;
 private double longtitude;
+private double altitude;
 private static final long serialVersionUID = 1L;
 
 /**
@@ -16,10 +17,11 @@ private static final long serialVersionUID = 1L;
  * @param latitude The latitude of the position object.
  * @param longtitude Longtitude of the position object.
  */
-public	GPosition(float latitude, float longtitude)
+public	GPosition(float latitude, float longtitude, float altitude)
 {
 	this.latitude=latitude;
 	this.longtitude=longtitude;
+	this.altitude=altitude;
 }
 
 /**
