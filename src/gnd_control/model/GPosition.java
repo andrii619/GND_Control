@@ -17,7 +17,7 @@ private static final long serialVersionUID = 1L;
  * @param latitude The latitude of the position object.
  * @param longtitude Longtitude of the position object.
  */
-public	GPosition(float latitude, float longtitude, float altitude)
+public	GPosition(double latitude, double longtitude, double altitude)
 {
 	this.latitude=latitude;
 	this.longtitude=longtitude;
@@ -28,7 +28,7 @@ public	GPosition(float latitude, float longtitude, float altitude)
  * Sets the latitude of the position object.
  * @param latitude the latitude to be set.
  */
-public void setLatitude(float latitude)
+public void setLatitude(double latitude)
 {
 	this.latitude=latitude;
 }
@@ -37,7 +37,7 @@ public void setLatitude(float latitude)
  * Sets the longitude of the position object.
  * @param longtitude
  */
-public void setLongtitude(float longtitude)
+public void setLongtitude(double longtitude)
 {
 	this.longtitude = longtitude;
 }

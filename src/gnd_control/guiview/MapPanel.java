@@ -22,6 +22,7 @@ import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
 import com.lynden.gmapsfx.javascript.object.Marker;
 import com.lynden.gmapsfx.javascript.object.MarkerOptions;
 
+import gnd_control.control.Control;
 import gnd_control.model.GPosition;
 import gnd_control.model.VehicleStateListener;
 import javafx.application.Platform;
@@ -43,10 +44,17 @@ public class MapPanel extends JPanel implements VehicleStateListener, MapCompone
 	
 	private buttonListener listener;
 	
+	private Control control;
+	
+	//private LatLong tmp = new LatLong(47.6097, -122.3331);
+	private double lat = 47.6097;
+	private double lon = -122.3331;
+	
 	private static final String MAP_FILE = "."+File.separator+"src"+File.separator+"html"+File.separator+"copter.png";
 	
-	public MapPanel()
+	public MapPanel(Control c)
 	{
+		this.control=c;
 		this.layout=new SpringLayout();
 		this.setLayout(layout);
 		
@@ -128,8 +136,13 @@ public class MapPanel extends JPanel implements VehicleStateListener, MapCompone
 			public void run() {
 				// TODO Auto-generated method stub
 				map.removeMarker(copterMarker);
-				copterMarker.setPosition(new LatLong(position.getLatitude(),position.getLongtitude()));
+				System.out.println("BLAH "+position.getLatitude()+", "+position.getLongtitude());
+				lat+=0.00001;
+				lon+=0.00001;
+				LatLong temp = new LatLong(position.getLatitude(),position.getLongtitude());//new LatLong(lat,lon);
+				copterMarker.setPosition(temp);
 				map.addMarker(copterMarker);
+				//map.setCenter(temp);
 				map.centerProperty();
 				
 			}
@@ -146,13 +159,35 @@ public class MapPanel extends JPanel implements VehicleStateListener, MapCompone
 	@Override
 	public void connectedChanged(boolean connected) {
 		// TODO Auto-generated method stub
-		
+		if(connected)
+		{
+			if(control.getCurrentVehicle()!=null)
+			{
+				GPosition t=control.getCurrentVehicle().getLocation();
+				//System.out.println("");
+				if(t!=null)
+				{
+					Platform.runLater(new Runnable(){
+
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							map.removeMarker(copterMarker);
+							copterMarker.setPosition(new LatLong(lat,lon));
+							map.addMarker(copterMarker);
+							map.setCenter(new LatLong(lat,lon));
+						}
+						
+					});
+				}
+			}
+		}
 	}
 	
 	public static void main(String[] args)
 	{
 		JFrame m =new JFrame();
-		m.add(new MapPanel());
+		m.add(new MapPanel(null));
 		
 		m.setPreferredSize(new Dimension(500,500));
 		m.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

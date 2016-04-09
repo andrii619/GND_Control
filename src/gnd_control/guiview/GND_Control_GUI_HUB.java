@@ -75,7 +75,7 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 		//control = new GND_Control();
 		/////////////////////////////
 		//googleMap=new JPanel();
-		googleMap = new MapPanel();
+		googleMap = new MapPanel(control);
 		///////////////////////////
 		
 		m1.add(i1);

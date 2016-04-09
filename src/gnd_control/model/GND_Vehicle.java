@@ -965,15 +965,19 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 	}
 	private void handleGlobalPositionInt(msg_global_position_int msg2) {
 		// TODO Auto-generated method stub
-		this.current_location.setLatitude(msg2.lat);
-		this.current_location.setLongtitude(msg2.lon);
 		
+		double t = msg2.lat/(double)Math.pow(10, 7);
+		double t2 = msg2.lon/(double)Math.pow(10, 7);
+		double t3 = msg2.alt/(double)Math.pow(10, 3);
+		this.current_location.setLatitude(t);
+		this.current_location.setLongtitude(t2);
+		//System.out.println("Got GPS: blah "+msg2.lat+" "+t);
 		if(this.listeners!=null)
 		{
 			for(int i=0;i<listeners.size();i++)
 			{
 				if(listeners.get(i)!=null)
-					listeners.get(i).locationChange(new GPosition(msg2.lat,msg2.lon,msg2.alt));
+					listeners.get(i).locationChange(new GPosition(t,t2,t3));
 			}
 		}
 	}
