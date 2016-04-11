@@ -57,5 +57,9 @@ public double getLongtitude()
 {
 	return this.longtitude;
 }
+public double getAltitude()
+{
+	return this.altitude;
+}
 
 }

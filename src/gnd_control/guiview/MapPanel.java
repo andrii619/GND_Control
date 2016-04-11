@@ -174,9 +174,10 @@ public class MapPanel extends JPanel implements VehicleStateListener, MapCompone
 						public void run() {
 							// TODO Auto-generated method stub
 							map.removeMarker(copterMarker);
-							copterMarker.setPosition(new LatLong(lat,lon));
+							if(t!=null)
+							copterMarker.setPosition(new LatLong(t.getLatitude(),t.getLongtitude()));
 							map.addMarker(copterMarker);
-							map.setCenter(new LatLong(lat,lon));
+							map.setCenter(new LatLong(t.getLatitude(),t.getLongtitude()));map.centerProperty();
 						}
 						
 					});
@@ -222,7 +223,6 @@ public class MapPanel extends JPanel implements VehicleStateListener, MapCompone
 	                .title("My Marker");
 
 	    copterMarker = new Marker( markerOptions );
-
 	    map.addMarker(copterMarker);map.centerProperty();
 	}
 

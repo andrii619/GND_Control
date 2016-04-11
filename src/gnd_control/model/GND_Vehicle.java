@@ -860,6 +860,8 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
              
         case msg_terrain_report.MAVLINK_MSG_ID_TERRAIN_REPORT:
             //return  new msg_terrain_report(this);
+        	msg_terrain_report msg3= (msg_terrain_report)m;
+        	handleTerrainReportMessage(msg3);
         	break; 
         	
         case msg_scaled_pressure2.MAVLINK_MSG_ID_SCALED_PRESSURE2:
@@ -963,6 +965,19 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 		}
 		//System.out.println("Drone handles packets");
 	}
+	private void handleTerrainReportMessage(msg_terrain_report msg3) {
+		// TODO Auto-generated method stub
+		//msg3.
+		if(this.listeners!=null)
+		{
+			for(int i=0;i<listeners.size();i++)
+			{
+				//if(listeners.get(i)!=null)
+				//	listeners.get(i).
+			}
+		}
+	}
+
 	private void handleGlobalPositionInt(msg_global_position_int msg2) {
 		// TODO Auto-generated method stub
 		

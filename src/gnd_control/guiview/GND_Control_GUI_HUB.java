@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.event.WindowStateListener;
@@ -28,6 +30,8 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SpringLayout;
 
+import com.MAVLink.Messages.MAVLinkPayload;
+
 import gnd_control.control.Control;
 import gnd_control.control.GND_Control;
 import gnd_control.guiview.interractive.Interractive_GUI;
@@ -39,6 +43,14 @@ import gnd_control.guiview.water.Water_GUI;
  *
  */
 public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
+	
+	private static int roll = 1500;
+	private static int yaw = 1500;
+	private static int pitch = 1500;
+	private static int throttle = 1500;
+	private static final int DELTA = 10;
+	private boolean controlEnabled = false;
+	private ButtonListener bListener=new ButtonListener();
 	//private GND_Control_GUI_HUB hub;
 	public Control control = new GND_Control();
 	// all sub windows
@@ -48,6 +60,7 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 	private MapPanel googleMap;
 	
 	JPanel main = new JPanel(new BorderLayout());
+	
 	JLayeredPane p0 = new JLayeredPane();
 	JTabbedPane p1 = new JTabbedPane();
 	JPanel p2 = new Profile_HUB_GUI();
@@ -77,7 +90,7 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 		//googleMap=new JPanel();
 		googleMap = new MapPanel(control);
 		///////////////////////////
-		
+		//this.getContentPane().
 		m1.add(i1);
 		m2.add(i2);
 		i2.addActionListener(new HideTabs());
@@ -282,5 +295,119 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 			e.printStackTrace();
 		}
 		new LA_Productions(m);
+	}
+	
+	public class ButtonListener implements KeyListener{
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			// TODO Auto-generated method stub
+			if(controlEnabled == false)
+				return;
+			if(e.getKeyCode() == KeyEvent.VK_UP) // pitch. nose down
+			{
+				if(pitch>=1100)
+					pitch-=DELTA; // nose down
+				System.out.println("Current pitch "+pitch);
+				//errorLabel.setText("pitch: "+pitch +", roll: "+roll+", yaw: "+yaw+", throttle: "+throttle);
+				control.manualOverride(pitch,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE);
+			}
+			else if(e.getKeyCode() == KeyEvent.VK_DOWN) // pitch, nose up
+			{
+				if(pitch<=1900)
+					pitch += DELTA;
+				System.out.println("Current pitch "+pitch);
+				//errorLabel.setText("pitch: "+pitch +", roll: "+roll+", yaw: "+yaw+", throttle: "+throttle);
+				control.manualOverride(pitch,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE);
+
+			}
+			else if(e.getKeyCode() == KeyEvent.VK_LEFT) // roll left
+			{
+				if(roll>=1100)
+					roll-=DELTA;
+				System.out.println("Current roll "+roll);
+				//errorLabel.setText("pitch: "+pitch +", roll: "+roll+", yaw: "+yaw+", throttle: "+throttle);
+				control.manualOverride(MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						roll,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE);
+			}
+			else if(e.getKeyCode() == KeyEvent.VK_RIGHT) // roll right
+			{
+				if(roll<=1900)
+					roll+=DELTA;
+				System.out.println("Current roll "+roll);
+				//errorLabel.setText("pitch: "+pitch +", roll: "+roll+", yaw: "+yaw+", throttle: "+throttle);
+				control.manualOverride(MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						roll,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE);
+			}
+			else if(e.getKeyCode() == KeyEvent.VK_A) // yaw left
+			{
+				if(yaw>=1100)
+					yaw-=DELTA;
+				//errorLabel.setText("pitch: "+pitch +", roll: "+roll+", yaw: "+yaw+", throttle: "+throttle);
+				control.manualOverride(MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						yaw,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE);
+
+			}
+			else if(e.getKeyCode() == KeyEvent.VK_D) // yaw right
+			{
+				if(yaw<=1900)
+					yaw+=DELTA;
+				//errorLabel.setText("pitch: "+pitch +", roll: "+roll+", yaw: "+yaw+", throttle: "+throttle);
+				//control.manualOverride(pitch,roll,yaw,throttle);
+				control.manualOverride(MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						yaw,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE);
+			}
+			else if(e.getKeyCode() == KeyEvent.VK_W) // increase throttle 65535
+			{
+				if(throttle<=1900)
+					throttle+=DELTA;
+				System.out.println("Current throttle "+throttle);
+				//errorLabel.setText("pitch: "+pitch +", roll: "+roll+", yaw: "+yaw+", throttle: "+throttle);
+				//control.manualOverride(pitch,roll,yaw,throttle);
+				control.manualOverride(MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE, throttle);
+				//control.manualOverride(65535, , yaw, throttle);
+			}
+			else if(e.getKeyCode() == KeyEvent.VK_S) // decrease throttle
+			{
+				if(throttle>=1100)
+					throttle-=DELTA;
+				System.out.println("Current throttle "+throttle);
+				//errorLabel.setText("pitch: "+pitch +", roll: "+roll+", yaw: "+yaw+", throttle: "+throttle);
+				control.manualOverride(MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE,
+						MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE, throttle);
+				//control.manualOverride(pitch,roll,yaw,throttle);
+				control.manualOverride(65535, 65535, 65535, throttle);
+			}
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
 }

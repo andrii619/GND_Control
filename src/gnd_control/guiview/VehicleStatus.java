@@ -180,7 +180,8 @@ public class VehicleStatus extends JPanel implements VehicleStateListener {
 	@Override
 	public void locationChange(GPosition location) {
 		// TODO Auto-generated method stub
-		
+		double alt = location.getAltitude();
+		this.altitudeField.setText(alt+"");
 	}
 
 
