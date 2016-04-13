@@ -10,6 +10,7 @@ import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.Parser;
 import com.MAVLink.Messages.MAVLinkStats;
 
+import gnd_control.model.SerialConnection.SerialPortListener;
 import jssc.*;
 
 /**
@@ -34,6 +35,8 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 	private MAVLinkStats stats;
 	private List<ConnectionObserver> listeners;
 	private boolean connected;
+	
+	private SerialPortListener serialListener;
 
 	public WHOIConnection(String connectionName, String portName, int baudRate, int parityBits, int dataBits, int stopBits) {
 		// TODO Auto-generated constructor stub
@@ -113,10 +116,13 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 			if(!this.queue.isEmpty())
 			{
 				
-				byte arr[] = this.queue.remove().encodePacket();
+				//byte arr[] = this.queue.remove().encodePacket();
 				try {
-					if(arr!=null)
-					this.serialPort.writeBytes(arr);
+				//	if(arr!=null)
+					String tmp = queue.remove().toString();
+					System.out.println("WHOI send: "+tmp);
+						serialPort.writeString(tmp);
+					//this.serialPort.writeBytes(arr);
 				} catch (SerialPortException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -124,16 +130,16 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 			}
 			
 			//try {
-				byte arr[]=null;
-				try {
-					arr = serialPort.readBytes();
-				} catch (SerialPortException e) {
+				//byte arr[]=null;
+				//try {
+				//	arr = serialPort.readBytes();
+				//} catch (SerialPortException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				StringBuilder tmp=new StringBuilder();
-				tmp.append(new String(arr));
-				System.out.println(tmp.toString());
+				//	e.printStackTrace();
+				//}
+				//StringBuilder tmp=new StringBuilder();
+				//tmp.append(new String(arr));
+				//System.out.println(tmp.toString());
 				//for(int i=0; i<arr.length;i++)
 				//{
 					//tmp.append(String.format("| %03d |", Integer.parseInt(String.format("%02X", arr[i]), 16)));
@@ -200,8 +206,8 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 			//this.serialPort.writeBytes("test".getBytes());
 			//System.out.println("Got: "+this.serialPort.readBytes(4).toString());
 			this.serialPort.setParams(this.rate, this.data, this.stop, this.parity);
-			  serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN | 
-                      SerialPort.FLOWCONTROL_RTSCTS_OUT);
+			 // serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN | 
+               //       SerialPort.FLOWCONTROL_RTSCTS_OUT);
 			  //this.serialPort.addEventListener(this);
 		} catch (SerialPortException e) {
 			// TODO Auto-generated catch block
@@ -225,7 +231,13 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 			e.printStackTrace();
 		}
 		
-		
+		serialListener = new SerialPortListener();
+		try {
+			serialPort.addEventListener(serialListener);
+		} catch (SerialPortException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		new Thread(this).start();
 	}
 	public boolean isConnected()
@@ -239,26 +251,27 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 			// TODO Auto-generated method stub
 			if(event.isRXCHAR() && event.getEventValue() > 0) {
 				//test=false;
-				MAVLinkPacket packet=null;
-				//StringBuilder sj=new StringBuilder();
+				//MAVLinkPacket packet=null;
+				///StringBuilder sj=new StringBuilder();
 	            try {
-	               // String receivedData = serialPort.readString(event.getEventValue());
+	                String receivedData = serialPort.readString(event.getEventValue());
+	                System.out.println("WHOI Recieve: "+receivedData);
 	                //System.out.println("Received response: " + receivedData);
-	            	byte[] arr=serialPort.readBytes();
-	            	if(arr==null)
-	            		return;
+	            	//byte[] arr=serialPort.readBytes();
+	            	///if(arr==null)
+	            	//	return;
 	            	//System.out.println("Response: "+new String(arr));
-	                for(int i=0;i<arr.length;i++)
-		            {
+	                //for(int i=0;i<arr.length;i++)
+		            //{
 	                	//sj.append(String.format("| %03d |", Integer.parseInt(String.format("%02X", arr[i]), 16)));
 	               // 	sj.append(String.format("| %02X |", arr[i]));
-	                	packet=parser.mavlink_parse_char(Integer.parseInt(String.format("%02X", arr[i]),16));
-	                	if(packet!=null)
-	                	{
+	                //	packet=parser.mavlink_parse_char(Integer.parseInt(String.format("%02X", arr[i]),16));
+	                //	if(packet!=null)
+	                //	{
 	                	//	System.out.println(packet.toString());
-	                		notifyAllObservers(packet);
-	                	}
-		            }
+	                //		notifyAllObservers(packet);
+	                //	}
+		          //  }
 	                //System.out.println("Got bytes: "+sj.toString());
 	                
 	            }

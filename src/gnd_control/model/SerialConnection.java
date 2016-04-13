@@ -157,8 +157,9 @@ public class SerialConnection implements Connection,Runnable, Serializable {
 			if(!this.queue.isEmpty())
 			{
 				System.out.println("Queue is not empty");
+				//this.queue.remove().
 				byte arr[] = this.queue.remove().encodePacket();
-				try {
+				try {//serialPort.write
 					this.serialPort.writeBytes(arr);
 					System.out.println("Written");
 				} catch (SerialPortException e) {
@@ -238,8 +239,9 @@ public class SerialConnection implements Connection,Runnable, Serializable {
 			this.serialPort.openPort();
 			
 			this.serialPort.setParams(this.rate, this.data, this.stop, this.parity);
-			  serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN | 
-                      SerialPort.FLOWCONTROL_RTSCTS_OUT);
+			//  serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN | 
+             //         SerialPort.FLOWCONTROL_RTSCTS_OUT);
+			//serialPort.
 			  //this.serialPort.addEventListener(this);
 		} catch (SerialPortException e) {
 			// TODO Auto-generated catch block
@@ -268,9 +270,9 @@ public class SerialConnection implements Connection,Runnable, Serializable {
 			if(event.isRXCHAR() && event.getEventValue() > 0) {
 				//test=false;
 				MAVLinkPacket packet=null;
-				//StringBuilder sj=new StringBuilder();
+				StringBuilder sj=new StringBuilder();
 	            try {
-	               // String receivedData = serialPort.readString(event.getEventValue());
+	                //String receivedData = serialPort.readString(event.getEventValue());
 	                //System.out.println("Received response: " + receivedData);
 	            	byte[] arr=serialPort.readBytes();
 	            	if(arr==null)
@@ -278,16 +280,16 @@ public class SerialConnection implements Connection,Runnable, Serializable {
 	            	//System.out.println("Response: "+new String(arr));
 	                for(int i=0;i<arr.length;i++)
 		            {
-	                	//sj.append(String.format("| %03d |", Integer.parseInt(String.format("%02X", arr[i]), 16)));
-	               // 	sj.append(String.format("| %02X |", arr[i]));
+	                //	sj.append(String.format("| %03d |", Integer.parseInt(String.format("%02X", arr[i]), 16)));
+	                	sj.append(String.format("| %02X |", arr[i]));
 	                	packet=parser.mavlink_parse_char(Integer.parseInt(String.format("%02X", arr[i]),16));
 	                	if(packet!=null)
 	                	{
-	                	//	System.out.println(packet.toString());
+	                		System.out.println("Serial got mavlink "+packet.toString());
 	                		notifyAllObservers(packet);
 	                	}
 		            }
-	                //System.out.println("Got bytes: "+sj.toString());
+	                System.out.println("Serial Got bytes: "+sj.toString());
 	                
 	            }
 	            catch (SerialPortException ex) {

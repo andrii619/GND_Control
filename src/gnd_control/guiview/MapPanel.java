@@ -165,7 +165,6 @@ public class MapPanel extends JPanel implements VehicleStateListener, MapCompone
 			if(control.getCurrentVehicle()!=null)
 			{
 				GPosition t=control.getCurrentVehicle().getLocation();
-				//System.out.println("");
 				if(t!=null)
 				{
 					Platform.runLater(new Runnable(){
