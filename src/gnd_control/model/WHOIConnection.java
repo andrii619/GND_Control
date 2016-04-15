@@ -30,14 +30,24 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 	
 	private SerialPort serialPort;
 	
-	private Queue<WHOIPacket> queue;
+	private Queue<MAVLinkPacket> queue;
 	private Parser parser;
 	private MAVLinkStats stats;
 	private List<ConnectionObserver> listeners;
 	private boolean connected;
+	//private boolean test = true;
 	
 	private SerialPortListener serialListener;
-
+	
+	public WHOIConnection(String name, String port, int rate )
+	{
+		this.connectionName = name;
+		this.port = port;
+		
+		this.rate = rate;
+	}
+	
+	
 	public WHOIConnection(String connectionName, String portName, int baudRate, int parityBits, int dataBits, int stopBits) {
 		// TODO Auto-generated constructor stub
 		this.connectionName=connectionName;
@@ -46,7 +56,7 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 		this.parity=parityBits;
 		this.data=dataBits;
 		this.stop=stopBits;
-		this.queue=new ArrayBlockingQueue<WHOIPacket>(20);
+		this.queue=new ArrayBlockingQueue<MAVLinkPacket>(20);
 		this.parser=new Parser();
 		this.stats=new MAVLinkStats();
 		this.listeners=new ArrayList<ConnectionObserver>();
@@ -55,27 +65,47 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 
 	@Override
 	public void sendMAV(MAVLinkPacket p) {
+		// TODO Auto-generated method stub
+		//byte[] b = p.encodePacket();
 		if(this.queue!=null)
 		{
-			WHOIPacket pack=new WHOIPacket(p);
-			System.out.println("Sending WHOI "+pack.toString());
 			if(p!=null)
-			{
-				this.queue.offer(pack);
-			}
+				this.queue.offer(p);
 		}
 	}
+
+	public void sendBytes(byte [] arr)
+	{
+		System.out.println("send bytes");
+		System.out.println(Thread.currentThread().getName());
+		if(arr!=null)
+			if(arr.length!=0)
+				try {
+					this.serialPort.writeBytes(arr);
+				} catch (SerialPortException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	}
+
 
 
 	@Override
 	public void disconnect() {
 		// TODO Auto-generated method stub
 		try {
+			serialPort.removeEventListener();
+		} catch (SerialPortException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
 			this.serialPort.closePort();
 		} catch (SerialPortException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 
 
@@ -107,6 +137,7 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 	public void run() {
 		// TODO Auto-generated method stub
 		MAVLinkPacket packet = null;
+		System.out.println("Run: "+Thread.currentThread().getName());
 		while(true)
 		{
 			if(this.serialPort==null)
@@ -115,45 +146,46 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 				continue;
 			if(!this.queue.isEmpty())
 			{
+				System.out.println("Queue is not empty");
+				//this.queue.remove().
+				WHOIPacket t = new WHOIPacket(this.queue.remove());
+				if(t==null)
+					return;
+				System.out.println("Whoi sends: "+t.toString());
 				
 				//byte arr[] = this.queue.remove().encodePacket();
-				try {
-				//	if(arr!=null)
-					String tmp = queue.remove().toString();
-					System.out.println("WHOI send: "+tmp);
-						serialPort.writeString(tmp);
+				try {//serialPort.write
+					serialPort.writeString("$CCMUC,0,1,1FFA\r\n");
+					serialPort.writeString("$CCCFQ,SRC\r\n");
+					
+				//	this.serialPort.writeString(t.toString());
 					//this.serialPort.writeBytes(arr);
+					System.out.println("Written");
 				} catch (SerialPortException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-			
-			//try {
-				//byte arr[]=null;
-				//try {
-				//	arr = serialPort.readBytes();
-				//} catch (SerialPortException e) {
-					// TODO Auto-generated catch block
-				//	e.printStackTrace();
-				//}
-				//StringBuilder tmp=new StringBuilder();
-				//tmp.append(new String(arr));
-				//System.out.println(tmp.toString());
-				//for(int i=0; i<arr.length;i++)
-				//{
-					//tmp.append(String.format("| %03d |", Integer.parseInt(String.format("%02X", arr[i]), 16)));
-				//	packet=parser.mavlink_parse_char(Integer.parseInt(String.format("%02X", arr[i]),16));
-				//	if(packet!=null)
-				//	{
+			/**
+			try {
+				//byte arr[] = serialPort.readBy
+				byte arr[] = serialPort.readBytes();
+				if(arr==null)
+					continue;
+				for(int i=0; i<arr.length;i++)
+				{
+					System.out.println("Serial got: " +new String(arr));
+			//		packet=parser.mavlink_parse_char(Integer.parseInt(String.format("%02X", arr[i]),16));
+			//		if(packet!=null)
+			//		{
 						//System.out.println("not null");
-				//		this.notifyAllObservers(packet);
-				//	}
-				//}
-			//} catch (SerialPortException e) {
+			//			this.notifyAllObservers(packet);
+			//		}
+				}
+			} catch (SerialPortException e) {
 				// TODO Auto-generated catch block
-			//	e.printStackTrace();
-			//}
+				e.printStackTrace();
+			}*/
 		}
 	}
 
@@ -194,46 +226,28 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 	public void connect() throws MyConnectException {
 		// TODO Auto-generated method stub
 		this.serialPort = new SerialPort(this.port);
-		if(this.serialPort.isOpened())
+		if(serialPort.isOpened())
 			try {
-				this.serialPort.closePort();
+				serialPort.closePort();
 			} catch (SerialPortException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		try {
+			
 			this.serialPort.openPort();
-			//serialPort.set
-			//this.serialPort.writeBytes("test".getBytes());
-			//System.out.println("Got: "+this.serialPort.readBytes(4).toString());
+			
 			this.serialPort.setParams(this.rate, this.data, this.stop, this.parity);
-			//serialPort.purgePort(flags);
-			serialPort.setDTR(true);
-			  serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN | 
-                      SerialPort.FLOWCONTROL_RTSCTS_OUT);
+			//  serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN | 
+             //         SerialPort.FLOWCONTROL_RTSCTS_OUT);
+			//serialPort.
 			  //this.serialPort.addEventListener(this);
 		} catch (SerialPortException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		this.connected=true;
-		
-		
-		// set up the whoi
-		//try{
-		//serialPort.writeString("$CCCFG,REV,0\r\n");                                                        
-		//serialPort.writeString("$CCCFG,ASD,0\r\n");                                                        
-		//serialPort.writeString("$CCCFG,SRC,0\r\n");                                                        
-		//serialPort.writeString("$CCCFG,RXA,0\r\n");                                                        
-		//serialPort.writeString("$CCCFG,RXD,1\r\n");                                                        
-		//serialPort.writeString("$CCCFG,DTO,5\r\n");                                                        
-		//serialPort.writeString("$CCCFG,AGN,0\r\n");                                                        
-		//serialPort.writeString("$CCCFG,XST,0\r\n"); 
-		//}catch(SerialPortException e)
-		//{
-		//	e.printStackTrace();
-		//}
-		
 		serialListener = new SerialPortListener();
 		try {
 			serialPort.addEventListener(serialListener);
@@ -241,6 +255,23 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		try {
+			serialPort.writeString("$CCCFG,REV,0\r\n");
+			serialPort.writeString("$CCCFG,ASD,0\r\n");                                                        
+			serialPort.writeString("$CCCFG,SRC,0\r\n");                                                        
+			serialPort.writeString("$CCCFG,RXA,0\r\n");                                                        
+			serialPort.writeString("$CCCFG,RXD,1\r\n");                                                        
+			serialPort.writeString("$CCCFG,DTO,5\r\n");                                                        
+			serialPort.writeString("$CCCFG,AGN,0\r\n");                                                        
+			serialPort.writeString("$CCCFG,XST,0\r\n");                                                        
+			serialPort.writeString("$CCCFQ,SRC\r\n");
+		} catch (SerialPortException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}                                                        
+		 
+		
 		new Thread(this).start();
 	}
 	public boolean isConnected()
@@ -248,20 +279,17 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 		return this.connected;
 	}
 	protected class SerialPortListener implements SerialPortEventListener{
-
+/////
 		@Override
 		public void serialEvent(SerialPortEvent event) {
 			// TODO Auto-generated method stub
 			if(event.isRXCHAR() && event.getEventValue() > 0) {
 				//test=false;
-				//MAVLinkPacket packet=null;
+				MAVLinkPacket packet=null;
 				StringBuilder sj=new StringBuilder();
 				StringBuilder ch = new StringBuilder();
-	            try {// whoi 115200
-	            	//String tmp = serialPort.readHexString(event.getEventValue());
-	            	//System.out.println("tmp "+tmp);
+	            try {
 	                //String receivedData = serialPort.readString(event.getEventValue());
-	                //System.out.println("WHOI Recieve: "+receivedData);
 	                //System.out.println("Received response: " + receivedData);
 	            	byte[] arr=serialPort.readBytes();
 	            	if(arr==null)
@@ -269,22 +297,19 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 	            	//System.out.println("Response: "+new String(arr));
 	                for(int i=0;i<arr.length;i++)
 		            {
-	                	//sj.append(String.format("| %03d |", Integer.parseInt(String.format("%02X", arr[i]), 16)));
-	                //	sj.append(String.format("| %02X |", arr[i]));
-	                //	System.out.println("Convert "+String.format("%02X", arr[i]));
-	                	
-	                //	System.out.println("char "+Character.toString((char)Integer.parseInt(String.format("%02X", arr[i]),16)));
+	                //	sj.append(String.format("| %03d |", Integer.parseInt(String.format("%02X", arr[i]), 16)));
+	                	sj.append(String.format("| %02X |", arr[i]));
+	                	packet=parser.mavlink_parse_char(Integer.parseInt(String.format("%02X", arr[i]),16));
 	                	ch.append((char)Integer.parseInt(String.format("%02X", arr[i]),16));
-	                //	packet=parser.mavlink_parse_char(Integer.parseInt(String.format("%02X", arr[i]),16));
-	                //	if(packet!=null)
-	                //	{
-	                	//	System.out.println(packet.toString());
-	                //		notifyAllObservers(packet);
-	                //	}
-		            }//serialPort.set
-	                //System.out.println(" WHOI Got bytes: "+sj.toString());
-	               // System.out.println(" WHOI Got bytes2: "+ch.toString());
-	                System.out.println(ch.toString());
+	                	if(packet!=null)
+	                	{
+	                		System.out.println("Serial got mavlink "+packet.toString());
+	                		notifyAllObservers(packet);
+	                	}
+		            }
+	               // System.out.println("Serial Got bytes: "+sj.toString());
+	                System.out.print(ch.toString());
+	                
 	            }
 	            catch (SerialPortException ex) {
 	                System.out.println("Error in receiving string from COM-port: " + ex);
@@ -293,5 +318,6 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 	        }
 		}
 		
+		////////////////
 	}
 }

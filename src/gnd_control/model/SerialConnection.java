@@ -263,7 +263,7 @@ public class SerialConnection implements Connection,Runnable, Serializable {
 		return this.connected;
 	}
 	protected class SerialPortListener implements SerialPortEventListener{
-
+/////
 		@Override
 		public void serialEvent(SerialPortEvent event) {
 			// TODO Auto-generated method stub
@@ -302,5 +302,6 @@ public class SerialConnection implements Connection,Runnable, Serializable {
 	        }
 		}
 		
+		////////////////
 	}
 }
