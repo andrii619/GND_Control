@@ -26,7 +26,7 @@ import com.MAVLink.Messages.MAVLinkStats;
 
 /**
  * <b>SerialConnection</b> class implements the Connection interface. Is used to send MAVLink packets through a serial interface.
- * @see Connection
+ * @see Connection 115200 regural os,  19200 whoi
  */
 public class SerialConnection implements Connection,Runnable, Serializable {
 
@@ -271,6 +271,7 @@ public class SerialConnection implements Connection,Runnable, Serializable {
 				//test=false;
 				MAVLinkPacket packet=null;
 				StringBuilder sj=new StringBuilder();
+				StringBuilder ch = new StringBuilder();
 	            try {
 	                //String receivedData = serialPort.readString(event.getEventValue());
 	                //System.out.println("Received response: " + receivedData);
@@ -283,13 +284,15 @@ public class SerialConnection implements Connection,Runnable, Serializable {
 	                //	sj.append(String.format("| %03d |", Integer.parseInt(String.format("%02X", arr[i]), 16)));
 	                	sj.append(String.format("| %02X |", arr[i]));
 	                	packet=parser.mavlink_parse_char(Integer.parseInt(String.format("%02X", arr[i]),16));
+	                	ch.append((char)Integer.parseInt(String.format("%02X", arr[i]),16));
 	                	if(packet!=null)
 	                	{
 	                		System.out.println("Serial got mavlink "+packet.toString());
 	                		notifyAllObservers(packet);
 	                	}
 		            }
-	                System.out.println("Serial Got bytes: "+sj.toString());
+	               // System.out.println("Serial Got bytes: "+sj.toString());
+	                System.out.print(ch.toString());
 	                
 	            }
 	            catch (SerialPortException ex) {

@@ -203,11 +203,14 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 			}
 		try {
 			this.serialPort.openPort();
+			//serialPort.set
 			//this.serialPort.writeBytes("test".getBytes());
 			//System.out.println("Got: "+this.serialPort.readBytes(4).toString());
 			this.serialPort.setParams(this.rate, this.data, this.stop, this.parity);
-			 // serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN | 
-               //       SerialPort.FLOWCONTROL_RTSCTS_OUT);
+			//serialPort.purgePort(flags);
+			serialPort.setDTR(true);
+			  serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN | 
+                      SerialPort.FLOWCONTROL_RTSCTS_OUT);
 			  //this.serialPort.addEventListener(this);
 		} catch (SerialPortException e) {
 			// TODO Auto-generated catch block
@@ -217,19 +220,19 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 		
 		
 		// set up the whoi
-		try{
-		serialPort.writeString("$CCCFG,REV,0\r\n");                                                        
-		serialPort.writeString("$CCCFG,ASD,0\r\n");                                                        
-		serialPort.writeString("$CCCFG,SRC,0\r\n");                                                        
-		serialPort.writeString("$CCCFG,RXA,0\r\n");                                                        
-		serialPort.writeString("$CCCFG,RXD,1\r\n");                                                        
-		serialPort.writeString("$CCCFG,DTO,5\r\n");                                                        
-		serialPort.writeString("$CCCFG,AGN,0\r\n");                                                        
-		serialPort.writeString("$CCCFG,XST,0\r\n"); 
-		}catch(SerialPortException e)
-		{
-			e.printStackTrace();
-		}
+		//try{
+		//serialPort.writeString("$CCCFG,REV,0\r\n");                                                        
+		//serialPort.writeString("$CCCFG,ASD,0\r\n");                                                        
+		//serialPort.writeString("$CCCFG,SRC,0\r\n");                                                        
+		//serialPort.writeString("$CCCFG,RXA,0\r\n");                                                        
+		//serialPort.writeString("$CCCFG,RXD,1\r\n");                                                        
+		//serialPort.writeString("$CCCFG,DTO,5\r\n");                                                        
+		//serialPort.writeString("$CCCFG,AGN,0\r\n");                                                        
+		//serialPort.writeString("$CCCFG,XST,0\r\n"); 
+		//}catch(SerialPortException e)
+		//{
+		//	e.printStackTrace();
+		//}
 		
 		serialListener = new SerialPortListener();
 		try {
@@ -252,28 +255,36 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 			if(event.isRXCHAR() && event.getEventValue() > 0) {
 				//test=false;
 				//MAVLinkPacket packet=null;
-				///StringBuilder sj=new StringBuilder();
-	            try {
-	                String receivedData = serialPort.readString(event.getEventValue());
-	                System.out.println("WHOI Recieve: "+receivedData);
+				StringBuilder sj=new StringBuilder();
+				StringBuilder ch = new StringBuilder();
+	            try {// whoi 115200
+	            	//String tmp = serialPort.readHexString(event.getEventValue());
+	            	//System.out.println("tmp "+tmp);
+	                //String receivedData = serialPort.readString(event.getEventValue());
+	                //System.out.println("WHOI Recieve: "+receivedData);
 	                //System.out.println("Received response: " + receivedData);
-	            	//byte[] arr=serialPort.readBytes();
-	            	///if(arr==null)
-	            	//	return;
+	            	byte[] arr=serialPort.readBytes();
+	            	if(arr==null)
+	            		return;
 	            	//System.out.println("Response: "+new String(arr));
-	                //for(int i=0;i<arr.length;i++)
-		            //{
+	                for(int i=0;i<arr.length;i++)
+		            {
 	                	//sj.append(String.format("| %03d |", Integer.parseInt(String.format("%02X", arr[i]), 16)));
-	               // 	sj.append(String.format("| %02X |", arr[i]));
+	                //	sj.append(String.format("| %02X |", arr[i]));
+	                //	System.out.println("Convert "+String.format("%02X", arr[i]));
+	                	
+	                //	System.out.println("char "+Character.toString((char)Integer.parseInt(String.format("%02X", arr[i]),16)));
+	                	ch.append((char)Integer.parseInt(String.format("%02X", arr[i]),16));
 	                //	packet=parser.mavlink_parse_char(Integer.parseInt(String.format("%02X", arr[i]),16));
 	                //	if(packet!=null)
 	                //	{
 	                	//	System.out.println(packet.toString());
 	                //		notifyAllObservers(packet);
 	                //	}
-		          //  }
-	                //System.out.println("Got bytes: "+sj.toString());
-	                
+		            }//serialPort.set
+	                //System.out.println(" WHOI Got bytes: "+sj.toString());
+	               // System.out.println(" WHOI Got bytes2: "+ch.toString());
+	                System.out.println(ch.toString());
 	            }
 	            catch (SerialPortException ex) {
 	                System.out.println("Error in receiving string from COM-port: " + ex);
