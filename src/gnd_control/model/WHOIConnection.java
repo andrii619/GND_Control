@@ -16,6 +16,8 @@ import jssc.*;
 /**
  * <b>WHOIConnection</b> class implements the Connection interface. Is used for sending data through 
  * a WHOI acoustics modem.
+ * echo -e ''\$CCMPC,0,1\\r\\n'' >> /dev/ttyUSB0
+ * 
  * @see Connection
  */
 public class WHOIConnection implements Connection,Runnable, Serializable {
@@ -155,10 +157,11 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 				
 				//byte arr[] = this.queue.remove().encodePacket();
 				try {//serialPort.write
-					serialPort.writeString("$CCMUC,0,1,1FFA\r\n");
-					serialPort.writeString("$CCCFQ,SRC\r\n");
+					//serialPort.writeString("$CCMUC,0,1,0401"+"\r\n");
+					//System.out.println("$sdmvsknv");
+					//serialPort.writeString("$CCCFQ,SRC\r\n");
 					
-				//	this.serialPort.writeString(t.toString());
+					this.serialPort.writeString(t.toString());
 					//this.serialPort.writeBytes(arr);
 					System.out.println("Written");
 				} catch (SerialPortException e) {
@@ -264,8 +267,27 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 			serialPort.writeString("$CCCFG,RXD,1\r\n");                                                        
 			serialPort.writeString("$CCCFG,DTO,5\r\n");                                                        
 			serialPort.writeString("$CCCFG,AGN,0\r\n");                                                        
-			serialPort.writeString("$CCCFG,XST,0\r\n");                                                        
+			serialPort.writeString("$CCCFG,XST,0\r\n");    
+			
+			
 			serialPort.writeString("$CCCFQ,SRC\r\n");
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			serialPort.writeString("$CCMUC,1,0,1FFA\r\n");
+			serialPort.writeString("$CCMUC,1,0,0400\r\n");
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			serialPort.writeString("$CCMUC,1,0,0090\r\n");
+			serialPort.writeString("$CCMUC,1,0,0420\r\n");
+			
 		} catch (SerialPortException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -308,6 +330,7 @@ public class WHOIConnection implements Connection,Runnable, Serializable {
 	                	}
 		            }
 	               // System.out.println("Serial Got bytes: "+sj.toString());
+	                //System.out.println("WHOI");
 	                System.out.print(ch.toString());
 	                
 	            }

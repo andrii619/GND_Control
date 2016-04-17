@@ -11,6 +11,8 @@ import com.MAVLink.common.msg_rc_channels_override;
 public class WHOIPacket {
 	private ByteBuffer buffer;
 	private String command;
+	private int commandID;
+	private int data;
 	
 	public WHOIPacket(MAVLinkPacket packet) // just build the string command
 	{
@@ -28,6 +30,8 @@ public class WHOIPacket {
 				/// 100 set roll
 				if(tmp.chan1_raw!=MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE)//yaw 
 				{
+					this.commandID=3;
+					this.data=tmp.chan1_raw;
 					// subtract 1000 bias
 					tmp.chan1_raw-=1000;
 					short data=0;
@@ -36,14 +40,16 @@ public class WHOIPacket {
 					if(data<=0x1FFF)
 					{
 						String t = String.format("%04X", data);
-						t=t.substring(2, t.length());
-						this.command=String.format("$CCMUC,0,1,%s\r\n", t);//"$CCMUC,0,1,\r\n";
+						//t=t.substring(2, t.length());
+						this.command=String.format("$CCMUC,1,0,%s\r\n", t);//"$CCMUC,0,1,\r\n";
 						System.out.println("Command:"+this.command);
 					}
 				}
 				else if(tmp.chan2_raw!=MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE)//pitch
 				{
+					this.commandID=2;
 					// subtract 1000 bias
+					this.data=tmp.chan2_raw;
 					tmp.chan2_raw-=1000;
 					short data=0;
 					data |= (0b010)<<10;
@@ -51,13 +57,15 @@ public class WHOIPacket {
 					if(data<=0x1FFF)
 					{
 						String t = String.format("%04X", data);
-						t=t.substring(2, t.length());
-						this.command=String.format("$CCMUC,0,1,%s\r\n", t);
+						//t=t.substring(2, t.length());
+						this.command=String.format("$CCMUC,1,0,%s\r\n", t);
 						System.out.println("Command:"+this.command);
 					}
 				}
 				else if(tmp.chan3_raw!=MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE)//throttle
 				{
+					this.commandID=1;
+					this.data=tmp.chan3_raw;
 					tmp.chan3_raw-=1000;
 					short data=0;
 					data |= (0b001)<<10;
@@ -65,13 +73,15 @@ public class WHOIPacket {
 					if(data<=0x1FFF)
 					{
 						String t = String.format("%04X", data);
-						t=t.substring(2, t.length());
-						this.command=String.format("$CCMUC,0,1,%s\r\n", t);
+						//t=t.substring(2, t.length());
+						this.command=String.format("$CCMUC,1,0,%s\r\n", t);
 						System.out.println("Command:"+this.command);
 					}
 				}
 				else if(tmp.chan4_raw!=MAVLinkPayload.UNSIGNED_SHORT_MAX_VALUE)// roll
 				{
+					this.commandID=4;
+					this.data=tmp.chan4_raw;
 					tmp.chan4_raw-=1000;
 					short data = 0;
 					data |= (0b100)<<10;
@@ -79,8 +89,8 @@ public class WHOIPacket {
 					if(data<=0x1FFF)
 					{
 						String t = String.format("%04X", data);
-						t=t.substring(2, t.length());
-						this.command=String.format("$CCMUC,0,1,%s\r\n", t);
+						//t=t.substring(2, t.length());
+						this.command=String.format("$CCMUC,1,0,%s\r\n", t);
 						System.out.println("Command:"+this.command);
 					}
 				}
@@ -108,6 +118,7 @@ public class WHOIPacket {
 	}
 	public String toString()
 	{
+		System.out.println("$CommandId: "+this.commandID+", data: "+this.data);
 		return this.command;
 	}
 }

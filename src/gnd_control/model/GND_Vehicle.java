@@ -431,7 +431,7 @@ public class GND_Vehicle implements Vehicle, ConnectionObserver, Serializable{
 		// TODO Auto-generated method stub
 		MAVLinkMessage m = p.unpack();
 		int id = m.msgid;
-		System.out.println("Got: "+m.toString());
+		//System.out.println("Got: "+m.toString());
 		switch(id)
 		{
         case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:
