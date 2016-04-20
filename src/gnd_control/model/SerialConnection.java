@@ -287,12 +287,12 @@ public class SerialConnection implements Connection,Runnable, Serializable {
 	                	ch.append((char)Integer.parseInt(String.format("%02X", arr[i]),16));
 	                	if(packet!=null)
 	                	{
-	                		System.out.println("Serial got mavlink "+packet.toString());
+	                		//System.out.println("Serial got mavlink "+packet.toString());
 	                		notifyAllObservers(packet);
 	                	}
 		            }
 	               // System.out.println("Serial Got bytes: "+sj.toString());
-	                System.out.print(ch.toString());
+	               // System.out.print(ch.toString());
 	                
 	            }
 	            catch (SerialPortException ex) {

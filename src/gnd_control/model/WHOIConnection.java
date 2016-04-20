@@ -17,7 +17,9 @@ import jssc.*;
  * <b>WHOIConnection</b> class implements the Connection interface. Is used for sending data through 
  * a WHOI acoustics modem.
  * echo -e ''\$CCMPC,0,1\\r\\n'' >> /dev/ttyUSB0
- * 
+ * mavproxy.py --master=tcp:127.0.0.1:5760 --out=/dev/ttyUSB0,57600 --out=udpout:127.0.0.1:14550
+*whoi os 115200, command port 19200
+*TX - echo -e ''\$CCMUC,0,1,0010\\r\\n'' >> /dev/ttyUSB0
  * @see Connection
  */
 public class WHOIConnection implements Connection,Runnable, Serializable {

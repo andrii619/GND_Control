@@ -41,7 +41,7 @@ public class WHOIPacket {
 					{
 						String t = String.format("%04X", data);
 						//t=t.substring(2, t.length());
-						this.command=String.format("$CCMUC,1,0,%s\r\n", t);//"$CCMUC,0,1,\r\n";
+						this.command=String.format("$CCMUC,0,1,%s\r\n", t);//"$CCMUC,0,1,\r\n";
 						System.out.println("Command:"+this.command);
 					}
 				}
@@ -58,7 +58,7 @@ public class WHOIPacket {
 					{
 						String t = String.format("%04X", data);
 						//t=t.substring(2, t.length());
-						this.command=String.format("$CCMUC,1,0,%s\r\n", t);
+						this.command=String.format("$CCMUC,0,1,%s\r\n", t);
 						System.out.println("Command:"+this.command);
 					}
 				}
@@ -74,7 +74,7 @@ public class WHOIPacket {
 					{
 						String t = String.format("%04X", data);
 						//t=t.substring(2, t.length());
-						this.command=String.format("$CCMUC,1,0,%s\r\n", t);
+						this.command=String.format("$CCMUC,0,1,%s\r\n", t);
 						System.out.println("Command:"+this.command);
 					}
 				}
@@ -90,7 +90,7 @@ public class WHOIPacket {
 					{
 						String t = String.format("%04X", data);
 						//t=t.substring(2, t.length());
-						this.command=String.format("$CCMUC,1,0,%s\r\n", t);
+						this.command=String.format("$CCMUC,0,1,%s\r\n", t);
 						System.out.println("Command:"+this.command);
 					}
 				}
