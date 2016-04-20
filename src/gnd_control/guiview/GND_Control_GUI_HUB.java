@@ -67,7 +67,7 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 	//JPanel p3;
 	JPanel p4 = new Water_GUI();
 	JPanel p5 = new Interractive_GUI(control);
-	JLabel l1 = new JLabel("");//(C) 2016 Software Engineering Team: Lucas Rivera(laneboy), Andrii Hlyvko(AndriiDSD), Russell Epstein, Jonathan Zelaya, Prerak Mehta, Thomas Ippolito, and Kevin Wu");
+	JLabel l1 = new JLabel("(C) 2016 Software Engineering Team: Lucas Rivera(laneboy), Andrii Hlyvko(AndriiDSD), Russell Epstein, Jonathan Zelaya, Prerak Mehta, Thomas Ippolito, and Kevin Wu");
 	JMenuBar bar = new JMenuBar();
 	JMenu m1 = new JMenu("FILE");
 	JMenu m2 = new JMenu("SETTINGS");
@@ -148,7 +148,7 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 	    main.setOpaque(false);
 		p0.add(main,1);
 		b1.addActionListener(new connect());
-		b1.setLocation(main.getSize().width-112, 32);
+		b1.setLocation(main.getSize().width-100, main.getSize().height-100);
 		b1.setSize(72, 64);
 		p0.add(b1,0);
 		add(p0);
@@ -207,7 +207,7 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 			if ((state & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH) {
 				Dimension D = GND_Control_GUI_HUB.this.getSize();
 				GND_Control_GUI_HUB.this.main.setSize(D.width-16, D.height-40);
-				GND_Control_GUI_HUB.this.b1.setLocation(main.getSize().width-112, 32);
+				GND_Control_GUI_HUB.this.b1.setLocation(main.getSize().width-100, main.getSize().height-100);
 			}
 		}
 		
@@ -219,7 +219,7 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 			if(hit){
 				GND_Control_GUI_HUB.this.i2.setText("Hide Tab Images");
 				((BorderLayout)main.getLayout()).setVgap(0);
-				b1.setLocation(main.getSize().width-112, 32);
+				b1.setLocation(main.getSize().width-100, main.getSize().height-100);
 				for(int i=0;i<p1.getTabCount();i++){
 					p1.setIconAt(i, tablist.get(i));
 					p1.setTitleAt(i, "");
@@ -229,7 +229,7 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 			else{
 				GND_Control_GUI_HUB.this.i2.setText("Show Tab Images");
 				((BorderLayout)main.getLayout()).setVgap(20);
-				b1.setLocation(main.getSize().width-73, 0);
+				b1.setLocation(main.getSize().width-100, main.getSize().height-100);
 				for(int i=0;i<p1.getTabCount();i++){
 					p1.setIconAt(i, null);
 					p1.setTitleAt(i, namelist.get(i));
@@ -249,10 +249,10 @@ public class GND_Control_GUI_HUB extends JFrame implements SplashListener{
 			Dimension D = GND_Control_GUI_HUB.this.getSize();
 			GND_Control_GUI_HUB.this.main.setSize(D.width-16, D.height-40);
 			if(hit){
-				GND_Control_GUI_HUB.this.b1.setLocation(main.getSize().width-73, 0);
+				GND_Control_GUI_HUB.this.b1.setLocation(main.getSize().width-100, main.getSize().height-100);
 			}
 			else{
-				GND_Control_GUI_HUB.this.b1.setLocation(main.getSize().width-112, 32);
+				GND_Control_GUI_HUB.this.b1.setLocation(main.getSize().width-100, main.getSize().height-100);
 			}
 			//System.out.println("width = "+D.width +" height = " + D.height);
 		}
